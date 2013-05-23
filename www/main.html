@@ -10,21 +10,33 @@
     <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
         
     <link href="/css/main.css" rel="stylesheet">
-    
+    <script src="/js/main.js"></script>
 </head>
 <body>
-    <table>
-        <tr><td class="login">Форма логина</td>
-            <td>
-                <a class="btn btn-primary">Войти</a>
+    <table class="container">
+        <tr><td class="login">
+                <form id="loginForm" method="POST" action = "/" class="form-inline" style="visibility:hidden">
+                    <input name="login"    type="text"     class="input-small" placeholder="Логин">
+                    <input name="password" type="password" class="input-small" placeholder="Пароль">
+                </form>
+            </td>
+            <td class="login-control">
+                <a href="javascript:loginAction();" class="btn btn-primary">Войти</a>
                 <img src="http://pemes.net/templates/images/ru.gif" class="img-rounded">
                 <img src="http://pemes.net/templates/images/gb.gif" class="img-rounded">
             </td>
         </tr>
+        <tr><td class="row-separator"></td></tr>
         <tr><td></td>
-            <td class="register"><a href="#" class="btn btn-success btn-large">Регистрация</a></td>
+            <td class="register"><a href="#" class="btn btn-success btn-large btn-block">Регистрация</a></td>
         </tr>
-        <tr><td></td><td></td>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td></td>
+            <td class="network-icons">
+                <a rel="nofollow" class="fb" title="Поделиться в Facebook" href="#"></a>
+                <a rel="nofollow" class="vk" title="Поделиться В Контакте" href="#"></a>
+                <a rel="nofollow" class="ok" title="Добавить в Одноклассники" href="#"></a>
+            </td>
         </tr>
         
     </table>

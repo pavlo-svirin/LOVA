@@ -1,0 +1,21 @@
+body {padding: 10px;}
+form {margin: 0}
+.login { text-align: right; padding: 0 15px; }
+.login-control { width: 155px; text-align: right; }
+.login-control img { margin-left: 10px; }
+.register { text-align: right; }
+.row-separator { height: 15px; }
+.network-icons a {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    outline: none;
+    padding: 0;
+    margin-left: 13px;
+    background: url('/img/net-icons.png') -0px 0 no-repeat;
+    opacity: 0.5;
+}
+.network-icons a:hover { opacity: 1; }
+.network-icons a.fb { background-position: -0px 0; }
+.network-icons a.ok { background-position: -32px 0; }
+.network-icons a.vk { background-position: -64px 0; }
