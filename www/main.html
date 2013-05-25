@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>LoRa</title>
+<title>LoVa</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
@@ -27,8 +27,53 @@
             </td>
         </tr>
         <tr><td class="row-separator"></td></tr>
-        <tr><td></td>
-            <td class="register"><a href="#" class="btn btn-success btn-large btn-block">Регистрация</a></td>
+        <tr><td>
+                <div id="registerForm" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">Регистрация</h3>
+                  </div>
+                  <div class="modal-body">
+                  <form id="registerForm" class="form-horizontal" method="POST" action = "/">
+                      <div class="control-group">
+                        <label class="control-label" for="first_name">Имя*</label>
+                        <div class="controls">
+                            <input type="text" id="first_name" required>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="last_name">Фамилия</label>
+                        <div class="controls">
+                            <input type="text" id="last_name">
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="nick_name">Ник*</label>
+                        <div class="controls">
+                            <input type="text" id="nick_name" required>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="email">Почта*</label>
+                        <div class="controls">
+                            <input id="email" type="email" required>
+                        </div>
+                      </div>
+                      <div class="control-group">
+                        <label class="control-label" for="password">Пароль*</label>
+                        <div class="controls">
+                            <input type="password" id="password" required>
+                        </div>
+                      </div>
+                  </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+                    <button class="btn btn-primary">Регистрация</button>
+                  </div>
+                </div>        
+            </td>
+            <td class="register"><a href="#registerForm" data-toggle="modal" class="btn btn-success btn-large btn-block">Регистрация</a></td>
         </tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td></td>
@@ -37,6 +82,9 @@
                 <a rel="nofollow" class="vk" title="Поделиться В Контакте" href="#"></a>
                 <a rel="nofollow" class="ok" title="Добавить в Одноклассники" href="#"></a>
             </td>
+        </tr>
+        <tr><td class="content" colspan="2">Content goes here</td>
+            
         </tr>
         
     </table>
