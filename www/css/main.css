@@ -5,6 +5,7 @@ form {margin: 0}
 .login-control img { margin-left: 10px; }
 .register { text-align: right; }
 .row-separator { height: 15px; }
+.network-icons { vertical-align: top }
 .network-icons a {
     display: inline-block;
     width: 32px;
