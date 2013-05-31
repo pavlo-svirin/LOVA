@@ -24,58 +24,63 @@
             </td>
             <td class="login-control">
                 <a href="javascript:loginAction();" class="btn btn-primary">Войти</a>
-                <img src="http://pemes.net/templates/images/ru.gif" class="img-rounded">
-                <img src="http://pemes.net/templates/images/gb.gif" class="img-rounded">
+                <a href="/ru/"><img src="http://pemes.net/templates/images/ru.gif" class="img-rounded"></a>
+                <a href="/en/"><img src="http://pemes.net/templates/images/gb.gif" class="img-rounded"></a>
             </td>
         </tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td>
-                <div id="registerForm" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div id="registerDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="registerLabel" aria-hidden="true">
+                  <form id="registerForm" data-async class="form-horizontal" method="POST" action="/register/">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="myModalLabel">Регистрация</h3>
+                    <h3 id="registerLabel">Регистрация</h3>
                   </div>
                   <div class="modal-body">
-                  <form id="registerForm" class="form-horizontal" method="POST" action = "/">
                       <div class="control-group">
                         <label class="control-label" for="first_name">Имя*</label>
                         <div class="controls">
-                            <input type="text" id="first_name" required>
+                            <input type="text" name="first_name" required>
+                            <span class="help-inline"></span>
                         </div>
                       </div>
                       <div class="control-group">
                         <label class="control-label" for="last_name">Фамилия</label>
                         <div class="controls">
-                            <input type="text" id="last_name">
+                            <input type="text" name="last_name">
+                            <span class="help-inline"></span>
                         </div>
                       </div>
                       <div class="control-group">
-                        <label class="control-label" for="nick_name">Ник*</label>
+                        <label class="control-label" for="login">Ник*</label>
                         <div class="controls">
-                            <input type="text" id="nick_name" required>
+                            <input type="text" name="login" required>
+                            <span class="help-inline"></span>
                         </div>
                       </div>
                       <div class="control-group">
                         <label class="control-label" for="email">Почта*</label>
                         <div class="controls">
-                            <input id="email" type="email" required>
+                            <input type="email" name="email" required>
+                            <span class="help-inline"></span>
                         </div>
                       </div>
                       <div class="control-group">
                         <label class="control-label" for="password">Пароль*</label>
                         <div class="controls">
-                            <input type="password" id="password" required>
+                            <input type="password" name="password" required>
+                            <span class="help-inline"></span>
                         </div>
                       </div>
-                  </form>
                   </div>
                   <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-                    <button class="btn btn-primary">Регистрация</button>
+                    <button name="register" type="submit" class="btn btn-primary">Регистрация</button>
                   </div>
+                  </form>
                 </div>        
             </td>
-            <td class="register"><a href="#registerForm" data-toggle="modal" class="btn btn-success btn-large btn-block">Регистрация</a></td>
+            <td class="register"><a href="#registerDiv" data-toggle="modal" class="btn btn-success btn-large btn-block">Регистрация</a></td>
         </tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td rowspan="2">

@@ -15,5 +15,9 @@ use JSON;
 use Sirius::Common;
 use Sirius::MySQL;
 
+use Service::User;
+
+use Data::BaseObject;
+use Data::User;
 
 1;

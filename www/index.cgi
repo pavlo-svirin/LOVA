@@ -17,6 +17,7 @@ our $sql     = Sirius::MySQL->new(host=>$MYSQL{'host'}, db=>$MYSQL{'base'}, user
 my $dbh      = $sql->connect;
 my $CGI      = new CGI;
 my $template = Template->new({RELATIVE=>1});
+my $json     = JSON->new->allow_nonref;
 
 # Используемые переменные
 # vars - переменные шаблона TT
@@ -38,26 +39,30 @@ $cgiSession->expire('1h');
 # Cookie с идентификатором сессии к клиенту
 my $cookie = new CGI::Cookie(-name=>'sid', -value=>$cgiSession->id());
 
+# Services
+my $userService = new Service::User();
+
+
 #=======================Template Variables================
  
 $vars->{'lang'} = $lang;
 $vars->{'error'} = "";
 
-
 #=======================Main Stage========================
-  
+
 if($URL =~ /\/ajax(\/|$)/)
 {
-  print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+    print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+    ajaxStage()
 }
 elsif($redirect)
 {
-  print $CGI->redirect(-uri=>$redirect, -cookie=>$cookie);
+    print $CGI->redirect(-uri=>$redirect, -cookie=>$cookie);
 }
 else
 {
-  print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
-  $template->process("../tmpl/$lang/main.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
+    print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+    $template->process("../tmpl/$lang/main.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
 }
 
 #=======================End Main Stage====================
@@ -68,7 +73,18 @@ $sql->disconnect();
 #====================== Subs =============================
 
 # Функция вызывается, если в ссылке есть /ajax/
-sub ajax_stage
+sub ajaxStage
 {
-
+    if($URL =~ /\/register\//)
+    {
+    	my $params = $CGI->Vars();
+    	my $user = $userService->createUserFromCgiParams($params);
+    	my $validationStatus = $userService->validate($user);
+    	if($validationStatus->{'success'} eq 'true')
+    	{
+            $userService->save($user);
+    	}
+    	my $jsonResult = $json->encode($validationStatus);
+    	print $jsonResult;
+    }
 }
