@@ -58,7 +58,7 @@ sub findAll
     my @users;
     while(my $ref = $sth->fetchrow_hashref())
     {
-      push(@users, new Data::User(%$ref));
+      push(@users, Data::User->new(%$ref));
     }
     return @users;
 }

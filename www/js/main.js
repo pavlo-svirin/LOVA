@@ -39,8 +39,12 @@ jQuery(function($) {
             url: $form.attr('action') + "/ajax/",
             data: $form.serialize(),
             dataType: 'json',
-            failure: function(data, status) {
-            
+            error: function(data, status) {
+            	// enable register button
+            	var $btn = $form.find("button[name='register']"); 
+            	$btn.removeClass("disabled");
+            	$btn.removeAttr("disabled");
+				alert("Произошла ошибка, попробуйте позже.");
             },
             success: function(data, status) {
             	// enable register button

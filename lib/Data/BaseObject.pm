@@ -22,6 +22,11 @@ sub getFields
 	return ();
 }
 
+sub getData
+{
+    my ($self) = @_;
+	return $self->{'data'};
+}
 sub get
 {
     my ($self, $field) = @_;

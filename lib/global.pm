@@ -10,11 +10,12 @@ use CGI::Cookie;
 
 use Template;
 
-use JSON;
+use JSON -convert_blessed_universally;
 
 use Sirius::Common;
 use Sirius::MySQL;
 
+use Service::Options;
 use Service::User;
 
 use Data::BaseObject;
