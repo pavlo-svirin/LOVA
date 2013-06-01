@@ -63,10 +63,19 @@ sub findAll
     return @users;
 }
 
+sub countAll
+{
+    my ($self) = @_;
+    my $sth = $::sql->handle->prepare("SELECT count(*) AS `total` FROM `$table`");
+    my $rv = $sth->execute();
+    my $ref = $sth->fetchrow_hashref();
+    return $ref->{'total'};
+}
+
 sub save
 {
     my ($self, $user) = @_;
-    my @fields = ("login", "email", "first_name", "last_name", "password");
+    my @fields = ("login", "email", "first_name", "last_name", "password", "referal_id");
     my @values;
     foreach my $field(@fields)
     {
@@ -129,6 +138,12 @@ sub validate
         $result->{'fields'}->{'password'} = 'Введите пароль';
         $result->{'success'} = 'false';
     }
+    unless  ($user->getLogin() =~ /^\w+$/)
+    {
+        $result->{'fields'}->{'login'} = 'Ник должен состоять из латинских букв и цифр.';
+        $result->{'success'} = 'false';
+    }
+        
     if($result->{'success'} eq 'false ')
     {
     	return $result;

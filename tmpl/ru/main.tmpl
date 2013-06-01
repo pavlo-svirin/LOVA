@@ -15,11 +15,11 @@
 <body>
     <table class="container">
         <tr><td class="login">
-                <form id="loginForm" method="POST" action = "/" class="form-inline" style="visibility:hidden">
+                <form id="loginForm" method="POST" action = "/login/" class="form-inline" [% url.search('login') ? '' : 'style="visibility:hidden"' %]>
                     <label class="control-label" for="login">Логин</label>
-                    <input id="login"    type="text"     class="input-small" placeholder="Логин">
+                    <input name="login"    type="text"     class="input-small" placeholder="Логин">
                     <label class="control-label" for="password">Пароль</label>
-                    <input id="password" type="password" class="input-small" placeholder="Пароль">
+                    <input name="password" type="password" class="input-small" placeholder="Пароль">
                 </form>
             </td>
             <td class="login-control">

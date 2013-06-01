@@ -34,7 +34,7 @@ my $sid = ($cookies{'sid'}) ? $cookies{'sid'}->value : undef;
 
 # Загружаем сессию с принятым ID или начинаем новую со сгенерированым идентификатором
 my $cgiSession = new CGI::Session("driver:MySQL;", $sid, {Handle=>$dbh});
-$cgiSession->expire('1h');
+$cgiSession->expire('+1y');
  
 # Cookie с идентификатором сессии к клиенту
 my $cookie = new CGI::Cookie(-name=>'sid', -value=>$cgiSession->id());
@@ -42,11 +42,23 @@ my $cookie = new CGI::Cookie(-name=>'sid', -value=>$cgiSession->id());
 # Services
 my $userService = new Service::User();
 
+my $userId = $cgiSession->param('userId');
+my $user = $userService->findById($userId);
+if(!$user)
+{
+	$redirect = "/";
+} 
 
 #=======================Template Variables================
  
 $vars->{'lang'} = $lang;
 $vars->{'error'} = "";
+
+if($user)
+{
+	$vars->{'data'}->{'users'} = $userService->countAll();
+	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
+}
 
 #=======================Main Stage========================
 
@@ -58,6 +70,11 @@ if($URL =~ /\/ajax(\/|$)/)
 elsif($redirect)
 {
     print $CGI->redirect(-uri=>$redirect, -cookie=>$cookie);
+}
+elsif($URL =~ /\/profile(\/|$)/)
+{
+    print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+    $template->process("../tmpl/$lang/profile.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
 }
 else
 {

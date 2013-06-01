@@ -19,6 +19,7 @@ CREATE TABLE `users` (
   `password` varchar(300) CHARACTER SET utf8 DEFAULT '',
   `created` datetime DEFAULT NULL,
   `last_seen` datetime DEFAULT NULL,
+  `referal_id` int(10) unsigned,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
 

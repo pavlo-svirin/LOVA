@@ -34,7 +34,7 @@ my $sid = ($cookies{'sid'}) ? $cookies{'sid'}->value : undef;
 
 # Загружаем сессию с принятым ID или начинаем новую со сгенерированым идентификатором
 my $cgiSession = new CGI::Session("driver:MySQL;", $sid, {Handle=>$dbh});
-$cgiSession->expire('1h');
+$cgiSession->expire('+1y');
  
 # Cookie с идентификатором сессии к клиенту
 my $cookie = new CGI::Cookie(-name=>'sid', -value=>$cgiSession->id());
@@ -47,6 +47,10 @@ my $userService = new Service::User();
  
 $vars->{'lang'} = $lang;
 $vars->{'error'} = "";
+$vars->{'url'} = $URL;
+
+checkUserLogin();
+checkReferal();
 
 #=======================Main Stage========================
 
@@ -82,9 +86,39 @@ sub ajaxStage
     	my $validationStatus = $userService->validate($user);
     	if($validationStatus->{'success'} eq 'true')
     	{
+    		$user->setReferal($cgiSession->param('ref'));
             $userService->save($user);
+            $cgiSession->param('userId', $user->getId());
     	}
     	my $jsonResult = $json->encode($validationStatus);
     	print $jsonResult;
     }
+}
+
+sub checkUserLogin
+{
+    if($URL =~ /\/login(\/|$)/)
+    {
+    	my $login = $CGI->param("login");
+        my $pwd = $CGI->param("password");
+    	my $user = $userService->findByLogin($login);
+    	if($user && $user->checkPassword($pwd))
+    	{
+            $cgiSession->param('userId', $user->getId());
+            $redirect = "/cab/";   		
+    	}
+    }
+}
+
+sub checkReferal
+{
+	my $ref = $CGI->param('ref');
+	if($ref)
+	{
+        my $user = $userService->findByLogin($ref);
+        if($user)
+        {
+            $cgiSession->param('ref', $user->getId());       
+        }
+	}
 }

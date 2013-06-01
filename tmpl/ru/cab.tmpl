@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>LoVa - cabinet</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+        
+    <link href="/css/main.css" rel="stylesheet">
+    <script src="/js/main.js"></script>
+</head>
+<body>
+    <table height="100%" class="container">
+        <tr><td class="logo"><h2>LoVa Logo</h2></td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td width="50%"><a href="/cab/profile/">Профиль</a></td><td align="right">Зарегистрировано <span class="label label-success">[% data.users %]</span></td></tr>
+        <tr><td></td><td align="right">Ожидаемый нами, Ваш доход в ближайшем будущем:</td></tr>
+        <tr><td></td><td align="right">За участие в фонде <span class="label label-success">$[% data.revenueUsers || "0.00" %]</span></td></tr>
+        <tr><td></td><td align="right">За привлечение <span class="label label-success">$[% data.revenueReferals || "0.00" %]</span></td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td>Ссылка по которой вы можете приглашать друзей<br><span class="input-xlarge uneditable-input">http://lova.su/[% data.refLink %]</span></td></tr>
+        <tr><td>Пригласив сейчас как можно большее количество друзей. Вы получите ощутимую и постоянно нарастающую выгоду в будущем.</td></tr>
+    </table>
+</body>
+</html>

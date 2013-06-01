@@ -54,7 +54,8 @@ jQuery(function($) {
             	
     			if(data.success === "true")
     			{
-    				alert("Регистрация прошла успешно.");
+    				top.location = "/cab/";
+    				// alert("Регистрация прошла успешно.");
     			}
     			else
     			{
