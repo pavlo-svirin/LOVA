@@ -73,6 +73,8 @@ elsif($redirect)
 }
 elsif($URL =~ /\/profile(\/|$)/)
 {
+    $userService->loadProfile($user);
+    $vars->{'data'}->{'user'} = $user;
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
     $template->process("../tmpl/$lang/profile.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
 }
@@ -92,16 +94,31 @@ $sql->disconnect();
 # Функция вызывается, если в ссылке есть /ajax/
 sub ajaxStage
 {
-    if($URL =~ /\/register\//)
+    if($URL =~ /\/save\//)
     {
     	my $params = $CGI->Vars();
-    	my $user = $userService->createUserFromCgiParams($params);
-    	my $validationStatus = $userService->validate($user);
+    	my $newUser = $userService->createUserFromCgiParams($params);
+    	$newUser->setId($user->getId());
+        $newUser->setLogin($user->getLogin());
+    	unless($newUser->getPassword())
+    	{
+    		$newUser->set('password', $user->getPassword());
+    	}
+    	my $validationStatus = $userService->validate($newUser);
     	if($validationStatus->{'success'} eq 'true')
     	{
-            $userService->save($user);
+            $userService->save($newUser);
+            foreach my $name("skype", "country", "phone")
+            {
+            	if($CGI->param($name))
+            	{
+                    $newUser->getProfile()->{$name} = $CGI->param($name);
+            	}
+            }
+            $userService->saveProfile($newUser);
     	}
     	my $jsonResult = $json->encode($validationStatus);
     	print $jsonResult;
     }
 }
+

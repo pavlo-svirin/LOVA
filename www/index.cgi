@@ -114,12 +114,8 @@ sub checkUserLogin
 sub checkReferal
 {
 	my $ref = $CGI->param('ref');
-	if($ref)
+	if($ref && $userService->findByLogin($ref))
 	{
-        my $user = $userService->findByLogin($ref);
-        if($user)
-        {
-            $cgiSession->param('ref', $user->getId());       
-        }
+        $cgiSession->param('ref', $ref);       
 	}
 }

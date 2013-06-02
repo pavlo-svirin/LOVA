@@ -15,7 +15,7 @@ sub getFields
 	    'login' => 'login',
 	    'email' => 'email',
 	    'password' => 'password',
-        'referal' => 'referal_id'
+        'referal' => 'referal'
 	)
 };
 
@@ -41,6 +41,16 @@ sub checkPassword
     	}
     }
     return undef;
+}
+
+sub getProfile
+{
+	my ($self) = @_;
+	if(!$self->getData()->{'profile'})
+	{
+		$self->getData()->{'profile'} = {};
+	}
+	return $self->getData()->{'profile'};
 }
 
 1;

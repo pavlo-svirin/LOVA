@@ -15,17 +15,17 @@ CREATE TABLE `users` (
   `login` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `first_name` varchar(300) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `last_name` varchar(300) CHARACTER SET utf8 DEFAULT '',
-  `email` varchar(100) CHARACTER SET utf8 DEFAULT '',
-  `password` varchar(300) CHARACTER SET utf8 DEFAULT '',
+  `email` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `password` varchar(300) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `created` datetime DEFAULT NULL,
   `last_seen` datetime DEFAULT NULL,
-  `referal_id` int(10) unsigned,
+  `referal` varchar(100) CHARACTER SET utf8 DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `user_profile`;
 CREATE TABLE `user_profile` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  `name` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `value`  varchar(300) CHARACTER SET utf8 NOT NULL DEFAULT ''
 ) ENGINE=MyISAM;

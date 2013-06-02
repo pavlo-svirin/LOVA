@@ -75,7 +75,7 @@ sub countAll
 sub save
 {
     my ($self, $user) = @_;
-    my @fields = ("login", "email", "first_name", "last_name", "password", "referal_id");
+    my @fields = ("login", "email", "first_name", "last_name", "password", "referal");
     my @values;
     foreach my $field(@fields)
     {
@@ -109,6 +109,7 @@ sub createUserFromCgiParams
     $user->setLogin($params->{'login'}) if($params->{'login'});
     $user->setEmail($params->{'email'}) if($params->{'email'});
     $user->setPassword($params->{'password'}) if($params->{'password'});
+    $user->setReferal($params->{'referal'}) if($params->{'referal'});
     return $user;
 }
 
@@ -140,28 +141,71 @@ sub validate
     }
     unless  ($user->getLogin() =~ /^\w+$/)
     {
-        $result->{'fields'}->{'login'} = 'Ник должен состоять из латинских букв и цифр.';
+        $result->{'fields'}->{'login'} = 'Ник должен состоять из латинских букв и цифр';
         $result->{'success'} = 'false';
     }
-        
+    if($user->getReferal())
+    {
+        unless($self->findByLogin($user->getReferal()))
+        {
+            $result->{'fields'}->{'referal'} = 'Пользователь с таким ником не найден';
+            $result->{'success'} = 'false';
+        }
+    }   
+         
     if($result->{'success'} eq 'false ')
     {
     	return $result;
     }
     
     # Validate uniq keys
-    if($self->findByEmail($user->getEmail()))
+    my $emailUser = $self->findByEmail($user->getEmail()); 
+    if($emailUser && ($emailUser->getId() != $user->getId()))
     {
         $result->{'fields'}->{'email'} = 'Такая почта уже зарегистрирована';
         $result->{'success'} = 'false';
     }
-    if($self->findByLogin($user->getLogin()))
+    
+    my $loginUser = $self->findByLogin($user->getLogin()); 
+    if($loginUser && ($loginUser->getId() != $user->getId()))
     {
+    	
         $result->{'fields'}->{'login'} = 'Такой логин уже зарегистрирован';
         $result->{'success'} = 'false';
     }
         
     return $result; 
+}
+
+sub loadProfile()
+{
+	my ($self, $user) = @_;
+
+	my $sth = $::sql->handle->prepare("SELECT * FROM `user_profile` WHERE `user_id` = ?");
+    my $rv = $sth->execute($user->getId());
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+    	$user->getProfile()->{$ref->{'name'}} = $ref->{'value'};
+    }
+}
+
+sub saveProfile()
+{
+    my ($self, $user) = @_;
+    $self->deleteProfile($user);
+    my $profile = $user->getProfile();
+    foreach my $name (keys %$profile)
+    {
+        my $sth = $::sql->handle->prepare("INSERT INTO `user_profile` (`user_id`, `name`, `value`) VALUES (?, ?, ?)");
+        $sth->execute($user->getId(), $name, $profile->{$name});
+    }    
+}
+
+sub deleteProfile()
+{
+    my ($self, $user) = @_;
+    my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `user_id` = ?");
+    $sth->execute($user->getId());
 }
 
 1;
