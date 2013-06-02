@@ -23,7 +23,7 @@
                 </form>
             </td>
             <td class="login-control">
-                <a href="javascript:loginAction();" class="btn btn-primary">Войти</a>
+                <a [% IF userId %]href="/cab/"[% ELSE %]href="javascript:loginAction();"[% END %] class="btn btn-primary">Войти</a>
                 <a href="/ru/"><img src="http://pemes.net/templates/images/ru.gif" class="img-rounded"></a>
                 <a href="/en/"><img src="http://pemes.net/templates/images/gb.gif" class="img-rounded"></a>
             </td>

@@ -43,14 +43,15 @@ my $cookie = new CGI::Cookie(-name=>'sid', -value=>$cgiSession->id());
 my $userService = new Service::User();
 
 
+checkUserLogin();
+checkReferal();
+
 #=======================Template Variables================
  
 $vars->{'lang'} = $lang;
 $vars->{'error'} = "";
 $vars->{'url'} = $URL;
-
-checkUserLogin();
-checkReferal();
+$vars->{'userId'} = $cgiSession->param('userId');
 
 #=======================Main Stage========================
 
