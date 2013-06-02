@@ -17,24 +17,34 @@
     <table class="container">
         <tr><td class="logo"><h2>LoVa Logo</h2></td></tr>
         <tr><td class="row-separator"></td></tr>
-        <tr><td width="50%" valign="top"><a href="/cab/profile/">Профиль</a></td><td align="right">
-            <table width="80%">
-                <tr><td width="60%">Зарегистрировано</td><td class="stat"><h3>[% data.users %]</h3></td></tr>
-                <tr><td class="row-separator"></td></tr>
-                <tr><td class="row-separator"></td></tr>
-                <tr><td colspan="2">Ожидаемый нами, Ваш доход в ближайшем будущем</td></tr>
-                <tr><td class="row-separator"></td></tr>
-                <tr><td></td><td class="stat">За участие в фонде</td></tr>
-                <tr><td></td><td class="stat"><h3>$[% data.revenueUsers || "0.00" %]</h3></td></tr>
-                <tr><td class="row-separator"></td></tr>
-                <tr><td></td><td class="stat">За привлечение</td></tr>
-                <tr><td></td><td class="stat"><h3>$[% data.revenueReferals || "0.00" %]</h3></td></tr>
+        <tr><td align="right" valign="top"><a href="/cab/profile/">Профиль</a> | <a href="/cab/logout/">Выйти</a></td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td>
+            <table width="100%">
+                <tr><td></td><td></td><td colspan="3" align="right"><i>Ожидаемый нами, Ваш доход в ближайшем будущем<i></td></tr>
+                <tr>
+                    <td width="30%" class="statHeader registered">Зарегистрировано</td>
+                    <td width="5%"></td> 
+                    <td width="30%" class="statHeader">За участие в фонде</td>
+                    <td width="5%"></td>                    
+                    <td width="30%" class="statHeader">За привлечение</td>
+                </tr>
+                <tr>
+                    <td class="stat"><h2>[% data.users %]</h2></td>
+                    <td width="5%"></td>                    
+                    <td class="stat"><h2>$[% data.revenueUsers || "0.00" %]</h2></td>
+                    <td width="5%"></td>                    
+                    <td class="stat"><h2>$[% data.revenueReferals || "0.00" %]</h2></td>
+                </tr>                    
             </table>
         </td></tr>        
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
+        <tr><td class="row-separator"></td></tr>
         <tr><td>Ссылка по которой вы можете приглашать друзей<br><input type="text" class="input-xlarge" value="http://lova.su/[% data.refLink %]"></td></tr>
-        <tr><td>Пригласив сейчас как можно большее количество друзей. Вы получите ощутимую и постоянно нарастающую выгоду в будущем.</td></tr>
+        <tr><td>Пригласив сейчас как можно большее количество друзей,<br> Вы получите ощутимую и постоянно нарастающую выгоду в будущем.</td></tr>
     </table>
 </body>
 </html>

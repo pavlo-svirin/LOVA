@@ -25,6 +25,20 @@ form {margin: 0}
     border: 1px black solid;
     padding: 0 5px;
     text-align: right;
+    background: #ffffff;
 }
 
-.stat h3 { margin: 0 };
+.stat h3 { margin: 0; }
+.statHeader {
+    border: 1px solid #3a87ad;
+    border-top: 0;
+    text-align: right;
+    padding: 0 5px;
+    background-color: #3a87ad;
+    font-weight: bold;
+    color: #ffffff;
+}
+.registered {
+    border: 1px solid #468847;
+    background-color: #468847;
+}

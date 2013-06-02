@@ -48,7 +48,6 @@ if(!$user)
 {
 	$redirect = "/";
 } 
-
 #=======================Template Variables================
  
 $vars->{'lang'} = $lang;
@@ -61,6 +60,12 @@ if($user)
 }
 
 #=======================Main Stage========================
+if($URL =~ /logout/)
+{
+    $cgiSession->clear('userId');   
+    $redirect = "/";
+}
+
 
 if($URL =~ /\/ajax(\/|$)/)
 {
