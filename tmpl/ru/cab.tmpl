@@ -17,10 +17,20 @@
     <table class="container">
         <tr><td class="logo"><h2>LoVa Logo</h2></td></tr>
         <tr><td class="row-separator"></td></tr>
-        <tr><td width="50%"><a href="/cab/profile/">Профиль</a></td><td align="right">Зарегистрировано <span class="label label-success">[% data.users %]</span></td></tr>
-        <tr><td></td><td align="right">Ожидаемый нами, Ваш доход в ближайшем будущем:</td></tr>
-        <tr><td></td><td align="right">За участие в фонде <span class="label label-success">$[% data.revenueUsers || "0.00" %]</span></td></tr>
-        <tr><td></td><td align="right">За привлечение <span class="label label-success">$[% data.revenueReferals || "0.00" %]</span></td></tr>
+        <tr><td width="50%" valign="top"><a href="/cab/profile/">Профиль</a></td><td align="right">
+            <table width="80%">
+                <tr><td width="60%">Зарегистрировано</td><td class="stat"><h3>[% data.users %]</h3></td></tr>
+                <tr><td class="row-separator"></td></tr>
+                <tr><td class="row-separator"></td></tr>
+                <tr><td colspan="2">Ожидаемый нами, Ваш доход в ближайшем будущем</td></tr>
+                <tr><td class="row-separator"></td></tr>
+                <tr><td></td><td class="stat">За участие в фонде</td></tr>
+                <tr><td></td><td class="stat"><h3>$[% data.revenueUsers || "0.00" %]</h3></td></tr>
+                <tr><td class="row-separator"></td></tr>
+                <tr><td></td><td class="stat">За привлечение</td></tr>
+                <tr><td></td><td class="stat"><h3>$[% data.revenueReferals || "0.00" %]</h3></td></tr>
+            </table>
+        </td></tr>        
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td>Ссылка по которой вы можете приглашать друзей<br><input type="text" class="input-xlarge" value="http://lova.su/[% data.refLink %]"></td></tr>
