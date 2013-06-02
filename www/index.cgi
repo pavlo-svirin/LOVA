@@ -41,7 +41,8 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 
 # Services
 my $userService = new Service::User();
-
+my $optionsService = new Service::Options();
+$optionsService->load();
 
 checkUserLogin();
 checkReferal();
@@ -52,6 +53,7 @@ $vars->{'lang'} = $lang;
 $vars->{'error'} = "";
 $vars->{'url'} = $URL;
 $vars->{'userId'} = $cgiSession->param('userId');
+$vars->{'contentRu'} = $optionsService->get("contentRu");
 
 #=======================Main Stage========================
 

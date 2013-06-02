@@ -35,6 +35,11 @@ Ext.define('Loto.view.Users', {
         text     	: 'E-mail',
         dataIndex	: 'email',
         flex	 	: 1
+      },
+      {
+          text     	: 'Пригласил',
+          dataIndex	: 'referal',
+          flex	 	: 1
       }
     ]
  });

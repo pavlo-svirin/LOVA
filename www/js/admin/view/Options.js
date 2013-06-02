@@ -95,8 +95,26 @@ Ext.define('Loto.view.Options', {
             name: 'scheduleTime'
           }
         ]
-      },       
-
+      },
+      {
+    	  xtype:'fieldset',
+    	  title: 'Содержание',
+    	  collapsible: false,
+    	  autoHeight: true,
+    	  width: 600,
+    	  defaults: {
+          	labelWidth: 90,
+          	allowBlank: false
+    	  },
+    	  items: [
+	          {
+	              xtype: 'textarea',
+	              fieldLabel: 'Контент',
+	              name: 'contentRu',
+	              height: 100
+	          }
+    	  ]
+      }
     ],
     buttons: [{
     	text: 'Сохранить',
