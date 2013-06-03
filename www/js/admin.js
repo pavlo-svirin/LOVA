@@ -22,13 +22,8 @@ Ext.application({
                 },
                 items: [
                     { xtype: 'options' },
-                    { 
-                    	title: 'Пользователи',
-                    	items: [
-            	            { xtype: 'users' },
-            	            { xtype: 'usersChart' },
-            	        ]
-            		}
+    	            { xtype: 'users' },
+    	            { xtype: 'usersChart' }
                 ]
             }]
         });
