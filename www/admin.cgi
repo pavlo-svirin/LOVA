@@ -84,15 +84,43 @@ $sql->disconnect();
 # Функция вызывается, если в ссылке есть /ajax/
 sub ajaxStage
 {
-  if($URL =~ /\/options\//)
-  {
-    printOptions();
-  }
-  elsif($URL =~ /\/users\//)
-  {
-    printAllSimpleObjects($userService);
-  }
-  
+    if($URL =~ /\/options\//)
+    {
+        printOptions();
+    }
+    elsif(($URL =~ /\/users\//) && ($URL =~ /\/chart\//))
+    {
+        my @users = $userService->findAll();
+    	my %result;
+        if($URL =~ /\/month\//)
+        {
+        	foreach my $user (@users)
+        	{
+        		if($user->wasCreatedThisMonth())
+        		{
+        			$result{$user->getCreatedDay()}->{'registered'}++;
+        			if($user->getReferal())
+        			{
+                        $result{$user->getCreatedDay()}->{'referals'}++;
+        			}
+        		} 
+        	}
+        }
+        elsif ($URL =~ /\/year\//)
+        {
+        	
+        }
+        print "{success: true, data: [";        
+        print map {"{date: '$_', "
+        	. "registered: " . ($result{$_}->{'registered'} || 0) . ", "
+        	. "referals: " . ($result{$_}->{'referals'} || 0) . "}, "
+        } sort keys %result;
+        print "]}";
+    }
+    elsif($URL =~ /\/users\//)
+    {
+        printAllSimpleObjects($userService);
+    }
 }
 
 sub printOptions()

@@ -1,47 +1,77 @@
 Ext.define('Loto.view.UsersChart', {
-	extend: 'Ext.chart.Chart',
+	extend: 'Ext.panel.Panel',
 	alias: 'widget.usersChart',
     title: 'График регистраций',
-    store: 'User',
-    animate: true,
-    style: 'background:#fff',
-    theme: 'Category1',
-    width: 800,
-    height: 200,
-    axes: [
-       {
-    	   type: 'Numeric',
-    	   position: 'left',
-    	   fields: ['data1', 'data2'],
-    	   title: 'Number of Users',
-    	   grid: true
-       },
-       {
-    	   type: 'Category',
-    	   position: 'bottom',
-    	   fields: ['created'],
-    	   title: 'Month of the Year'
-       }
-    ],
-    series: [
-        {
-	        type: 'column',
-	        axis: 'left',
-	        xField: 'created',
-	        yField: 'id',
-	        markerConfig: {
-	            type: 'cross',
-	            size: 3
-	        }
-        },
-        {
-            type: 'line',
-            axis: 'left',
-            smooth: true,
-            fill: true,
-            fillOpacity: 0.5,
-            xField: 'created',
-            yField: 'id'
-    	}
-    ]
+    height: '600',
+    tbar: [
+        { xtype: 'button', name: "month", text: 'Month' },
+        { xtype: 'button', name: "year", text: 'Year' }
+    ],    
+    items: [
+      {
+    	xtype: "chart",
+    	store:{
+    	    proxy: new Ext.data.HttpProxy({
+    	        url: '/admin/users/chart/month/ajax/',
+    	        reader: {
+    	            type: 'json',
+    	            root: 'data'
+    	        }
+    	    }),
+			model:Ext.define("MyModel", {
+				extend:"Ext.data.Model",
+				fields:[
+					"date",
+					{name: "registered", type: 'int'},
+					{name: "referals", type: 'int'}
+				]
+			}),
+    	    autoLoad: true
+		},
+    	animate: false,
+        style: 'background:#fff',
+        theme: 'Base:gradients',
+        width: 800,
+        height: 200,
+        layout: 'fit',
+    	axes:[
+				{
+					type:"Numeric",
+					position:"left",
+					fields:["registered", "referals"],
+					grid: true,
+					minimum:0,
+					maximum: 10,
+					minorTickSteps: 1
+				},
+				{
+					type:"Category",
+					position:"bottom",
+					fields:["date"]
+				}
+			],
+			series:[
+				{
+					type:"line",
+					axis:"left",
+					stacked:true,
+					xField:"date",
+					yField:["registered"]
+				},
+				{
+					type:"column",
+					axis:"left",
+					stacked:true,
+					xField:"date",
+					yField:["referals"],
+			     	style: {
+			            opacity: 0.5
+			        }				
+				}
+			]
+    	
+      }
+	]
+/*
+    */
  });
