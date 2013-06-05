@@ -21,6 +21,22 @@ form {margin: 0}
 .network-icons a.fb { background-position: -0px 0; }
 .network-icons a.ok { background-position: -32px 0; }
 .network-icons a.vk { background-position: -64px 0; }
+
+.network-icons-small a {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    outline: none;
+    padding: 0;
+    margin-left: 8px;
+    background: url('/img/net-icons-small.png') -0px 0 no-repeat;
+    opacity: 0.5;
+}
+.network-icons-small a:hover { opacity: 1; }
+.network-icons-small a.fb { background-position: -0px 0; }
+.network-icons-small a.ok { background-position: -16px 0; }
+.network-icons-small a.vk { background-position: -32px 0; }
+
 .stat {
     border: 1px black solid;
     padding: 0 5px;

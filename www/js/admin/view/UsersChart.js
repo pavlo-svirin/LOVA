@@ -30,7 +30,7 @@ Ext.define('Loto.view.UsersChart', {
 		},
     	animate: false,
         style: 'background:#fff',
-        theme: 'Base:gradients',
+        theme: 'Blue',
         width: 800,
         height: 200,
         layout: 'fit',
