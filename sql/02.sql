@@ -29,3 +29,12 @@ CREATE TABLE `user_profile` (
   `name` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `value`  varchar(300) CHARACTER SET utf8 NOT NULL DEFAULT ''
 ) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS `user_account`;
+CREATE TABLE `user_account` (
+  `user_id` int(10) unsigned NOT NULL,
+  `personal` NUMERIC(10,2) DEFAULT 0,
+  `fond` NUMERIC(10,2) DEFAULT 0,
+  `referal` NUMERIC(10,2) DEFAULT 0,
+  PRIMARY KEY (`user_id`)
+) ENGINE=MyISAM;

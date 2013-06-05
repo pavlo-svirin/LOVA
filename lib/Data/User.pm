@@ -55,6 +55,16 @@ sub getProfile
 	return $self->getData()->{'profile'};
 }
 
+sub getAccount
+{
+    my ($self) = @_;
+    if(!$self->getData()->{'account'})
+    {
+        $self->getData()->{'account'} = {};
+    }
+    return $self->getData()->{'account'};
+}
+
 sub getCreatedYear
 {
     my ($self) = @_;

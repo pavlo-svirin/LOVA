@@ -46,6 +46,7 @@ my $userId = $cgiSession->param('userId');
 my $user = $userService->findById($userId);
 if(!$user)
 {
+	$cgiSession->clear('userId');
 	$redirect = "/";
 } 
 #=======================Template Variables================
@@ -57,6 +58,8 @@ if($user)
 {
 	$vars->{'data'}->{'users'} = $userService->countAll();
 	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
+	$vars->{'data'}->{'account'}->{'fond'} = sprintf("%.02f", $user->getAccount()->{'fond'});
+    $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
 }
 
 #=======================Main Stage========================

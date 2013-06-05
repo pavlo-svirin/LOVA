@@ -16,6 +16,7 @@ use Sirius::Common;
 use Sirius::MySQL;
 
 use Service::Options;
+use Service::Scheduler;
 use Service::User;
 
 use Data::BaseObject;

@@ -72,6 +72,15 @@ sub countAll
     return $ref->{'total'};
 }
 
+sub countReferals
+{
+    my ($self, $user) = @_;
+    my $sth = $::sql->handle->prepare("SELECT count(*) AS `total` FROM `$table` WHERE `referal` = ?");
+    my $rv = $sth->execute($user->getLogin());
+    my $ref = $sth->fetchrow_hashref();
+    return $ref->{'total'};
+}
+
 sub save
 {
     my ($self, $user) = @_;
@@ -206,6 +215,66 @@ sub deleteProfile()
     my ($self, $user) = @_;
     my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `user_id` = ?");
     $sth->execute($user->getId());
+}
+
+sub loadAccount()
+{
+    my ($self, $user) = @_;
+    my $sth = $::sql->handle->prepare("SELECT * FROM `user_account` WHERE `user_id` = ?");
+    my $rv = $sth->execute($user->getId());
+    my $ref = $sth->fetchrow_hashref();
+    
+    $user->getAccount()->{'personal'} = $ref->{'personal'};
+    $user->getAccount()->{'fond'} = $ref->{'fond'};
+    $user->getAccount()->{'referal'} = $ref->{'referal'};
+}
+
+sub saveAccount()
+{
+    my ($self, $user) = @_;
+    my $sth = $::sql->handle->prepare("SELECT * FROM `user_account` WHERE `user_id` = ?");
+    my $rv = $sth->execute($user->getId());
+    if($rv == 1)
+    {
+        $sth = $::sql->handle->prepare("UPDATE `user_account` SET `personal` = ?, `fond` = ?, `referal` = ? WHERE `user_id` = ?");
+        $sth->execute(
+            $user->getAccount()->{'personal'},
+            $user->getAccount()->{'fond'},
+            $user->getAccount()->{'referal'},
+            $user->getId()
+        );
+    }
+    else
+    {
+        $sth = $::sql->handle->prepare("INSERT INTO `user_account` (`user_id`, `personal`, `fond`, `referal`) VALUES (?, ?, ?, ?)");
+        $sth->execute(
+            $user->getId(),
+            $user->getAccount()->{'personal'},
+            $user->getAccount()->{'fond'},
+            $user->getAccount()->{'referal'}
+        );
+    } 
+}
+
+sub deleteAccount()
+{
+    my ($self, $user) = @_;
+    my $sth = $::sql->handle->prepare("DELETE FROM `user_account` WHERE `user_id` = ?");
+    $sth->execute($user->getId());
+}
+
+sub runAccount()
+{
+    my ($self, $rateFond, $rateReferal) = @_;
+    my $fondReward = ($self->countAll() * $rateFond) || 0;
+    foreach my $user ($self->findAll())
+    {
+    	$self->loadAccount($user);
+        my $referalReward = ($self->countReferals($user) * $rateReferal) || 0;
+        $user->getAccount()->{'fond'} = $user->getAccount()->{'fond'} + $fondReward;
+        $user->getAccount()->{'referal'} = $user->getAccount()->{'referal'} + $referalReward;
+        $self->saveAccount($user);     	
+    }
 }
 
 1;

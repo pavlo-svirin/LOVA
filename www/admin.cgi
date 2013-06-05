@@ -42,18 +42,21 @@ my $cookie = new CGI::Cookie(-name=>'sid', -value=>$cgiSession->id());
 # Сервисы
 my $userService = new Service::User();
 my $optionsService = new Service::Options();
+my $schedulerService = new Service::Scheduler(optionsService => $optionsService);
 
 #=======================Template Variables================
 
 #=======================Main Stage========================	
 if ($URL =~ /\/options\/save(\/|$)/)
 {
-  foreach (keys %{$CGI->Vars})
-  {
-    $optionsService->set($_, $CGI->param($_));
-  }
-  $optionsService->save();
-  $redirect = '/admin/';
+    foreach (keys %{$CGI->Vars})
+    {
+        $optionsService->set($_, $CGI->param($_));
+    }
+    my $nextAccountRun = $schedulerService->calcNextAccountTime();
+    $optionsService->set('nextAccountTime', $nextAccountRun);
+    $optionsService->save();
+    $redirect = '/admin/';
 }
 
 $optionsService->load();
@@ -61,8 +64,8 @@ $optionsService->load();
 #--------Headers---------
 if($URL =~ /\/ajax(\/|$)/)
 {
-  print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
-  ajaxStage();
+    print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+    ajaxStage();
 }
 elsif($redirect)
 {

@@ -44,13 +44,13 @@ sub set
 
 sub save
 {
-  my ($self) = @_;
-  $::sql->handle->do("DELETE FROM `$table`");
-  foreach(keys %$self)
-  {
-    my $sth = $::sql->handle->prepare("INSERT INTO `$table`(`name`, `value`) VALUES(?, ?)");
-    my $rv = $sth->execute($_, $self->{$_});
-  } 
+    my ($self) = @_;
+    $::sql->handle->do("DELETE FROM `$table`");
+    foreach(keys %$self)
+    {
+        my $sth = $::sql->handle->prepare("INSERT INTO `$table`(`name`, `value`) VALUES(?, ?)");
+        my $rv = $sth->execute($_, $self->{$_});
+    }
 }
 
 sub getAllNames
