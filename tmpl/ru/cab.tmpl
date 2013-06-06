@@ -5,14 +5,15 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="LoVa" />
+    <meta name="description" content="Я зарегистрирован на lova.su. Там вся страна!" />        
     <!-- Bootstrap -->
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
-        
     <link href="/css/main.css" rel="stylesheet">
     <script src="/js/main.js"></script>
-    <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>
+    <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>    
 </head>
 <body style="background:url(/img/tile3.jpg)">
     <table class="container">
@@ -22,7 +23,8 @@
         <tr><td>
           <span class="network-icons">
             <a rel="nofollow" class="fb" title="Поделиться в Facebook" target="_blank" href="http://www.mcm.net.ua" style="margin-top: 2px"></a>
-            <a rel="nofollow" class="vk" title="Поделиться В Контакте" target="_blank" href="http://vkontakte.ru/share.php?url=lova.su&title=LoVa&description=Я зарегистрирован на lova.su. Там вся страна!"></a>
+            <a rel="nofollow" class="vk" title="Поделиться В Контакте" href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);">            
+<!--            <a rel="nofollow" class="vk" title="Поделиться В Контакте" target="_blank" href="http://vkontakte.ru/share.php?url=lova.su&title=LoVa&description=Я зарегистрирован на lova.su. Там вся страна!"></a> -->
             <a rel="nofollow" class="ok" title="Добавить в Одноклассники" href="#"></a>
           </span>
           [% IF !data.user.activated %]

@@ -24,6 +24,13 @@ Ext.define('Loto.view.Options', {
         },
         defaultType: 'numberfield',
         items: [
+	        {
+	      	  xtype: 'textfield',
+	            fieldLabel: 'Лайков',
+	            name: 'like',
+	            readOnly: true
+	        },
+                
           {
         	name: 'rateFond',
             fieldLabel: 'Сумма начисленний за каждого участника системы',
@@ -114,11 +121,6 @@ Ext.define('Loto.view.Options', {
 	              height: 100
 	          }
     	  ]
-      },
-      {
-    	  xtype: 'displayfield',
-          fieldLabel: 'Лайков',
-          name: 'like',
       }
     ],
     buttons: [{
