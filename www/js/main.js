@@ -138,7 +138,13 @@ jQuery(function($) {
  
         event.preventDefault();
     });
-    
+
+    $('.network-icons a').on('click', function(event) {
+    	$('div#alert').removeClass("alert-error");
+    	$('div#alert').addClass("alert-success");
+    	$('div#alert').html("Вы использовали все возможности кабинета! :-)");
+    	$.ajax("/like/ajax/");
+    });
 });
 
 

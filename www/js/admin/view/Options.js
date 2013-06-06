@@ -114,6 +114,11 @@ Ext.define('Loto.view.Options', {
 	              height: 100
 	          }
     	  ]
+      },
+      {
+    	  xtype: 'displayfield',
+          fieldLabel: 'Лайков',
+          name: 'like',
       }
     ],
     buttons: [{

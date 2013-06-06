@@ -6,7 +6,7 @@ SET `collation_connection` = 'utf8_general_ci';
 DROP TABLE IF EXISTS `options`;
 CREATE TABLE `options` (
   `name` varchar(100) CHARACTER SET utf8 NOT NULL UNIQUE,
-  `value` varchar(300) CHARACTER SET utf8 NOT NULL DEFAULT ''
+  `value` TEXT DEFAULT ''
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS `users`;

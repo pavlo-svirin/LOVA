@@ -58,9 +58,12 @@ if($user)
 {
 	$vars->{'data'}->{'users'} = $userService->countAll();
 	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
+    $vars->{'data'}->{'referals'} = $userService->countReferals($user);
 	$userService->loadAccount($user);
 	$vars->{'data'}->{'account'}->{'fond'} = sprintf("%.02f", $user->getAccount()->{'fond'});
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
+    $userService->loadProfile($user);
+    $vars->{'data'}->{'user'}->{'activated'} = $user->getProfile()->{'activated'};
 }
 
 #=======================Main Stage========================
