@@ -14,7 +14,12 @@ function loginAction()
 	}
 }
 
-// Registration
+function fbShare()
+{
+    window.open("https://www.facebook.com/sharer/sharer.php?u=lova.su", 'sharer', 'width=626,height=436');
+    return false;
+}
+
 jQuery(function($) {
     $('#registerForm').on('submit', function(event) {
     	
@@ -146,7 +151,7 @@ jQuery(function($) {
     	$.ajax("/like/ajax/");
     });
     
-    var vk = VK.Share.button({ url: 'http://lova.su', title: 'LoVa'}, { type: 'link',  text: ''});
+    var vk = VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
     
 });
 

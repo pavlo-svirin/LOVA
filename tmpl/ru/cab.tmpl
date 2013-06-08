@@ -19,13 +19,11 @@
 <body style="background:url(/img/tile3.jpg)">
     <table class="container">
         <tr><td class="logo"><img alt="LoVa" src="/img/logo.gif"></td></tr>
-        <tr><td class="row-separator"></td></tr>
         <tr><td align="right" valign="top"><a href="/cab/profile/">Профиль</a> | <a href="/cab/logout/">Выйти</a></td></tr>
         <tr><td>
           <span class="network-icons">
-            <a rel="nofollow" class="fb" title="Поделиться в Facebook" target="_blank" href="http://www.mcm.net.ua" style="margin-top: 2px"></a>
+            <a rel="nofollow" class="fb" title="Поделиться в Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare()' style="margin-left: 0px"></a>
             <a rel="nofollow" class="vk" title="Поделиться В Контакте" href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);">            
-<!--            <a rel="nofollow" class="vk" title="Поделиться В Контакте" target="_blank" href="http://vkontakte.ru/share.php?url=lova.su&title=LoVa&description=Я зарегистрирован на lova.su. Там вся страна!"></a> -->
             <a rel="nofollow" class="ok" title="Добавить в Одноклассники" href="#"></a>
           </span>
           [% IF !data.user.activated %]
