@@ -44,23 +44,26 @@
                     <td width="5%"></td> 
                     <td width="30%" class="statHeader">За участие в фонде</td>
                     <td width="5%"></td>                    
-                    <td width="30%" class="statHeader">За привлечение</td>
+                    <td width="15%" class="statHeader" style="border-right: 1px solid #ffffff">За привлечение</td>
+                    <td width="15%" class="statHeader" style="border-left: 1px solid #ffffff">Вы пригласили</td>
                 </tr>
                 <tr>
-                    <td class="stat"><h2>[% data.users %]</h2></td>
-                    <td width="5%"></td>                    
-                    <td class="stat"><h2>$[% data.account.fond || "0.00" %]</h2></td>
-                    <td width="5%"></td>                    
-                    <td class="stat"><h2>$[% data.account.referal || "0.00" %]</h2></td>
+                    <td class="stat" rowspan="2"><h2>[% data.users %]</h2></td>
+                    <td width="5%" rowspan="2"></td>                    
+                    <td class="stat" rowspan="2"><h2>$[% data.account.fond || "0.00" %]</h2></td>
+                    <td width="5%" rowspan="2"></td>                    
+                    <td class="stat"><h3>$[% data.account.referal || "0.00" %]</h2></td>
+                    <td class="stat"><h3>[% data.referals || "0" %]</h2></td>
+                </tr>                    
+                <tr>
+                    <td class="stat" colspan="2">Ваша ссылка для приглашения<br>http://lova.su/[% data.refLink %]</td>
                 </tr>                    
             </table>
         </td></tr>        
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
-        <tr><td>Ссылка по которой вы можете приглашать друзей<br><input type="text" class="input-xlarge" value="http://lova.su/[% data.refLink %]"></td></tr>
         <tr><td>Пригласив сейчас как можно большее количество друзей,<br> Вы получите ощутимую и постоянно нарастающую выгоду в будущем.</td></tr>
-        <tr><td>Уже зарегистрировалось <input type="text" class="input-mini text-right" value="[% data.referals %]">  друзей по Вашей ссылке</td></tr>
     </table>
 </body>
 </html>

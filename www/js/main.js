@@ -154,7 +154,7 @@ jQuery(function($) {
     			.removeClass("ajax-loading")
     			.addClass("alert-success")
         		.html("Вы использовали все возможности кабинета! :-)");
-    	}, 5000);
+    	}, 20000);
     });
     
     var vk = VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
