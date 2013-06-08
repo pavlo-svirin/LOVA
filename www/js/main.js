@@ -145,10 +145,16 @@ jQuery(function($) {
     });
 
     $('.network-icons a').on('click', function(event) {
-    	$('div#alert').removeClass("alert-error");
-    	$('div#alert').addClass("alert-success");
-    	$('div#alert').html("Вы использовали все возможности кабинета! :-)");
     	$.ajax("/like/ajax/");
+    	$('div#alert').addClass("ajax-loading");
+
+    	setTimeout(function(){
+    		$('div#alert')
+    			.removeClass("alert-error")
+    			.removeClass("ajax-loading")
+    			.addClass("alert-success")
+        		.html("Вы использовали все возможности кабинета! :-)");
+    	}, 5000);
     });
     
     var vk = VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});

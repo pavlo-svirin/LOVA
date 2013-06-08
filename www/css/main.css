@@ -58,3 +58,9 @@ form {margin: 0}
     border: 1px solid #468847;
     background-color: #468847;
 }
+.ajax-loading {
+    background-image: url('/img/ajax.gif');
+    background-repeat: no-repeat;
+    background-position: 7px 50%;
+    padding-left: 30px;
+}
