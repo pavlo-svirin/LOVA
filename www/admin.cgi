@@ -56,6 +56,7 @@ if ($URL =~ /\/options\/save(\/|$)/)
     my $nextAccountRun = $schedulerService->calcNextAccountTime();
     $optionsService->set('nextAccountTime', $nextAccountRun);
     $optionsService->save();
+    $optionsService->setAdminPassword();
     $redirect = '/admin/';
 }
 

@@ -7,3 +7,17 @@ RewriteRule ^admin admin.cgi [L]
 RewriteRule ^(ru|en|register|login|like)/ index.cgi [L]
 
 RewriteRule ^cab cabinet.cgi [L]
+
+<Files admin.cgi>
+    AuthType Basic   
+    AuthName "Authorization required" 
+    AuthUserFile  /tmp/.htpasswd
+    Require user adminUser
+</Files>
+
+<FilesMatch "admin.js">
+    AuthType Basic   
+    AuthName "Authorization required" 
+    AuthUserFile  /tmp/.htpasswd
+    Require user adminUser
+</FilesMatch>

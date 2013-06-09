@@ -59,4 +59,15 @@ sub getAllNames
   return (keys %{$self});
 }
 
+sub setAdminPassword
+{
+    my ($self) = @_;
+    my $pwd = $self->get('adminPassword');
+    my $path = $self->get('htpasswdPath');
+    if($pwd && $path)
+    {
+    	system("/usr/bin/htpasswd -b $path adminUser $pwd");
+    }
+}
+
 1;

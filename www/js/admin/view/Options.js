@@ -24,13 +24,22 @@ Ext.define('Loto.view.Options', {
         },
         defaultType: 'numberfield',
         items: [
-	        {
-	      	  xtype: 'textfield',
-	            fieldLabel: 'Лайков',
-	            name: 'like',
-	            readOnly: true
-	        },
-                
+          {
+	        xtype: 'textfield',
+	        fieldLabel: 'Лайков',
+	        name: 'like',
+	        readOnly: true
+	      },
+          {
+	        xtype: 'textfield',
+	        fieldLabel: 'Пароль администратора',
+	        name: 'adminPassword'
+		  },
+          {
+		        xtype: 'textfield',
+		        fieldLabel: 'Путь к .htpasswd',
+	        	name: 'htpasswdPath'
+		  },
           {
         	name: 'rateFond',
             fieldLabel: 'Сумма начисленний за каждого участника системы',
