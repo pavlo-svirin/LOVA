@@ -42,13 +42,23 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 # Services
 my $userService = new Service::User();
 
+if($URL=~/(\w{32})/)
+{
+	my $emailCode = $1;
+	my $user = $userService->findByEmailCode($emailCode);
+	if($user)
+	{
+		$cgiSession->param('userId', $user->getId());
+		$userService->loadProfile($user);
+		$user->getProfile()->{'validateEmail'} = time;
+		$userService->saveProfile($user);
+	}
+}
+
 my $userId = $cgiSession->param('userId');
 my $user = $userService->findById($userId);
-if(!$user)
-{
-	$cgiSession->clear('userId');
-	$redirect = "/";
-} 
+
+
 #=======================Template Variables================
  
 $vars->{'lang'} = $lang;
@@ -65,6 +75,11 @@ if($user)
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'}->{'activated'} = $user->getProfile()->{'activated'};
 }
+else
+{
+    $cgiSession->clear('userId');
+    $redirect = "/";
+} 
 
 #=======================Main Stage========================
 if($URL =~ /logout/)

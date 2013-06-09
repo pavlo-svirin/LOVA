@@ -65,6 +65,17 @@ sub findAll
     return @users;
 }
 
+sub findByEmailCode
+{
+    my ($self, $emailCode) = @_;
+    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` JOIN `user_profile` p WHERE `p`.`name` = 'emailCode' AND `p`.`value` = ?");
+    my $rv = $sth->execute($emailCode);
+    return undef if($rv == 0E0);
+    my $ref = $sth->fetchrow_hashref();
+    my $user = Data::User->new(%$ref);
+    return $user;
+}
+
 sub countAll
 {
     my ($self) = @_;
@@ -207,8 +218,17 @@ sub saveProfile()
     my $profile = $user->getProfile();
     foreach my $name (keys %$profile)
     {
-        my $sth = $::sql->handle->prepare("INSERT INTO `user_profile` (`user_id`, `name`, `value`) VALUES (?, ?, ?)");
-        $sth->execute($user->getId(), $name, $profile->{$name});
+    	my $value = $profile->{$name};
+    	if($value)
+    	{
+	        my $sth = $::sql->handle->prepare("INSERT INTO `user_profile` (`user_id`, `name`, `value`) VALUES (?, ?, ?)");
+	        $sth->execute($user->getId(), $name, $profile->{$name});
+    	}
+    	else
+    	{
+            my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `user_id` = ? AND `name` = ?");
+            $sth->execute($user->getId(), $name);
+    	}
     }    
 }
 
@@ -282,17 +302,24 @@ sub runAccount()
 sub sendFirstEmail
 {
     my ($self, $user) = @_;
+    $self->loadProfile($user);
+    my $emailCode = Sirius::Common::GenerateRandomString(32);
+    $user->getProfile()->{'emailCode'} = $emailCode;
+    $self->saveProfile($user);
     my $msg = Mail::Send->new();
     my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
     $msg->to($userName . "<" . $user->getEmail() . ">");
     $msg->subject('Регистрация на LoVa');
     $msg->add("From", 'LoVa <lova@pemes.net>');
     my $fh = $msg->open('sendmail');
-    print $fh "Здравствуйте.\n";
+    print $fh "Здравствуйте.\n\n";
     print $fh "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
     print $fh "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
     print $fh "Для подтверждения регистрации перейдите по следующей ссылке:\n";
-    $msg->close();
+    print $fh "http://lova.su/cab/" . $emailCode;
+    print $fh "\n\n";
+    print $fh "Спасибо.\n";
+    $fh->close();
 }
 
 1;
