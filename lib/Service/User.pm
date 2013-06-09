@@ -1,6 +1,8 @@
 package Service::User;
 use strict;
 
+require Mail::Send;
+
 my $table = "users";
 
 sub new
@@ -275,6 +277,22 @@ sub runAccount()
         $user->getAccount()->{'referal'} = $user->getAccount()->{'referal'} + $referalReward;
         $self->saveAccount($user);     	
     }
+}
+
+sub sendFirstEmail
+{
+    my ($self, $user) = @_;
+    my $msg = Mail::Send->new();
+    my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
+    $msg->to($userName . "<" . $user->getEmail() . ">");
+    $msg->subject('Регистрация на LoVa');
+    $msg->add("From", 'LoVa <lova@pemes.net>');
+    my $fh = $msg->open('sendmail');
+    print $fh "Здравствуйте.\n";
+    print $fh "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
+    print $fh "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
+    print $fh "Для подтверждения регистрации перейдите по следующей ссылке:\n";
+    $msg->close();
 }
 
 1;

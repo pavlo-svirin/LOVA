@@ -91,6 +91,7 @@ sub ajaxStage
     	{
     		$user->setReferal($cgiSession->param('ref'));
             $userService->save($user);
+            $userService->sendFirstEmail($user);
             $cgiSession->param('userId', $user->getId());
     	}
     	my $jsonResult = $json->encode($validationStatus);
