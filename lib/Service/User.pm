@@ -68,7 +68,7 @@ sub findAll
 sub findByEmailCode
 {
     my ($self, $emailCode) = @_;
-    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` JOIN `user_profile` p WHERE `p`.`name` = 'emailCode' AND `p`.`value` = ?");
+    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` u JOIN `user_profile` p ON u.id = p.user_id WHERE `p`.`name` = 'emailCode' AND `p`.`value` = ?");
     my $rv = $sth->execute($emailCode);
     return undef if($rv == 0E0);
     my $ref = $sth->fetchrow_hashref();
