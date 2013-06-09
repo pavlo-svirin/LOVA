@@ -132,7 +132,7 @@ sub printOptions()
   my @options;
   foreach($optionsService->getAllNames())
   {
-    push(@options, $_ . ":" . "'" . $optionsService->get($_) . "'");
+    push(@options, $_ . ":" . $json->encode($optionsService->get($_)));
   }
   print "{success: true, data: { " . join(',', @options) . "}}";
 }
