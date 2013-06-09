@@ -14,6 +14,7 @@
     <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
     <link href="/css/main.css" rel="stylesheet">
     <script src="/js/main.js"></script>
+    <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>    
 </head>
 <body>
     <table class="container">
@@ -88,8 +89,8 @@
         <tr><td class="row-separator"></td></tr>
         <tr><td rowspan="2">[% contentRu %]</td>
             <td class="network-icons">
-                <a rel="nofollow" class="fb" title="Поделиться в Facebook" href="#"></a>
-                <a rel="nofollow" class="vk" title="Поделиться В Контакте" href="#"></a>
+                <a rel="nofollow" class="fb" title="Поделиться в Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare()' style="margin-left: 0px"></a>
+                <a rel="nofollow" class="vk" title="Поделиться В Контакте" href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);">            
                 <a rel="nofollow" class="ok" title="Добавить в Одноклассники" href="#"></a>
             </td>
         </tr>
