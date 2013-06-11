@@ -311,6 +311,7 @@ sub sendFirstEmail
     $msg->to($userName . "<" . $user->getEmail() . ">");
     $msg->subject('Регистрация на LoVa');
     $msg->add("From", 'LoVa <lova@pemes.net>');
+    $msg->add("Content-Type", 'text/plain; charset=utf-8');
     my $fh = $msg->open('sendmail');
     print $fh "Здравствуйте.\n\n";
     print $fh "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
