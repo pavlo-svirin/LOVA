@@ -146,7 +146,9 @@ jQuery(function($) {
 
     $('.network-icons a').on('click', function(event) {
     	$.ajax("/like/ajax/");
-    	$('div#alert').addClass("ajax-loading");
+    	$('div#alert')
+  			.removeClass("arrow")
+  			.addClass("ajax-loading");
 
     	setTimeout(function(){
     		$('div#alert')
