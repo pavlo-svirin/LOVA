@@ -74,6 +74,10 @@ if($user)
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'}->{'activated'} = $user->getProfile()->{'activated'};
+    if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
+    {
+        $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
+    } 
 }
 else
 {
@@ -127,6 +131,12 @@ sub ajaxStage
     	my $newUser = $userService->createUserFromCgiParams($params);
     	$newUser->setId($user->getId());
         $newUser->setLogin($user->getLogin());
+        
+        # Do not allow change referal after 7 days
+	    if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
+	    {
+	    	$newUser->setReferal($user->getReferal());
+	    }        
     	unless($newUser->getPassword())
     	{
     		$newUser->set('password', $user->getPassword());

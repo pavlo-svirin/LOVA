@@ -1,7 +1,10 @@
 package Data::User;
+
 use strict;
 use lib "..";
 use parent 'Data::BaseObject';
+
+use Date::Calc qw(Mktime);
 
 my $salt = "SALT!"; 
 
@@ -115,6 +118,15 @@ sub wasCreatedThisMonth
     if(($self->getCreatedYear() == $year) && ($self->getCreatedMonth() == $mon))
     {
     	return 1;
+    }
+}
+
+sub getCreatedUnixTime
+{
+    my ($self) = @_;
+    if($self->getCreated() =~ /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/)
+    {
+        Mktime( $1, $2, $3, $4, $5, $6 );
     }
 }
 

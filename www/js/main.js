@@ -157,7 +157,10 @@ jQuery(function($) {
     	}, 20000);
     });
     
-    var vk = VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
+    if (window['VK'] != undefined)
+    {
+        VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
+    }
     
 });
 

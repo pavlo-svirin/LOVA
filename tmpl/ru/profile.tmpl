@@ -76,11 +76,11 @@
                 <span class="help-inline"></span>
             </div>
           </div>
-          <div class="control-group">
+          <div class="control-group info">
             <label class="control-label" for="referal">Пригласил</label>
             <div class="controls">
-                <input type="text" name="referal" value="[% data.user.getReferal() %]">
-                <span class="help-inline"></span>
+                <input type="text" name="referal" [% data.profile.referalDisabled %] value="[% data.user.getReferal() %]">
+                <span class="help-inline">поле можно изменить в течении 7 дней с момента регистрации</span>
             </div>
           </div>
           <div class=" class="form-actions">
