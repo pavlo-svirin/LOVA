@@ -44,15 +44,15 @@ Ext.define('Loto.view.Options', {
         	name: 'rateFond',
             fieldLabel: 'Сумма начисленний за каждого участника системы',
             allowDecimals: true,
-            decimalPrecision: 2,
-            step: 0.01
+            decimalPrecision: 6,
+            step: 0.001
           },
           {
           	name: 'rateReferal',
               fieldLabel: 'Сумма начисленний за каждого реферала',
               allowDecimals: true,
-              decimalPrecision: 2,
-              step: 0.01
+              decimalPrecision: 6,
+              step: 0.001
           }
         ]
       },

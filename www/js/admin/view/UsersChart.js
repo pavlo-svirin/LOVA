@@ -41,7 +41,6 @@ Ext.define('Loto.view.UsersChart', {
 					fields:["registered", "referals"],
 					grid: true,
 					minimum:0,
-					maximum: 10,
 					minorTickSteps: 1
 				},
 				{
