@@ -20,6 +20,15 @@ function fbShare()
     return false;
 }
 
+function okShare()
+{
+    var url = "http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1";
+    url += '&st.comments=' + encodeURIComponent("Я зарегистрирован на lova.su. Там вся страна!");
+    url += '&st._surl=' + encodeURIComponent("http://lova.su");
+    window.open(url, 'sharer', 'width=626,height=436');
+    return false;
+}
+
 jQuery(function($) {
     $('#registerForm').on('submit', function(event) {
     	

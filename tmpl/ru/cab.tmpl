@@ -33,7 +33,7 @@
           <span class="network-icons">
             <a rel="nofollow" class="fb" title="Поделиться в Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare()' style="margin-left: 0px"></a>
             <a rel="nofollow" class="vk" title="Поделиться В Контакте" href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);">            
-            <a rel="nofollow" class="ok" title="Добавить в Одноклассники" href="http://www.odnoklassniki.ru/dk?st.cmd=addShare&amp;st.s=1&amp;st._surl=http://lova.su"></a>
+            <a rel="nofollow" class="ok" title="Добавить в Одноклассники" target="_blank" href="http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1&st._surl=lova.su" onClick='okShare()'></a>
           </span>
           [% IF !data.user.activated %]
             <div class="alert alert-error arrow" style="float: right; width: 700px" id="alert">
