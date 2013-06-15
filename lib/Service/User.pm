@@ -60,7 +60,7 @@ sub findByLoginOrEmail
     }
     if(!$user && $values->{"email"})
     {
-        $user = $self->findByLogin($values->{"email"});
+        $user = $self->findByEmail($values->{"email"});
     }
     return $user;
 }

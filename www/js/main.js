@@ -207,10 +207,12 @@ jQuery(function($) {
             	
     			if(data.success === "true")
     			{
+    				$form.find("div.alert-error").addClass("hide");
     				$form.find("div.alert-success").removeClass("hide");
     			}
     			else
     			{
+    				$form.find("div.alert-success").addClass("hide");
     				$form.find("div.alert-error").removeClass("hide");
     			}
             }
