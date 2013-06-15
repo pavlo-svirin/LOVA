@@ -69,4 +69,38 @@ sub sendPasswordEmail
     $fh->close();
 }
 
+sub sendToAllUsers
+{
+    my ($self, $subject, $body) = @_;
+    my $users = $self->{'userService'}->findAll();
+    foreach my $user (@$users)
+    {
+        my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
+        my $email = $userName . "<" . $user->getEmail() . ">";
+        $self->sendHtmlEmail($email, $subject, $body);
+    }
+}
+
+sub sendToRecipients
+{
+    my ($self, $subject, $body, $recipients) = @_;
+	foreach my $email (split(',', $recipients))
+	{
+		$self->sendHtmlEmail($email, $subject, $body);
+	}
+}
+
+sub sendHtmlEmail
+{
+    my ($self, $to, $subject, $body) = @_;
+    my $msg = Mail::Send->new();
+    $msg->add("From", 'LoVa <lova@pemes.net>');
+    $msg->add("Content-Type", 'text/html; charset=utf-8');
+    $msg->to($to);
+    $msg->subject($subject);
+    my $fh = $msg->open('sendmail');
+    print $fh $body;
+    $fh->close();
+}
+
 1;

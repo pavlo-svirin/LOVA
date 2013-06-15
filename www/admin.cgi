@@ -43,6 +43,7 @@ my $cookie = new CGI::Cookie(-name=>'sid', -value=>$cgiSession->id());
 my $userService = new Service::User();
 my $optionsService = new Service::Options();
 my $schedulerService = new Service::Scheduler(optionsService => $optionsService);
+my $emailService = new Service::Email(userService => $userService);
 
 #=======================Template Variables================
 
@@ -92,6 +93,20 @@ sub ajaxStage
     {
         printOptions();
     }
+    elsif($URL =~ /\/send\//)
+    {
+    	my $subject = $CGI->param("subject");
+        my $body = $CGI->param("body");
+        my $recipients = $CGI->param("emails");
+        if($CGI->param('rcpt') eq 'all')
+        {
+        	$emailService->sendToAllUsers($subject, $body);
+        }
+        else
+        {
+            $emailService->sendToRecipients($subject, $body, $recipients);
+        }
+    }    
     elsif(($URL =~ /\/users\//) && ($URL =~ /\/chart\//))
     {
         my @users = $userService->findAll();

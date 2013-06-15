@@ -4,7 +4,8 @@ Ext.application({
     appFolder: '/js/admin',
     controllers: [
       'Options',
-      'Users'
+      'Users',
+      'Emails'
     ],
     launch: function()
     {
@@ -23,7 +24,8 @@ Ext.application({
                 items: [
                     { xtype: 'options' },
     	            { xtype: 'users' },
-    	            { xtype: 'usersChart' }
+    	            { xtype: 'usersChart' },
+    	            { xtype: 'emails' }
                 ]
             }]
         });
