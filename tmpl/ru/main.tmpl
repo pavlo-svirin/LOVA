@@ -26,8 +26,13 @@
 </head>
 <body>
     <table class="container">
-        <tr><td class="login">
-                <form id="loginForm" method="POST" action = "/login/" class="form-inline" [% url.search('login') ? '' : 'style="visibility:hidden"' %]>
+        <tr><td class="login" [% url.search('login') ? '' : 'style="visibility:hidden"' %]>
+                <a href="#restoreDiv" data-toggle="modal">Забыли пароль?</a>
+            </td>
+            <td></td>
+        </tr>
+        <tr><td class="login" [% url.search('login') ? '' : 'style="visibility:hidden"' %]>
+                <form id="loginForm" method="POST" action = "/login/" class="form-inline">
                     <label class="control-label" for="login">Логин</label>
                     <input name="login"    type="text"     class="input-small" placeholder="Логин">
                     <label class="control-label" for="password">Пароль</label>
@@ -41,57 +46,7 @@
             </td>
         </tr>
         <tr><td class="row-separator"></td></tr>
-        <tr><td>
-                <div id="registerDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="registerLabel" aria-hidden="true">
-                  <form id="registerForm" data-async class="form-horizontal" method="POST" action="/register/">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3 id="registerLabel">Регистрация</h3>
-                  </div>
-                  <div class="modal-body">
-                      <div class="control-group">
-                        <label class="control-label" for="first_name">Имя*</label>
-                        <div class="controls">
-                            <input type="text" name="first_name" required>
-                            <span class="help-inline"></span>
-                        </div>
-                      </div>
-                      <div class="control-group">
-                        <label class="control-label" for="last_name">Фамилия</label>
-                        <div class="controls">
-                            <input type="text" name="last_name">
-                            <span class="help-inline"></span>
-                        </div>
-                      </div>
-                      <div class="control-group">
-                        <label class="control-label" for="login">Ник*</label>
-                        <div class="controls">
-                            <input type="text" name="login" required>
-                            <span class="help-inline"></span>
-                        </div>
-                      </div>
-                      <div class="control-group">
-                        <label class="control-label" for="email">Почта*</label>
-                        <div class="controls">
-                            <input type="email" name="email" required>
-                            <span class="help-inline"></span>
-                        </div>
-                      </div>
-                      <div class="control-group">
-                        <label class="control-label" for="password">Пароль*</label>
-                        <div class="controls">
-                            <input type="password" name="password" required>
-                            <span class="help-inline"></span>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-                    <button name="register" type="submit" class="btn btn-primary">Регистрация</button>
-                  </div>
-                  </form>
-                </div>        
-            </td>
+        <tr><td></td>
             <td class="register"><a href="#registerDiv" data-toggle="modal" class="btn btn-success btn-large btn-block">Регистрация</a></td>
         </tr>
         <tr><td class="row-separator"></td></tr>
@@ -108,5 +63,87 @@
         </tr>
         
     </table>
+    
+    <div id="registerDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="registerLabel" aria-hidden="true">
+      <form id="registerForm" data-async class="form-horizontal" method="POST" action="/register/">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="registerLabel">Регистрация</h3>
+      </div>
+      <div class="modal-body">
+          <div class="control-group">
+            <label class="control-label" for="first_name">Имя*</label>
+            <div class="controls">
+                <input type="text" name="first_name" required>
+                <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="last_name">Фамилия</label>
+            <div class="controls">
+                <input type="text" name="last_name">
+                <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="login">Ник*</label>
+            <div class="controls">
+                <input type="text" name="login" required>
+                <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="email">Почта*</label>
+            <div class="controls">
+                <input type="email" name="email" required>
+                <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="password">Пароль*</label>
+            <div class="controls">
+                <input type="password" name="password" required>
+                <span class="help-inline"></span>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        <button name="register" type="submit" class="btn btn-primary">Регистрация</button>
+      </div>
+      </form>
+    </div>        
+    
+    <div id="restoreDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="restoreLabel" aria-hidden="true">
+      <form id="restoreForm" data-async class="form-horizontal" method="POST" action="/restore/">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="restoreLabel">Восстановление пароля</h3>
+      </div>
+      <div class="modal-body">
+          <div class="alert alert-error hide">Логин или E-mail не найден</div>
+          <div class="alert alert-success hide">Сcылка для восстановления пароля отправлена на почту</div>
+          <div class="control-group">
+            <label class="control-label" for="first_name">Введите логин</label>
+            <div class="controls">
+                <input type="text" name="login">
+                <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="email">Или e-mail</label>
+            <div class="controls">
+                <input type="email" name="email">
+                <span class="help-inline"></span>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        <button name="restore" type="submit" class="btn btn-primary">Восстановить</button>
+      </div>
+      </form>
+    </div>        
+    
 </body>
 </html>

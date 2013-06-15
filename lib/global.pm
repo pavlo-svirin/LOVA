@@ -18,6 +18,7 @@ use Sirius::MySQL;
 use Service::Options;
 use Service::Scheduler;
 use Service::User;
+use Service::Email;
 
 use Data::BaseObject;
 use Data::User;

@@ -41,6 +41,7 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 
 # Services
 my $userService = new Service::User();
+my $emailService = new Service::Email(userService => $userService);
 my $optionsService = new Service::Options();
 $optionsService->load();
 
@@ -91,11 +92,26 @@ sub ajaxStage
     	{
     		$user->setReferal($cgiSession->param('ref'));
             $userService->save($user);
-            $userService->sendFirstEmail($user);
+            $emailService->sendFirstEmail($user);
             $cgiSession->param('userId', $user->getId());
     	}
     	my $jsonResult = $json->encode($validationStatus);
     	print $jsonResult;
+    }
+    elsif($URL =~ /\/restore\//)
+    {
+    	my $result->{'success'} = 'false';
+
+        my $user = $userService->findByLoginOrEmail({
+        	login => $CGI->param("login"),
+        	email => $CGI->param("email")
+        });
+        if($user)
+        {
+            $emailService->sendPasswordEmail($user);
+            $result->{'success'} = 'true';
+        }
+    	print $json->encode($result);
     }
     elsif($URL =~ /\/like\//)
     {

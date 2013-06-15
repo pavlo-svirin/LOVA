@@ -1,8 +1,6 @@
 package Service::User;
 use strict;
 
-require Mail::Send;
-
 my $table = "users";
 
 sub new
@@ -48,6 +46,22 @@ sub findByEmail
     return undef if($rv == 0E0);
     my $ref = $sth->fetchrow_hashref();
     my $user = Data::User->new(%$ref);
+    return $user;
+}
+
+sub findByLoginOrEmail
+{
+    my $self = shift;
+    my $values = shift;
+    my $user;
+    if($values->{"login"})
+    {
+        $user = $self->findByLogin($values->{"login"});
+    }
+    if(!$user && $values->{"email"})
+    {
+        $user = $self->findByLogin($values->{"email"});
+    }
     return $user;
 }
 
@@ -297,30 +311,6 @@ sub runAccount()
         $user->getAccount()->{'referal'} = $user->getAccount()->{'referal'} + $referalReward;
         $self->saveAccount($user);     	
     }
-}
-
-sub sendFirstEmail
-{
-    my ($self, $user) = @_;
-    $self->loadProfile($user);
-    my $emailCode = Sirius::Common::GenerateRandomString(32);
-    $user->getProfile()->{'emailCode'} = $emailCode;
-    $self->saveProfile($user);
-    my $msg = Mail::Send->new();
-    my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
-    $msg->to($userName . "<" . $user->getEmail() . ">");
-    $msg->subject('Регистрация на LoVa');
-    $msg->add("From", 'LoVa <lova@pemes.net>');
-    $msg->add("Content-Type", 'text/plain; charset=utf-8');
-    my $fh = $msg->open('sendmail');
-    print $fh "Здравствуйте.\n\n";
-    print $fh "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
-    print $fh "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
-    print $fh "Для подтверждения регистрации перейдите по следующей ссылке:\n";
-    print $fh "http://lova.su/cab/" . $emailCode;
-    print $fh "\n\n";
-    print $fh "Спасибо.\n";
-    $fh->close();
 }
 
 1;

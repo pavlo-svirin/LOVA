@@ -82,7 +82,7 @@ if($user)
 else
 {
     $cgiSession->clear('userId');
-    $redirect = "/";
+    $redirect = "/login/";
 } 
 
 #=======================Main Stage========================

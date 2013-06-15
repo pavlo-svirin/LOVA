@@ -1,16 +1,19 @@
+if (window['VK'] != undefined)
+{
+    VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
+}
+
+    
 function loginAction()
 {
-	var loginForm = document.getElementById('loginForm');
-	if(loginForm)
+	$(".login").css('visibility', 'visible');
+	
+	var $form = $('#loginForm');
+	var login = $form.find("input[name=login]");
+
+	if(login[0].value)
 	{
-		if(loginForm.style.visibility == 'hidden')
-		{
-			loginForm.style.visibility = 'visible';
-		}
-		else
-		{
-			loginForm.submit();
-		}
+		$form.submit();
 	}
 }
 
@@ -69,7 +72,6 @@ jQuery(function($) {
     			if(data.success === "true")
     			{
     				top.location = "/cab/";
-    				// alert("Регистрация прошла успешно.");
     			}
     			else
     			{
@@ -168,10 +170,54 @@ jQuery(function($) {
     	}, 20000);
     });
     
-    if (window['VK'] != undefined)
-    {
-        VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
-    }
+   
+    $('#restoreForm').on('submit', function(event) {
+        var $form = $(this);
+        
+        // disable register button;
+    	var $btn = $form.find("button[name='restore']"); 
+    	$btn.addClass("disabled");
+    	$btn.attr("disabled", "disabled");
+    	// flush errors
+    	$form.find("input")
+			.closest('.control-group')
+			.removeClass('error');
+    	$form.find("input")
+			.parent()
+			.children("span")
+			.html("");
+    	
+        $.ajax({
+            type: $form.attr('method'),
+            url: $form.attr('action') + "/ajax/",
+            data: $form.serialize(),
+            dataType: 'json',
+            error: function(data, status) {
+            	// enable register button
+            	var $btn = $form.find("button[name='restore']"); 
+            	$btn.removeClass("disabled");
+            	$btn.removeAttr("disabled");
+				$form.find("div.alert-error").html("Произошла ошибка, попробуйте позже").removeClass("hide");
+            },
+            success: function(data, status) {
+            	// enable register button
+            	$form.find("button[name='restore']") 
+            		.removeClass("disabled")
+            		.removeAttr("disabled");
+            	
+    			if(data.success === "true")
+    			{
+    				$form.find("div.alert-success").removeClass("hide");
+    			}
+    			else
+    			{
+    				$form.find("div.alert-error").removeClass("hide");
+    			}
+            }
+        });
+ 
+        event.preventDefault();
+    });
     
 });
 

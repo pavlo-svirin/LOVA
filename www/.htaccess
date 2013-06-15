@@ -4,7 +4,7 @@ RewriteRule ^favicon.ico - [L]
 
 RewriteRule ^admin admin.cgi [L]
 
-RewriteRule ^(ru|en|register|login|like)/ index.cgi [L]
+RewriteRule ^(ru|en|register|restore|login|like)/ index.cgi [L]
 
 RewriteRule ^cab cabinet.cgi [L]
 
