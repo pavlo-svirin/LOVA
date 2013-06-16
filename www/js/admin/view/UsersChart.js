@@ -6,9 +6,9 @@ Ext.define('Loto.view.UsersChart', {
     tbar: [
         { xtype: 'button', name: "month", text: 'Month' },
         { xtype: 'button', name: "year", text: 'Year' },
-        { xtype: 'label', text: 'Всего:', margin: '0 2 0 10' },
+        { xtype: 'label', text: 'Всего:', margin: '0 2 0 20' },
         { xtype: 'label', name: 'total', text: '0' },
-        { xtype: 'label', text: 'Сегодня:', margin: '0 2 0 5' },
+        { xtype: 'label', text: 'Сегодня:', margin: '0 2 0 10' },
         { xtype: 'label', name: 'today', text: '0' }
     ],    
     items: [
