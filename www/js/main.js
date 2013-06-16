@@ -36,6 +36,7 @@ function mmShare()
 {
     var url = "http://connect.mail.ru/share";
     url += '?title=' + encodeURIComponent("LoVa");
+    url += '&url=' + encodeURIComponent("http://lova.su/");
     url += '&description=' + encodeURIComponent("Я зарегистрирован на lova.su. Там вся страна!");
     url += '&imageurl=' + encodeURIComponent("http://lova.su/img/logo.jpg");
     window.open(url, 'sharer', 'width=626,height=436');
