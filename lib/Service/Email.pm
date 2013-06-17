@@ -72,8 +72,20 @@ sub sendPasswordEmail
 sub sendToAllUsers
 {
     my ($self, $subject, $body) = @_;
-    my $users = $self->{'userService'}->findAll();
-    foreach my $user (@$users)
+    my @users = $self->{'userService'}->findAll();
+    foreach my $user (@users)
+    {
+        my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
+        my $email = $userName . "<" . $user->getEmail() . ">";
+        $self->sendHtmlEmail($email, $subject, $body);
+    }
+}
+
+sub sendToSubscribedUsers
+{
+    my ($self, $subject, $body) = @_;
+    my @users = $self->{'userService'}->findSubscribed();
+    foreach my $user (@users)
     {
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
         my $email = $userName . "<" . $user->getEmail() . ">";

@@ -8,7 +8,7 @@ Ext.define('Loto.view.UsersChart', {
         { xtype: 'button', name: "year", text: 'Year' },
         { xtype: 'label', text: 'Всего:', margin: '0 2 0 20' },
         { xtype: 'label', name: 'total', text: '0' },
-        { xtype: 'label', text: 'Сегодня:', margin: '0 2 0 10' },
+        { xtype: 'label', text: 'Сегодня:', margin: '0 2 0 15' },
         { xtype: 'label', name: 'today', text: '0' }
     ],    
     items: [

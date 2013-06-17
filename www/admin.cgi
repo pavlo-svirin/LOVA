@@ -100,7 +100,11 @@ sub ajaxStage
         my $recipients = $CGI->param("emails");
         if($CGI->param('rcpt') eq 'all')
         {
-        	$emailService->sendToAllUsers($subject, $body);
+            $emailService->sendToAllUsers($subject, $body);
+        }
+        elsif($CGI->param('rcpt') eq 'subscribers')
+        {
+            $emailService->sendToSubscribedUsers($subject, $body);
         }
         else
         {

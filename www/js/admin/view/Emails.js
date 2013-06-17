@@ -12,13 +12,23 @@ Ext.define('Loto.view.Emails', {
     buttonAlign: 'left',
     items: [
         {
-        	xtype: 'radiogroup',
+        	xtype: 'combo',
         	fieldLabel: 'Получатель',
-        	columns: 2,
-        	items: [
-                { boxLabel: 'Указанный адрес', name: 'rcpt', inputValue: 'list' },
-                { boxLabel: 'Все пользователи', name: 'rcpt', inputValue: 'all', checked: true},
-        	]
+        	queryMode: 'local',
+        	name: 'rcpt',
+            displayField: 'caption',
+            valueField: 'inputValue',
+            autoSelect: true,
+	        allowBlank: false,
+	        editable: false,
+            store: Ext.create('Ext.data.Store', {
+                fields: ['caption', 'inputValue'],
+                data : [
+                    { caption: 'Указанный адрес', inputValue: 'list' },
+                    { caption: 'Подписчикам', inputValue: 'subscribers'},
+                    { caption: 'Все пользователи', inputValue: 'all'}
+                ]
+            })
         },
         {
 	        xtype: 'textfield',

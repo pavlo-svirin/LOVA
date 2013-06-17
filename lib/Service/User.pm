@@ -82,12 +82,26 @@ sub findAll
 sub findByEmailCode
 {
     my ($self, $emailCode) = @_;
-    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` u JOIN `user_profile` p ON u.id = p.user_id WHERE `p`.`name` = 'emailCode' AND `p`.`value` = ?");
+    my $sth = $::sql->handle->prepare("SELECT u.* FROM `$table` u JOIN `user_profile` p ON u.id = p.user_id WHERE `p`.`name` = 'emailCode' AND `p`.`value` = ?");
     my $rv = $sth->execute($emailCode);
     return undef if($rv == 0E0);
     my $ref = $sth->fetchrow_hashref();
     my $user = Data::User->new(%$ref);
     return $user;
+}
+
+sub findSubscribed
+{
+    my ($self) = @_;
+    my $sth = $::sql->handle->prepare("SELECT u.* FROM `$table` u LEFT JOIN `user_profile` p ON u.id = p.user_id AND p.name = 'subscribe' WHERE (`p`.`name` = 'subscribe' AND `p`.`value` = 'true') OR p.name IS NULL");
+    my $rv = $sth->execute();
+    return () if($rv == 0E0);
+    my @users;
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+      push(@users, Data::User->new(%$ref));
+    }
+    return @users;
 }
 
 sub countAll

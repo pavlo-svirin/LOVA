@@ -9,7 +9,7 @@ Ext.define('Loto.controller.Emails', {
             'emails button[action=send]': {
                 click: this._send
             },
-            'emails radiogroup': {
+            'emails combo[name=rcpt]': {
             	change: this._toggleRcpts
             }
         });
@@ -26,19 +26,19 @@ Ext.define('Loto.controller.Emails', {
         }
     }, 
     
-    _toggleRcpts: function(grp) {
-    	var emails = grp.up('form').down('textfield[name=emails]');
-    	if(grp.getValue().rcpt == "all")
-		{
-    		emails.allowBlank = true;
-    		emails.validate();
-    		emails.disable();
-		}
-    	else
+    _toggleRcpts: function(rcpt) {
+    	var emails = rcpt.up('form').down('textfield[name=emails]');
+    	if(rcpt.getValue() == "list")
 		{
     		emails.allowBlank = false;
     		emails.validate();
     		emails.enable();
+		}
+    	else
+		{
+    		emails.allowBlank = true;
+    		emails.validate();
+    		emails.disable();
 		}
     }
     

@@ -142,10 +142,11 @@ sub ajaxStage
     		$newUser->set('password', $user->getPassword());
     	}
     	my $validationStatus = $userService->validate($newUser);
+    	$newUser->getProfile()->{"subscribe"} = "false";
     	if($validationStatus->{'success'} eq 'true')
     	{
             $userService->save($newUser);
-            foreach my $name("skype", "country", "phone")
+            foreach my $name("skype", "country", "phone", "subscribe")
             {
             	if($CGI->param($name))
             	{
