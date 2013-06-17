@@ -25,7 +25,7 @@ Ext.define('Loto.view.Emails', {
                 fields: ['caption', 'inputValue'],
                 data : [
                     { caption: 'Указанный адрес', inputValue: 'list' },
-                    { caption: 'Подписчикам', inputValue: 'subscribers'},
+                    { caption: 'Подписчики', inputValue: 'subscribers'},
                     { caption: 'Все пользователи', inputValue: 'all'}
                 ]
             })
