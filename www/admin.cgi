@@ -34,10 +34,10 @@ my %cookies = fetch CGI::Cookie;
 my $sid = ($cookies{'sid'}) ? $cookies{'sid'}->value : undef;
 # Загружаем сессию с принятым ID или начинаем новую со сгенерированым идентификатором
 my $cgiSession = new CGI::Session("driver:MySQL;", $sid, {Handle=>$dbh});
-$cgiSession->expire('1h');
+$cgiSession->expire('+3M');
 
 # Cookie с идентификатором сессии к клиенту
-my $cookie = new CGI::Cookie(-name=>'sid', -value=>$cgiSession->id());
+my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession->id());
 
 # Сервисы
 my $userService = new Service::User();
