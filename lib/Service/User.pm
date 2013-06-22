@@ -2,6 +2,7 @@ package Service::User;
 use strict;
 
 my $table = "users";
+my @systemProfileValues = ("activated", "emailCode", "validateEmail");
 
 sub new
 {
@@ -227,11 +228,21 @@ sub validate
     return $result; 
 }
 
+sub getProfileValueFlag
+{
+    my ($self, $name) = @_;
+    if(grep {$_ eq $name} @systemProfileValues)
+    {
+    	return 1;
+    }
+    return 0;
+}
+
 sub loadProfile()
 {
 	my ($self, $user) = @_;
 
-	my $sth = $::sql->handle->prepare("SELECT * FROM `user_profile` WHERE `user_id` = ?");
+	my $sth = $::sql->handle->prepare("SELECT `name`, `value` FROM `user_profile` WHERE `user_id` = ?");
     my $rv = $sth->execute($user->getId());
     while(my $ref = $sth->fetchrow_hashref())
     {
@@ -249,13 +260,9 @@ sub saveProfile()
     	my $value = $profile->{$name};
     	if($value)
     	{
-	        my $sth = $::sql->handle->prepare("INSERT INTO `user_profile` (`user_id`, `name`, `value`) VALUES (?, ?, ?)");
-	        $sth->execute($user->getId(), $name, $profile->{$name});
-    	}
-    	else
-    	{
-            my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `user_id` = ? AND `name` = ?");
-            $sth->execute($user->getId(), $name);
+            my $flag_id = $self->getProfileValueFlag($name);    		
+	        my $sth = $::sql->handle->prepare("INSERT INTO `user_profile` (`user_id`, `name`, `value`, `flag_id`) VALUES (?, ?, ?, ?)");
+	        $sth->execute($user->getId(), $name, $profile->{$name}, $flag_id);
     	}
     }    
 }
@@ -263,7 +270,7 @@ sub saveProfile()
 sub deleteProfile()
 {
     my ($self, $user) = @_;
-    my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `user_id` = ?");
+    my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `flag_id` <> 1 AND `user_id` = ?");
     $sth->execute($user->getId());
 }
 

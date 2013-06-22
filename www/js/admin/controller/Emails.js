@@ -1,6 +1,6 @@
 Ext.define('Loto.controller.Emails', {
     extend: 'Ext.app.Controller',
-    views: [ 'Emails' ]
+    views: [ 'Emails' ],
 
     init: function() {
         this.control({
