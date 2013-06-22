@@ -109,7 +109,7 @@ sub findCreatedInRange
 {
     my ($self, $conf) = @_;
     
-    my $from = $conf->{'form'} || '1970-01-01';
+    my $from = $conf->{'from'} || '1970-01-01';
     $from .= ' 00:00:00';
     my $to = $conf->{'to'} || '2999-01-01';
     $to .= ' 23:59:59';
