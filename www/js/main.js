@@ -1,9 +1,3 @@
-if (window['VK'] != undefined)
-{
-    VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
-}
-
-    
 function loginAction()
 {
 	$(".login").css('visibility', 'visible');
@@ -44,6 +38,12 @@ function mmShare()
 }
 
 jQuery(function($) {
+	
+	if (window['VK'] != undefined)
+	{
+	    VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
+	}
+	
     $('#registerForm').on('submit', function(event) {
     	
         var $form = $(this);
