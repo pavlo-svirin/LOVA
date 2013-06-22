@@ -10,17 +10,12 @@ Ext.application({
     launch: function()
     {
         Ext.create('Ext.container.Viewport', {
-            layout: 'fit',
-           
+            layout: 'card',
             items: [{
                 xtype: 'tabpanel',
                 renderTo: 'admin-screen',
-                width: "100%",
                 activeTab: 0,
                 frame: true,
-                defaults: {
-                    autoHeight: true
-                },
                 items: [
                     { xtype: 'options' },
     	            { xtype: 'users' },
