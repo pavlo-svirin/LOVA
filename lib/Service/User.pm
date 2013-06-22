@@ -105,6 +105,26 @@ sub findSubscribed
     return @users;
 }
 
+sub findCreatedInRange
+{
+    my ($self, $conf) = @_;
+    
+    my $from = $conf->{'form'} || '1970-01-01';
+    $from .= ' 00:00:00';
+    my $to = $conf->{'to'} || '2999-01-01';
+    $to .= ' 23:59:59';
+    
+    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` WHERE `created` >= ? AND `created` <= ? ORDER BY `created`");
+    my $rv = $sth->execute($from, $to);
+    return () if($rv == 0E0);
+    my @users;
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+      push(@users, Data::User->new(%$ref));
+    }
+    return @users;
+}
+
 sub countAll
 {
     my ($self) = @_;

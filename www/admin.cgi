@@ -113,26 +113,22 @@ sub ajaxStage
     }    
     elsif(($URL =~ /\/users\//) && ($URL =~ /\/chart\//))
     {
-        my @users = $userService->findAll();
     	my %result;
-        if($URL =~ /\/month\//)
+        my @users = $userService->findCreatedInRange({
+            from => $CGI->param('from'),
+            to => $CGI->param('to')
+        });
+
+        foreach my $user (@users)
         {
-        	foreach my $user (@users)
-        	{
-        		if($user->wasCreatedThisMonth())
-        		{
-        			$result{$user->getCreatedDay()}->{'registered'}++;
-        			if($user->getReferal())
-        			{
-                        $result{$user->getCreatedDay()}->{'referals'}++;
-        			}
-        		} 
-        	}
+        	my $date = $user->getCreatedByScale($CGI->param('scale')); 
+            $result{$date}->{'registered'}++;
+            if($user->getReferal())
+            {
+                $result{$date}->{'referals'}++;
+            }
         }
-        elsif ($URL =~ /\/year\//)
-        {
-        	
-        }
+
         print "{success: true, data: [";        
         print map {"{date: '$_', "
         	. "registered: " . ($result{$_}->{'registered'} || 0) . ", "

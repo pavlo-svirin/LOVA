@@ -4,34 +4,58 @@ Ext.define('Loto.view.UsersChart', {
     title: 'График регистраций',
     height: '600',
     tbar: [
-        { xtype: 'button', name: "month", text: 'Month' },
-        { xtype: 'button', name: "year", text: 'Year' },
-        { xtype: 'label', text: 'Всего:', margin: '0 2 0 20' },
+        { xtype: 'label', text: 'Всего:', margin: '0 2 0 0' },
         { xtype: 'label', name: 'total', text: '0' },
         { xtype: 'label', text: 'Сегодня:', margin: '0 2 0 15' },
-        { xtype: 'label', name: 'today', text: '0' }
+        { xtype: 'label', name: 'today', text: '0', margin: '0 15 0 0' },
+        { 
+        	xtype: 'combo',
+        	name: 'scale',
+        	fieldLabel: 'Масштаб',
+        	allowBlank: false,
+            displayField: 'caption',
+            valueField: 'name',
+            autoSelect: true,
+        	labelWidth: 60,
+        	width: 160,
+        	store: Ext.create('Ext.data.Store', {
+        		fields: [ 'name', 'caption' ],
+        		data: [
+    		        { name: 'day', caption: 'День' },
+    		        { name: 'week', caption: 'Неделя' },
+    		        { name: 'month', caption: 'Месяц' },
+    		        { name: 'year', caption: 'Год' }    		        
+        		]
+        	})
+        },
+        { 
+        	xtype: 'datefield',
+        	name: 'from',
+        	fieldLabel: 'Период с',
+        	format: 'Y-m-d',
+        	startDay: 1,
+        	labelWidth: 60,
+        	width: 160
+        },
+        { 
+        	xtype: 'datefield',
+        	name: 'to',
+        	fieldLabel: 'по',
+        	format: 'Y-m-d',
+        	startDay: 1,
+        	labelWidth: 20,
+        	width: 120
+        },
+        { 
+        	xtype: 'button',
+        	action: 'refresh',
+        	text: 'Обновить'
+        }
     ],    
     items: [
       {
     	xtype: 'chart',
-    	store:{
-    	    proxy: new Ext.data.HttpProxy({
-    	        url: '/admin/users/chart/month/ajax/',
-    	        reader: {
-    	            type: 'json',
-    	            root: 'data'
-    	        }
-    	    }),
-			model:Ext.define("MyModel", {
-				extend:"Ext.data.Model",
-				fields:[
-					"date",
-					{name: "registered", type: 'int'},
-					{name: "referals", type: 'int'}
-				]
-			}),
-    	    autoLoad: true
-		},
+    	store: 'Registrations',
     	animate: false,
         style: 'background:#fff',
         theme: 'Blue',
@@ -57,14 +81,29 @@ Ext.define('Loto.view.UsersChart', {
 				{
 					type:"line",
 					axis:"left",
-					stacked:true,
 					xField:"date",
-					yField:["registered"]
+					yField:["registered"],
+		            tips: {
+		                trackMouse: true,
+		                width: 160,
+		                height: 55,
+		                renderer: function(storeItem, item) {
+		                  this.setTitle(
+		                      storeItem.get('date')
+		                      + '<br>'
+		                      + 'Зарегистрировано: '
+		                      + storeItem.get('registered')
+		                      + "<br>"
+		                      + 'Рефералов: '
+		                      + storeItem.get('referals')
+		                  );
+		                }
+   	                },					
 				},
 				{
 					type:"column",
 					axis:"left",
-					stacked:true,
+					highlight: true,
 					xField:"date",
 					yField:["referals"],
 			     	style: {
@@ -73,8 +112,15 @@ Ext.define('Loto.view.UsersChart', {
 				}
 			]
     	
+      },
+      {
+    	  xtype: 'grid',
+    	  store: 'Registrations',
+    	  columns: [
+    	      { text : 'Период', dataIndex: 'date', flex: 1 },
+    	      { text : 'Зарегистрировано', dataIndex: 'registered', flex: 1 },
+    	      { text : 'Рефералов', dataIndex: 'referals', flex: 1 }
+    	  ]
       }
 	]
-/*
-    */
  });

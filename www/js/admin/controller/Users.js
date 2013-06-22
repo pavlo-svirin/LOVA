@@ -1,19 +1,22 @@
 Ext.define('Loto.controller.Users', {
     extend: 'Ext.app.Controller',
     views: [ 'Users', 'UsersChart' ],
-    models: [ 'User' ],
-    stores: [ 'User' ],
+    models: [ 'User', 'Registrations' ],
+    stores: [ 'User', 'Registrations' ],
 
     init: function() {
         this.control({
             'usersChart': {
                 render: this._init
             },
-            'usersChart button[name=month]': {
-                click: this._loadMonthData
+            'usersChart datefield': {
+                change: this._refresh
             },
-            'usersChart button[name=year]': {
-                click: this._loadYearData
+            'usersChart combo[name=scale]': {
+                change: this._refresh
+            },
+            'usersChart button[action=refresh]': {
+                click: this._refresh
             }
         });
     },
@@ -41,17 +44,31 @@ Ext.define('Loto.controller.Users', {
         	}
         });
     	
-    	this._loadMonthData();
+        widget.down("combo[name=scale]").setValue("day");
+        widget.down("datefield[name=from]").setValue(Ext.Date.getFirstDateOfMonth(new Date()));
+        widget.down("datefield[name=to]").setValue(Ext.Date.getLastDateOfMonth(new Date()));      
+    	this._refresh(widget.down("button[action=refresh]"));
     },
     
-    _loadMonthData: function()
+    _refresh: function(source)
     {
-    	
-    },
+    	var widget = source.up("panel");
+    	var scale = widget.down("combo[name=scale]").getValue(); 
+    	var from = widget.down("datefield[name=from]").getValue();
+    	var to = widget.down("datefield[name=to]").getValue();
+
+    	if(scale && from && to)
+		{
+            var store = Ext.data.StoreManager.lookup('Registrations');
+            store.load({
+                params: {
+                    scale: scale,
+                    from: Ext.Date.format(from, 'Y-m-d'),
+                    to: Ext.Date.format(to, 'Y-m-d')                	
+                }        	
+            });
+		}
+    }
     
-    _loadYearData: function()
-    {
-    	
-    },
     
 });

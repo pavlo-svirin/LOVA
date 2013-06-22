@@ -4,7 +4,7 @@ use strict;
 use lib "..";
 use parent 'Data::BaseObject';
 
-use Date::Calc qw(Mktime);
+use DateTime;
 
 my $salt = "SALT!"; 
 
@@ -68,57 +68,17 @@ sub getAccount
     return $self->getData()->{'account'};
 }
 
-sub getCreatedYear
+sub getCreatedByScale
 {
-    my ($self) = @_;
-	if($self->getCreated() =~ /(\d{4})-\d{2}-\d{2}/)
-	{
-        return $1;
-	}
-}
+    my ($self, $scale) = @_;
+    $scale = $scale || "day";
 
-sub getCreatedMonth
-{
-    my ($self) = @_;
-    if($self->getCreated() =~ /(\d{4})-(\d{2})-\d{2}/)
-    {
-        return $2;
-    }
-}
+    $self->getCreated() =~ /(\d{4})-(\d{2})-(\d{2})/;
 
-sub getCreatedDay
-{
-    my ($self) = @_;
-    if($self->getCreated() =~ /(\d{4})-(\d{2})-(\d{2})/)
-    {
-        return $3;
-    }
-}
-
-sub wasCreatedThisYear
-{
-    my ($self) = @_;
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-    $year = $year + 1900;
-    
-    if($self->getCreatedYear() == $year)
-    {
-        return 1;
-    }
-}
-
-sub wasCreatedThisMonth
-{
-    my ($self) = @_;
-
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-    $year = $year + 1900;
-    $mon++;
-    
-    if(($self->getCreatedYear() == $year) && ($self->getCreatedMonth() == $mon))
-    {
-    	return 1;
-    }
+    return DateTime->new( year => $1, month => $2, day => $3 )
+        ->truncate( to => $scale )
+        ->ymd('-');
+	
 }
 
 sub getCreatedUnixTime
@@ -126,7 +86,15 @@ sub getCreatedUnixTime
     my ($self) = @_;
     if($self->getCreated() =~ /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/)
     {
-        Mktime( $1, $2, $3, $4, $5, $6 );
+        return DateTime->new( 
+            year => $1,
+            month => $2,
+            day => $3,
+            hour => $4,
+            minute => $5,
+            second => $6
+        )->epoch();
+    	
     }
 }
 
