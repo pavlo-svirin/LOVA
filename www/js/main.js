@@ -29,7 +29,7 @@ function okShare()
 function mmShare()
 {
     var url = "http://connect.mail.ru/share";
-    url += '?title=' + encodeURIComponent("LoVa");
+    url += '?title=' + encodeURIComponent("LOVA");
     url += '&url=' + encodeURIComponent("http://lova.su/");
     url += '&description=' + encodeURIComponent("Я зарегистрирован на lova.su. Там вся страна!");
     url += '&imageurl=' + encodeURIComponent("http://lova.su/img/logo.jpg");
@@ -41,7 +41,7 @@ jQuery(function($) {
 	
 	if (window['VK'] != undefined)
 	{
-	    VK.Share.button({ url: 'http://lova.su', title: 'LoVa', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
+	    VK.Share.button({ url: 'http://lova.su', title: 'LOVA', image: 'http://lova.su/img/logo.jpg'}, { type: 'link',  text: ''});
 	}
 	
     $('#registerForm').on('submit', function(event) {
