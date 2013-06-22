@@ -113,7 +113,7 @@ sub ajaxStage
     }    
     elsif(($URL =~ /\/users\//) && ($URL =~ /\/chart\//))
     {
-    	my %result;
+    	my %usersByDate;
         my @users = $userService->findCreatedInRange({
             from => $CGI->param('from'),
             to => $CGI->param('to')
@@ -122,19 +122,24 @@ sub ajaxStage
         foreach my $user (@users)
         {
         	my $date = $user->getCreatedByScale($CGI->param('scale')); 
-            $result{$date}->{'registered'}++;
+            $usersByDate{$date}->{'registered'}++;
             if($user->getReferal())
             {
-                $result{$date}->{'referals'}++;
+                $usersByDate{$date}->{'referals'}++;
             }
         }
 
-        print "{success: true, data: [";        
-        print map {"{date: '$_', "
-        	. "registered: " . ($result{$_}->{'registered'} || 0) . ", "
-        	. "referals: " . ($result{$_}->{'referals'} || 0) . "}, "
-        } sort keys %result;
-        print "]}";
+        my $result->{'success'} = JSON::true;
+        $result->{'data'} = (); 
+        for my $date (sort keys %usersByDate)
+        {
+        	my $row->{'date'} = $date;
+        	$row->{'registered'} = $usersByDate{$date}->{'registered'} || 0;
+            $row->{'referals'} = $usersByDate{$date}->{'referals'} || 0;
+        	push(@{$result->{'data'}}, $row);
+        }
+        print $json->encode($result);                
+     
     }
     elsif($URL =~ /\/users\//)
     {
