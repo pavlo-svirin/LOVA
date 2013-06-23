@@ -1,7 +1,9 @@
 package Service::Email;
 use strict;
 
-require Mail::Send;
+use Mail::Send;
+use Email::Send;
+use Email::Simple;
 
 sub new
 {
@@ -105,14 +107,20 @@ sub sendToRecipients
 sub sendHtmlEmail
 {
     my ($self, $to, $subject, $body) = @_;
-    my $msg = Mail::Send->new();
-    $msg->add("From", 'LoVa <lova@pemes.net>');
-    $msg->add("Content-Type", 'text/html; charset=utf-8');
-    $msg->to($to);
-    $msg->subject($subject);
-    my $fh = $msg->open('sendmail');
-    print $fh $body;
-    $fh->close();
+
+    my $message = Email::Simple->create(
+        header => [
+            From    => 'LOVA <lova@pemes.net>',
+            To      => $to,
+            Subject => $subject
+        ],
+        body => $body
+    );
+    $message->header_set("Content-Type" => 'text/html; charset=utf-8');
+    
+    my $sender = Email::Send->new({mailer => 'SMTP'});
+    $sender->mailer_args([Host => 'localhost']);
+    $sender->send($message);
 }
 
 1;
