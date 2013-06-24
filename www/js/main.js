@@ -179,8 +179,6 @@ jQuery(function($) {
     			.addClass("alert-success")
         		.html("Вы использовали все возможности кабинета! :-)");
     	}, 20000);
-    	
-    	updateCountDown();
     });
     
    
@@ -236,16 +234,3 @@ jQuery(function($) {
     
 });
 
-function updateCountDown()
-{
-	$.ajax({
-		url: "/cab/countdown/ajax/",
-		dataType: 'json',
-        success: function(data, status) {
-        	if($("#countdown").length > 0)
-        	{
-            	$("#countdown").jCountdown('update', '' + data.counter, 'sync');
-        	}
-        }
-	});
-}

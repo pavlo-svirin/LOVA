@@ -69,7 +69,7 @@ Ext.define('Loto.view.Options', {
       	      },
               {
         	        xtype: 'numberfield',
-        	        fieldLabel: 'Лайков надо',
+        	        fieldLabel: 'Пользователей надо',
         	        name: 'likeRequired'
     	      }
           ]

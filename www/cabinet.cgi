@@ -81,7 +81,7 @@ if($user)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
     }
-    $vars->{'data'}->{'likesLeft'} = getLikesLeft(); 
+    $vars->{'data'}->{'usersLeft'} = getUsersLeft(); 
 }
 else
 {
@@ -164,15 +164,15 @@ sub ajaxStage
     }
     elsif($URL =~ /\/countdown\//)
     {
-    	my $result->{'counter'} = getLikesLeft();
+    	my $result->{'counter'} = getUsersLeft();
     	print $json->encode($result);
     }
     
 }
 
-sub getLikesLeft
+sub getUsersLeft
 {
-    my $left = $optionsService->get('likeRequired') - $optionsService->get('like');
+    my $left = $optionsService->get('likeRequired') - $userService->countAll();
     if(!$left || ($left < 0))
     {
         $left = 0;
