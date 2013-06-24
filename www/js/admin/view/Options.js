@@ -26,12 +26,6 @@ Ext.define('Loto.view.Options', {
         items: [
           {
 	        xtype: 'textfield',
-	        fieldLabel: 'Лайков',
-	        name: 'like',
-	        readOnly: true
-	      },
-          {
-	        xtype: 'textfield',
 	        fieldLabel: 'Пароль администратора',
 	        name: 'adminPassword'
 		  },
@@ -55,6 +49,30 @@ Ext.define('Loto.view.Options', {
               step: 0.001
           }
         ]
+      },
+      {
+          xtype:'fieldset',
+          title: 'Лайки',
+          collapsible: false,
+          autoHeight: true,
+          width: 600,
+          defaults: {
+          	minValue: 0,
+          	allowBlank: false
+          },
+          items: [
+              {
+      	        xtype: 'textfield',
+      	        fieldLabel: 'Лайков',
+      	        name: 'like',
+      	        readOnly: true
+      	      },
+              {
+        	        xtype: 'numberfield',
+        	        fieldLabel: 'Лайков надо',
+        	        name: 'likeRequired'
+    	      }
+          ]
       },
       {
         xtype:'fieldset',

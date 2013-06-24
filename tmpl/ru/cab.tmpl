@@ -8,10 +8,17 @@
     <meta name="title" content="LoVa" />
     <meta name="description" content="Я зарегистрирован на lova.su. Там вся страна!" />        
     <link rel="image_src" href="http://lova.su/img/logo.jpg" />
+    
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+        
     <!-- Bootstrap -->
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/lib/jcountdown/jcountdown.css" />
+    <script src="/lib/jcountdown/jquery.jcountdown.js"></script>
+       
     <link href="/css/main.css" rel="stylesheet">
     <script src="/js/main.js"></script>
     <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>
@@ -43,6 +50,27 @@
             </div>
           [% END %]
         </td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td class="row-separator"></td></tr>
+        <tr><td align="center">
+            <script>
+                $(function() {
+                    $("#countdown").jCountdown({
+                        width: 0,
+                        textGroupSpace: 15,
+                        textSpace: 0,
+                        reflection: true,
+                        reflectionOpacity: 15,
+                        reflectionBlur: 2,
+                        dayTextNumber: 8
+                    });
+                    $("#countdown").jCountdown('update', '[% data.likesLeft %]');
+                    $("#countdown").jCountdown('start');
+                });
+            </script>
+            <div id="countdown"></div>
+        </td></tr>                         
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>

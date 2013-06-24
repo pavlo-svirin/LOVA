@@ -41,6 +41,9 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 
 # Services
 my $userService = new Service::User();
+my $optionsService = new Service::Options();
+$optionsService->load();
+
 
 if($URL=~/(\w{32})/)
 {
@@ -77,7 +80,8 @@ if($user)
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
-    } 
+    }
+    $vars->{'data'}->{'likesLeft'} = getLikesLeft(); 
 }
 else
 {
@@ -158,5 +162,20 @@ sub ajaxStage
     	my $jsonResult = $json->encode($validationStatus);
     	print $jsonResult;
     }
+    elsif($URL =~ /\/countdown\//)
+    {
+    	my $result->{'counter'} = getLikesLeft();
+    	print $json->encode($result);
+    }
+    
 }
 
+sub getLikesLeft
+{
+    my $left = $optionsService->get('likeRequired') - $optionsService->get('like');
+    if(!$left || ($left < 0))
+    {
+        $left = 0;
+    }
+    return $left;
+}
