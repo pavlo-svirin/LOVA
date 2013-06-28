@@ -30,8 +30,8 @@ sub sendFirstEmail
     my $msg = Mail::Send->new();
     my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
     $msg->to($userName . "<" . $user->getEmail() . ">");
-    $msg->subject('Регистрация на LoVa');
-    $msg->add("From", 'LoVa <lova@pemes.net>');
+    $msg->subject('Регистрация на LOVA');
+    $msg->add("From", 'LOVA <lova@pemes.net>');
     $msg->add("Content-Type", 'text/plain; charset=utf-8');
     my $fh = $msg->open('sendmail');
     print $fh "Здравствуйте.\n\n";
@@ -58,7 +58,7 @@ sub sendPasswordEmail
     my $msg = Mail::Send->new();
     my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
     $msg->to($userName . "<" . $user->getEmail() . ">");
-    $msg->subject('Восстановление пароля на LoVa');
+    $msg->subject('Восстановление пароля на LOVA');
     $msg->add("From", 'LOVA <lova@pemes.net>');
     $msg->add("Content-Type", 'text/plain; charset=utf-8');
     my $fh = $msg->open('sendmail');
