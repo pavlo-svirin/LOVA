@@ -154,7 +154,7 @@ sub sendPlainEmail
     $message->header_set("Content-Type" => 'text/plain; charset=utf-8');
     
     my $sender = Email::Send->new({mailer => 'SMTP'});
-    $sender->mailer_args([Host => 'mail.la.net.ua']);
+    $sender->mailer_args([Host => 'localhost']);
     $sender->send($message);
 }
 
