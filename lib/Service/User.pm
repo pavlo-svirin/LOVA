@@ -173,9 +173,10 @@ sub countReferals
 {
     my ($self, $user) = @_;
     my $query = "SELECT count(`u`.`id`) AS `total` FROM `$table` `u`";
-    $query .= " JOIN `user_profile` `p` ON `u`.`id` = `p`.`user_id` ";
-    $query .= " WHERE `p`.`name` = 'validateEmail' ";
-    $query .= " AND `referal` = ? ";
+#    $query .= " JOIN `user_profile` `p` ON `u`.`id` = `p`.`user_id` ";
+#    $query .= " WHERE `p`.`name` = 'validateEmail' ";
+#    $query .= " AND `referal` = ? ";
+    $query .= " WHERE `referal` = ? ";
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute($user->getLogin());
     my $ref = $sth->fetchrow_hashref();
@@ -383,8 +384,8 @@ sub deleteAccount()
 sub runAccount()
 {
     my ($self, $rateFond, $rateReferal) = @_;
-    my $fondReward = ($self->countActive() * $rateFond) || 0;
-    foreach my $user ($self->findActive())
+    my $fondReward = ($self->countAll() * $rateFond) || 0;
+    foreach my $user ($self->findAll())
     {
     	$self->loadAccount($user);
         my $referalReward = ($self->countReferals($user) * $rateReferal) || 0;
