@@ -45,13 +45,10 @@ my $optionsService = new Service::Options();
 $optionsService->load();
 my $emailService = new Service::Email(userService => $userService);
 
-Sirius::Common::debug("start");
 if($URL=~/(\w{32})/)
 {
 	my $emailCode = $1;
 	my $user = $userService->findByEmailCode($emailCode);
-	Sirius::Common::debug($emailCode);
-	Sirius::Common::debug($user->getId());
 	if($user)
 	{
 		$cgiSession->param('userId', $user->getId());
@@ -73,7 +70,7 @@ $vars->{'error'} = "";
 
 if($user)
 {
-	$vars->{'data'}->{'users'} = $userService->countAll();
+	$vars->{'data'}->{'users'} = $userService->countActive();
 	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
     $vars->{'data'}->{'referals'} = $userService->countReferals($user);
 	$userService->loadAccount($user);
@@ -81,6 +78,7 @@ if($user)
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'}->{'activated'} = $user->getProfile()->{'activated'};
+    $vars->{'data'}->{'user'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
@@ -144,7 +142,11 @@ sub ajaxStage
     elsif($URL =~ /\/invite\//)
     {
     	sendInvite();
-    }    
+    }
+    elsif($URL =~ /\/send\//)
+    {
+    	$emailService->sendFirstEmail($user);
+    }
 }
 
 sub saveProfile
@@ -219,10 +221,11 @@ sub sendInvite
 
 sub getUsersLeft
 {
-    my $left = $optionsService->get('likeRequired') - $userService->countAll();
+    my $left = $optionsService->get('likeRequired') - $userService->countActive();
     if(!$left || ($left < 0))
     {
         $left = 0;
     }
     return $left;
 }
+

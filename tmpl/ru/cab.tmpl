@@ -78,6 +78,10 @@
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td>
+            [% IF !data.user.validateEmail %]
+            <div id="validateEmail" class="alert alert-error">Для подтверждения e-mail перейдите по ссылке в письме, полученном при регистрации.
+            <br>Если вы не получили письмо, проверьте папку Спам, нажмите <a href="#" onclick="sendFirstEmail();return false;">здесь</a> для повторной отправки.</div>
+            [% END %]
             <table width="100%">
                 <tr><td></td><td></td><td colspan="3" align="right"><i>Прогнозируемый нами, Ваш доход в работающем проекте:<i></td></tr>
                 <tr>

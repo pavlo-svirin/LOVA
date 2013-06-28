@@ -55,3 +55,17 @@ jQuery(function($) {
     
 });
 
+function sendFirstEmail()
+{
+	var me = this;
+	$.ajax({
+		url: "/cab/send/ajax/",
+		dataType: 'json',
+        success: function(data, status) {
+        	$('#validateEmail')
+        		.removeClass("alert-error")
+        		.addClass("aler-success")
+        		.html("Письмо со ссылкой было отправлено на почту.");
+        }
+	});
+}

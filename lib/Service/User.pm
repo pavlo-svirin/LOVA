@@ -80,6 +80,24 @@ sub findAll
     return @users;
 }
 
+sub findActive
+{
+    my ($self) = @_;
+    my $query = "SELECT `u`.* FROM `$table` u";
+    $query .= " JOIN `user_profile` p ON `u`.`id` = `p`.`user_id` ";
+    $query .= " WHERE `p`.`name` = 'validateEmail' ";
+    $query .= " ORDER BY `u`.`created`";
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute();
+    return () if($rv == 0E0);
+    my @users;
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+      push(@users, Data::User->new(%$ref));
+    }
+    return @users;
+}
+
 sub findByEmailCode
 {
     my ($self, $emailCode) = @_;
@@ -94,7 +112,12 @@ sub findByEmailCode
 sub findSubscribed
 {
     my ($self) = @_;
-    my $sth = $::sql->handle->prepare("SELECT u.* FROM `$table` u LEFT JOIN `user_profile` p ON u.id = p.user_id AND p.name = 'subscribe' WHERE (`p`.`name` = 'subscribe' AND `p`.`value` = 'true') OR p.name IS NULL");
+    my $query = "SELECT `u`.* FROM `$table` `u` ";
+    $query .= " LEFT JOIN `user_profile` p ON u.id = p.user_id AND p.name = 'subscribe'";
+    $query .= " JOIN `user_profile` `pa` ON `u`.`id` = `pa`.`user_id` ";
+    $query .= " WHERE (`p`.`name` = 'subscribe' AND `p`.`value` = 'true') OR p.name IS NULL";
+    $query .= " AND `pa`.`name` = 'validateEmail' ";
+    my $sth = $::sql->handle->prepare( );
     my $rv = $sth->execute();
     return () if($rv == 0E0);
     my @users;
@@ -134,10 +157,26 @@ sub countAll
     return $ref->{'total'};
 }
 
+sub countActive
+{
+    my ($self) = @_;
+    my $query = "SELECT count(`u`.`id`) AS `total` FROM `$table` `u`";
+    $query .= " JOIN `user_profile` `p` ON `u`.`id` = `p`.`user_id` ";
+    $query .= " WHERE `p`.`name` = 'validateEmail' ";
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute();
+    my $ref = $sth->fetchrow_hashref();
+    return $ref->{'total'};
+}
+
 sub countReferals
 {
     my ($self, $user) = @_;
-    my $sth = $::sql->handle->prepare("SELECT count(*) AS `total` FROM `$table` WHERE `referal` = ?");
+    my $query = "SELECT count(`u`.`id`) AS `total` FROM `$table` `u`";
+    $query .= " JOIN `user_profile` `p` ON `u`.`id` = `p`.`user_id` ";
+    $query .= " WHERE `p`.`name` = 'validateEmail' ";
+    $query .= " AND `referal` = ? ";
+    my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute($user->getLogin());
     my $ref = $sth->fetchrow_hashref();
     return $ref->{'total'};
@@ -344,8 +383,8 @@ sub deleteAccount()
 sub runAccount()
 {
     my ($self, $rateFond, $rateReferal) = @_;
-    my $fondReward = ($self->countAll() * $rateFond) || 0;
-    foreach my $user ($self->findAll())
+    my $fondReward = ($self->countActive() * $rateFond) || 0;
+    foreach my $user ($self->findActive())
     {
     	$self->loadAccount($user);
         my $referalReward = ($self->countReferals($user) * $rateReferal) || 0;
