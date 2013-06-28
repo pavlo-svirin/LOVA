@@ -22,7 +22,7 @@ sub new {
 }
 
 
-sub debug{
+sub debug {
     open(my $logFile, ">>", $Sirius::Common::debugFile);
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
     $year += 1900;

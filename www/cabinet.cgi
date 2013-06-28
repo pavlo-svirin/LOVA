@@ -43,18 +43,22 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 my $userService = new Service::User();
 my $optionsService = new Service::Options();
 $optionsService->load();
+my $emailService = new Service::Email(userService => $userService);
 
-
+Sirius::Common::debug("start");
 if($URL=~/(\w{32})/)
 {
 	my $emailCode = $1;
 	my $user = $userService->findByEmailCode($emailCode);
+	Sirius::Common::debug($emailCode);
+	Sirius::Common::debug($user->getId());
 	if($user)
 	{
 		$cgiSession->param('userId', $user->getId());
 		$userService->loadProfile($user);
 		$user->getProfile()->{'validateEmail'} = time;
 		$userService->saveProfile($user);
+		$redirect = "/cab/profile/";
 	}
 }
 
@@ -96,7 +100,6 @@ if($URL =~ /logout/)
     $redirect = "/";
 }
 
-
 if($URL =~ /\/ajax(\/|$)/)
 {
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
@@ -131,43 +134,87 @@ sub ajaxStage
 {
     if($URL =~ /\/save\//)
     {
-    	my $params = $CGI->Vars();
-    	my $newUser = $userService->createUserFromCgiParams($params);
-    	$newUser->setId($user->getId());
-        $newUser->setLogin($user->getLogin());
-        
-        # Do not allow change referal after 7 days
-	    if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
-	    {
-	    	$newUser->setReferal($user->getReferal());
-	    }        
-    	unless($newUser->getPassword())
-    	{
-    		$newUser->set('password', $user->getPassword());
-    	}
-    	my $validationStatus = $userService->validate($newUser);
-    	$newUser->getProfile()->{"subscribe"} = "false";
-    	if($validationStatus->{'success'} eq 'true')
-    	{
-            $userService->save($newUser);
-            foreach my $name("skype", "country", "phone", "subscribe")
-            {
-            	if($CGI->param($name))
-            	{
-                    $newUser->getProfile()->{$name} = $CGI->param($name);
-            	}
-            }
-            $userService->saveProfile($newUser);
-    	}
-    	my $jsonResult = $json->encode($validationStatus);
-    	print $jsonResult;
+    	saveProfile();
     }
     elsif($URL =~ /\/countdown\//)
     {
     	my $result->{'counter'} = getUsersLeft();
     	print $json->encode($result);
     }
+    elsif($URL =~ /\/invite\//)
+    {
+    	sendInvite();
+    }    
+}
+
+sub saveProfile
+{
+    my $params = $CGI->Vars();
+    my $newUser = $userService->createUserFromCgiParams($params);
+    $newUser->setId($user->getId());
     
+    # Do not allow change login if it already exists
+    if($user->getLogin())
+    {
+        $newUser->setLogin($user->getLogin());
+    	
+    }
+
+    # Do not allow change referal after 7 days
+    if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
+    {
+        $newUser->setReferal($user->getReferal());
+    }
+    
+    # Save old password        
+    unless($newUser->getPassword())
+    {
+        $newUser->set('password', $user->getPassword());
+    }
+    
+    my $validationStatus = $userService->validate($newUser);
+    $newUser->getProfile()->{"subscribe"} = "false";
+    if($validationStatus->{'success'} eq 'true')
+    {
+        $userService->save($newUser);
+        foreach my $name("skype", "country", "phone", "subscribe")
+        {
+            if($CGI->param($name))
+            {
+                $newUser->getProfile()->{$name} = $CGI->param($name);
+            }
+        }
+        $userService->saveProfile($newUser);
+    }
+    
+    my $jsonResult = $json->encode($validationStatus);
+    print $jsonResult;	
+}
+
+sub sendInvite
+{
+    my $result->{'success'} = JSON::false;
+    my $name = $CGI->param('first_name');
+    my $email = $CGI->param('email');   
+    if (!$name || !$email)
+    {
+        $result->{'error'} = "Пожалуйста, укажите имя и e-mail.";
+    }
+    elsif ($userService->findByEmail($email))
+    {
+        $result->{'error'} = "Такой e-mail уже зарегистрирован.";
+    }
+    else
+    {
+        my $params = $CGI->Vars();
+        my $inviteUser = $userService->createUserFromCgiParams($params);
+        $inviteUser->setReferal($user->getLogin());
+        $inviteUser->setPassword(Sirius::Common::GenerateRandomString());
+        $userService->save($inviteUser);
+        $emailService->sendInviteEmail($inviteUser);
+        $result->{'success'} = JSON::true;
+    }
+    print $json->encode($result);	
 }
 
 sub getUsersLeft

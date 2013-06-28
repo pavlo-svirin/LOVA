@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>LoVa - cabinet</title>
+    <title>LOVA - cabinet</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="LoVa" />
+    <meta name="title" content="LOVA" />
     <meta name="description" content="Я зарегистрирован на lova.su. Там вся страна!" />        
     <link rel="image_src" href="http://lova.su/img/logo.jpg" />
     
@@ -21,6 +21,7 @@
        
     <link href="/css/main.css" rel="stylesheet">
     <script src="/js/main.js"></script>
+    <script src="/js/cab.js"></script>
     <script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>
     <script>
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -71,6 +72,7 @@
             </script>
             Установленный минимум регистраций до старта:
             <div id="countdown"></div>
+            Ускорь старт проекта, <a href="#inviteDiv" data-toggle="modal">пригласи друзей</a>!
         </td></tr>                         
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
@@ -104,16 +106,54 @@
         <tr><td class="row-separator"></td></tr>
         <tr><td>Пригласив сейчас как можно большее количество друзей,<br> Вы получите ощутимую и постоянно нарастающую выгоду в будущем.<br>
         <br>Присоединиться к движению, и следить за событиями, можно по ссылкам:</td></tr>
-        <tr><td><table class="container" style="max-width: 100%; background-color: transparent; border-collapse: collapse; border-spacing: 0px; width: 940px; margin-right: auto; margin-left: auto; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px;" border="0">
-<tbody>
-<tr>
-<td><span style="font-size: medium;"><strong><em><a href="http://plus.google.com/u/0/communities/115325367202810045104" target="_blank">Google+</a>&nbsp;<a href="http://www.odnoklassniki.ru/group/52073368649803" target="_blank">Одноклассники</a>&nbsp;<a href="http://www.vk.com/public54754540" target="_blank">ВКонтакте</a>&nbsp;<a href="http://www.facebook.com/groups/568943719823000" target="_blank">Facebook</a>&nbsp;<a href="http://www.twitter.com/wwwlovasu" target="_blank">Twitter</a>&nbsp;<a href="http://my.mail.ru/community/lova.su/" target="_blank">Мой Мир</a></em></strong></span></td>
-</tr>
-    </table>
-</td></tr>        
+        <tr><td>
+            <table class="container" style="max-width: 100%; background-color: transparent; border-collapse: collapse; border-spacing: 0px; width: 940px; margin-right: auto; margin-left: auto; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px;" border="0">
+            <tr>
+                <td><span style="font-size: medium;"><strong><em>
+                    <a href="http://plus.google.com/u/0/communities/115325367202810045104" target="_blank">Google+</a>
+                    &nbsp;<a href="http://www.odnoklassniki.ru/group/52073368649803" target="_blank">Одноклассники</a>
+                    &nbsp;<a href="http://www.vk.com/public54754540" target="_blank">ВКонтакте</a>
+                    &nbsp;<a href="http://www.facebook.com/groups/568943719823000" target="_blank">Facebook</a>
+                    &nbsp;<a href="http://www.twitter.com/wwwlovasu" target="_blank">Twitter</a>
+                    &nbsp;<a href="http://my.mail.ru/community/lova.su/" target="_blank">Мой Мир</a>
+                </em></strong></span></td>
+            </tr>
+            </table>
+        </td></tr>        
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
 		<tr><td>lova@pemes.net - техподдержка</td></tr>
 		</table>
+		
+    <div id="inviteDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="inviteLabel" aria-hidden="true">
+      <form id="inviteForm" data-async class="form-horizontal" method="POST" action="/cab/invite/">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="restoreLabel">Пригласи друга</h3>
+      </div>
+      <div class="modal-body">
+          <div class="alert alert-error hide">Имя и e-mail обязательны</div>
+          <div class="alert alert-success hide">Приглашение отправлено, Вы можете пригласить ещё одного друга!</div>
+          <div class="control-group">
+            <label class="control-label" for="first_name">Введите имя друга</label>
+            <div class="controls">
+                <input type="text" name="first_name" required>
+                <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="email">и его e-mail</label>
+            <div class="controls">
+                <input type="email" name="email" required>
+                <span class="help-inline"></span>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        <button name="invite" type="submit" class="btn btn-primary">Пригласить</button>
+      </div>
+      </form>
+    </div>        		
 </body>
 </html>

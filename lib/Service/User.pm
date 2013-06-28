@@ -164,6 +164,7 @@ sub save
     {
         my $fieldsList = join(', ', map {"`$_`"} @fields);
         my $tokensList = join(', ', map {"?"} @fields);
+        
         # TODO-VZ: add debug message
         my $sth = $::sql->handle->prepare("INSERT INTO `$table` ($fieldsList, `created`, `last_seen`) VALUES ($tokensList, NOW(), NOW())");
         $sth->execute(@values);
