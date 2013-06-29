@@ -161,7 +161,7 @@ sub sendPlainEmail
 sub sendHtmlEmail
 {
     my ($self, $to, $subject, $body) = @_;
-
+    utf8::decode($body);
     my $message = Email::Simple->create(
         header => [
             From    => 'LOVA <lova@pemes.net>',
