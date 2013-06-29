@@ -6,15 +6,17 @@ Ext.define('Loto.view.Users', {
     stateful: true,
     columns: [
       {
-        text     : 'Дата регистрации',
-        dataIndex: 'created',
-        format   : 'Y-m-d H:i',
-        renderer : Ext.util.Format.dateRenderer('Y-m-d H:i')          
+        text     	: 'Дата регистрации',
+        dataIndex	: 'created',
+        format   	: 'Y-m-d H:i',
+        width	 	: 120,
+        renderer 	: Ext.util.Format.dateRenderer('Y-m-d H:i')          
       },
       {
-        text     	: 'Последняя активность',
+        text     	: 'Активность',
         dataIndex	: 'last_seen',
         format   	: 'Y-m-d H:i',
+        width	 	: 120,        
         renderer 	: Ext.util.Format.dateRenderer('Y-m-d H:i')          
       },
       {
@@ -41,5 +43,11 @@ Ext.define('Loto.view.Users', {
           dataIndex	: 'referal',
           flex	 	: 1
       }
-    ]
+    ],
+    dockedItems: [{
+        xtype: 'pagingtoolbar',
+        store: 'User',
+        dock: 'bottom',
+        displayInfo: true
+    }]    
  });

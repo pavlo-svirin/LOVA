@@ -1,13 +1,21 @@
 Ext.define('Loto.store.User', {
     extend: 'Ext.data.Store', 
-    storeId: 'usersStore',
+    storeId: '	',
     model: 'Loto.model.User',
+    pageSize: 25,
+    remoteSort: true,
     autoLoad: true,
     proxy: new Ext.data.HttpProxy({
+        type: 'jsonp',
         url: '/admin/users/load/ajax/',
+        simpleSortMode: true,
         reader: {
-            type: 'json',
+            totalProperty: 'total',
             root: 'data'
         }
-    })
+    }),
+    sorters: [{
+        property: 'created',
+        direction: 'DESC'
+    }]
 });

@@ -80,6 +80,29 @@ sub findAll
     return @users;
 }
 
+sub findExtJs
+{
+    my ($self, $config) = @_;
+    my $page = int ($config->{'page'}) || 1;
+    my $start = int ($config->{'start'}) || 0;
+    my $limit = int ($config->{'limit'}) || 25;
+    my $order = $::sql->handle->quote_identifier($config->{'order'} || "created");
+    my $direction = ($config->{'direction'} eq "ASC") ? "ASC" : "DESC";
+    
+    my $query = "SELECT * FROM `$table`";
+    $query .= " ORDER BY $order $direction ";
+    $query .= " LIMIT ?, ?";
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute( $start, $limit);
+    return () if($rv == 0E0);
+    my @users;
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+      push(@users, Data::User->new(%$ref));
+    }
+    return @users;
+}
+
 sub findActive
 {
     my ($self) = @_;

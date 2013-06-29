@@ -143,7 +143,20 @@ sub ajaxStage
     }
     elsif($URL =~ /\/users\//)
     {
-        printAllSimpleObjects($userService);
+        my $response->{'success'} = JSON::true;
+        $response->{'total'} = $userService->countAll();
+        my @users = $userService->findExtJs({
+        	page => $CGI->param('page'),
+        	start => $CGI->param('start'),
+        	limit => $CGI->param('limit'),
+        	order => $CGI->param('sort'),
+        	direction => $CGI->param('dir')
+        });
+        foreach my $user (@users)
+        {
+            push(@{$response->{data}}, $user->getData());
+		}
+		print $json->encode($response);
     }
 }
 
