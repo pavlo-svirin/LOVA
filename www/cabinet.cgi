@@ -77,7 +77,7 @@ if($user)
 	$vars->{'data'}->{'account'}->{'fond'} = sprintf("%.02f", $user->getAccount()->{'fond'});
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
     $userService->loadProfile($user);
-    $vars->{'data'}->{'user'}->{'activated'} = $user->getProfile()->{'activated'};
+    $vars->{'data'}->{'user'}->{'like'} = $user->getProfile()->{'like'};
     $vars->{'data'}->{'user'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {

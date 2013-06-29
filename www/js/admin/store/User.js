@@ -1,8 +1,7 @@
 Ext.define('Loto.store.User', {
     extend: 'Ext.data.Store', 
-    storeId: '	',
     model: 'Loto.model.User',
-    pageSize: 25,
+    pageSize: 500,
     remoteSort: true,
     autoLoad: true,
     proxy: new Ext.data.HttpProxy({

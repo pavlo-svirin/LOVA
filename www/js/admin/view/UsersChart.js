@@ -4,10 +4,6 @@ Ext.define('Loto.view.UsersChart', {
     title: 'График регистраций',
     height: '600',
     tbar: [
-        { xtype: 'label', text: 'Всего:', margin: '0 2 0 0' },
-        { xtype: 'label', name: 'total', text: '0' },
-        { xtype: 'label', text: 'Сегодня:', margin: '0 2 0 15' },
-        { xtype: 'label', name: 'today', text: '0', margin: '0 15 0 0' },
         { 
         	xtype: 'combo',
         	name: 'scale',

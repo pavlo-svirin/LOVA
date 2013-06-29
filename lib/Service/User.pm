@@ -2,7 +2,7 @@ package Service::User;
 use strict;
 
 my $table = "users";
-my @systemProfileValues = ("activated", "emailCode", "validateEmail");
+my @systemProfileValues = ("like", "emailCode", "validateEmail");
 
 sub new
 {

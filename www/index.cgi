@@ -124,9 +124,9 @@ sub ajaxStage
         if($user)
         {
             $userService->loadProfile($user);
-            unless ($user->getProfile()->{'activated'})
+            unless ($user->getProfile()->{'like'})
             {
-            	$user->getProfile()->{'activated'} = time;
+            	$user->getProfile()->{'like'} = time;
             	$userService->saveProfile($user);
             }
         }
