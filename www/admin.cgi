@@ -153,6 +153,39 @@ sub ajaxStage
 		}
 		print $json->encode($response);
     }
+    elsif (($URL =~ /\/user\//) && ($URL =~ /\/delete\//))
+    {
+    	my $user = $userService->findById($CGI->param('id'));
+        my $response->{'success'} = JSON::false;
+    	if($user)
+    	{
+    		$userService->deleteUser($user);
+    		$response->{'success'} = JSON::true;
+    	}
+    	print $json->encode($response);
+    } 
+    elsif (($URL =~ /\/user\//) && ($URL =~ /\/load\//))
+    {
+        my $user = $userService->findById($CGI->param('id'));
+        my $response->{'success'} = JSON::false;
+        if($user)
+        {
+        	$userService->loadProfile($user);
+        	$userService->loadAccount($user);
+        	if($user->getProfile()->{'validateEmail'})
+        	{
+        		$user->getProfile()->{'validateEmail'} = JSON::true;
+        	}
+            if($user->getProfile()->{'like'})
+            {
+                $user->getProfile()->{'like'} = JSON::true;
+            }
+        	my $data =  $user->getData();
+            $response->{'success'} = JSON::true;
+            push(@{$response->{data}}, $data);
+        }
+        print $json->encode($response);
+    }    
 }
 
 sub printOptions()

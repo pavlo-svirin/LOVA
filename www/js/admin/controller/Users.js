@@ -1,8 +1,8 @@
 Ext.define('Loto.controller.Users', {
     extend: 'Ext.app.Controller',
-    views: [ 'Users', 'UsersChart' ],
-    models: [ 'User', 'Registrations' ],
-    stores: [ 'User', 'Registrations' ],
+    views: [ 'Users', 'UsersChart', 'UserDetails' ],
+    models: [ 'User', 'Registrations', 'UserDetails' ],
+    stores: [ 'User', 'Registrations', 'UserDetails' ],
 
     init: function() {
         this.control({
@@ -17,6 +17,18 @@ Ext.define('Loto.controller.Users', {
             },
             'usersChart button[action=refresh]': {
                 click: this._refresh
+            },
+            'users': {
+            	selectionchange: this._selectUser
+            },
+            'userDetails button[action=close]': {
+                click: this._closeUser
+            },
+            'userDetails button[action=delete]': {
+                click: this._deleteUser
+            },
+            'userDetails button[action=save]': {
+                click: this._saveUser
             }
         });
     },
@@ -47,7 +59,58 @@ Ext.define('Loto.controller.Users', {
                 }        	
             });
 		}
-    }
+    },
     
+    _selectUser: function(selection, rows)
+    {
+        var details = selection.view.up("tabpanel").down("userDetails");
+        details.show();
+    	var user = selection.selected.first();
+    	var userId = user.get("id");
+        
+        Ext.data.StoreManager.lookup('UserDetails').load({
+        	scope: this,
+        	params: { id: userId },
+        	callback: function(records, operation, success) {
+        		var userDetails = records[0];
+        		details.getForm().loadRecord(userDetails);
+    	    }
+        });
+    },
+    
+    _closeUser: function(btn)
+    {
+        var details = btn.up("tabpanel").down("userDetails").hide();    	
+    },
+    
+    _deleteUser: function(btn)
+    {
+    	var me = this;
+    	var del = btn;
+    	var user = btn.up("tabpanel").down("users").getSelectionModel().selected.first();
+    	var userName = user.get("login");
+    	var userId = user.get("id");
+    	var msg = "Вы уверены что хотите удалить пользователя '" + userName + "'.<br>Эта операция не может быть отменена."
+    	Ext.Msg.confirm('Удаление пользователя', msg,
+           function (btn){
+               if(btn == 'yes')
+        	   {
+            	   Ext.Ajax.request({
+            		   url: "/admin/user/delete/ajax/",
+            		   method: 'GET',
+            		   params: {id: userId},
+            		   success: function (result, request) {
+            			   Ext.data.StoreManager.lookup('User').load();
+            			   me._closeUser(del);
+            		   }
+            	   });            	   
+        	   }
+           }
+    	);    	
+	},
+    
+    _saveUser: function(btn)
+    {
+    }
     
 });

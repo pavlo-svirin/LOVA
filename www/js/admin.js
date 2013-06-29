@@ -18,7 +18,18 @@ Ext.application({
                 frame: true,
                 items: [
                     { xtype: 'options' },
-    	            { xtype: 'users' },
+    	            { 
+                    	title: 'Пользователи',
+                    	layout: {
+                    	    type  : 'vbox',
+                    	    align : 'stretch',
+                    	    pack  : 'start'
+                    	},                    	
+                		items: [
+	                      { xtype: 'users', flex: 1 },
+	                      { xtype: 'userDetails' }
+	                    ]
+    	            },
     	            { xtype: 'usersChart' },
     	            { xtype: 'emails' }
                 ]

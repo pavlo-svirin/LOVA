@@ -356,6 +356,8 @@ sub loadProfile()
 {
 	my ($self, $user) = @_;
 
+	# Create empty profile
+    $user->getProfile();
 	my $sth = $::sql->handle->prepare("SELECT `name`, `value` FROM `user_profile` WHERE `user_id` = ?");
     my $rv = $sth->execute($user->getId());
     while(my $ref = $sth->fetchrow_hashref())
@@ -381,6 +383,15 @@ sub saveProfile()
     }    
 }
 
+sub deleteUser
+{
+	my ($self, $user) = @_;
+	$self->deleteAccount($user);
+	$self->deleteProfile($user);
+    my $sth = $::sql->handle->prepare("DELETE FROM `$table` WHERE `id` = ?");
+    $sth->execute($user->getId());
+}
+
 sub deleteProfile()
 {
     my ($self, $user) = @_;
@@ -391,6 +402,7 @@ sub deleteProfile()
 sub loadAccount()
 {
     my ($self, $user) = @_;
+    
     my $sth = $::sql->handle->prepare("SELECT * FROM `user_account` WHERE `user_id` = ?");
     my $rv = $sth->execute($user->getId());
     my $ref = $sth->fetchrow_hashref();
