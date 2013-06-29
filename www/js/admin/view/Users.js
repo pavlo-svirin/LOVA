@@ -1,9 +1,21 @@
+Ext.Loader.setPath('Ext.ux', '/lib/ext/examples/ux/');
+Ext.require('Ext.ux.grid.FiltersFeature');
 Ext.define('Loto.view.Users', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.users',
     title: 'Пользователи',
     store: 'User',
     stateful: true,
+    features: [{
+    	ftype: 'filters',
+        filters: [
+            { dataIndex: 'login', type: 'string' },
+            { dataIndex: 'first_name', type: 'string' },
+            { dataIndex: 'last_name', type: 'string' },
+            { dataIndex: 'email', type: 'string' },
+            { dataIndex: 'referal', type: 'string' }
+        ]    	
+    }],
     columns: [
       {
         text     	: 'Дата регистрации',

@@ -83,13 +83,22 @@ sub findAll
 sub findExtJs
 {
     my ($self, $config) = @_;
+
     my $page = int ($config->{'page'}) || 1;
     my $start = int ($config->{'start'}) || 0;
     my $limit = int ($config->{'limit'}) || 25;
-    my $order = $::sql->handle->quote_identifier($config->{'order'} || "created");
-    my $direction = ($config->{'direction'} eq "ASC") ? "ASC" : "DESC";
+    my $order = $::sql->handle->quote_identifier($config->{'sort'} || "created");
+    my $direction = ($config->{'dir'} eq "ASC") ? "ASC" : "DESC";
+    my @filters = $self->parseFilters($config);
     
     my $query = "SELECT * FROM `$table`";
+    $query .= " WHERE 1 = 1 ";
+    for my $filter (@filters)
+    {
+        $query .= " AND " . $::sql->handle->quote_identifier($filter->{'field'});
+        $query .= " LIKE ";
+        $query .= $::sql->handle->quote("%" . $filter->{'value'} . "%");     	
+    }
     $query .= " ORDER BY $order $direction ";
     $query .= " LIMIT ?, ?";
     my $sth = $::sql->handle->prepare($query);
@@ -179,6 +188,27 @@ sub countAll
     my $ref = $sth->fetchrow_hashref();
     return $ref->{'total'};
 }
+
+sub countExtJs
+{
+    my ($self, $config) = @_;
+    my @filters = $self->parseFilters($config);
+    
+    my $query = "SELECT count(*) AS `total` FROM `$table`";
+    $query .= " WHERE 1 = 1 ";
+    for my $filter (@filters)
+    {
+        $query .= " AND " . $::sql->handle->quote_identifier($filter->{'field'});
+        $query .= " LIKE ";
+        $query .= $::sql->handle->quote("%" . $filter->{'value'} . "%");        
+    }
+
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute();
+    my $ref = $sth->fetchrow_hashref();
+    return $ref->{'total'};
+}
+
 
 sub countActive
 {
@@ -416,6 +446,25 @@ sub runAccount()
         $user->getAccount()->{'referal'} = $user->getAccount()->{'referal'} + $referalReward;
         $self->saveAccount($user);     	
     }
+}
+
+sub parseFilters
+{
+    my ($self, $params) = @_;
+    my @filters = ();
+    for my $param (keys %$params)
+    {
+    	if($param =~ /filter\[(\d+)\]\[field\]/)
+    	{
+    		my $fid = $1;
+    		$filters[$fid] = {
+                field => $params->{$param},
+                value => $params->{"filter[$fid][data][value]"},
+                type => $params->{"filter[$fid][data][type]"},
+    		};
+    	}
+    }
+    return @filters;
 }
 
 1;
