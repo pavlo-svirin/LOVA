@@ -3,9 +3,13 @@ Ext.define('Loto.view.UserDetails', {
 	alias: 'widget.userDetails',
     title: 'Пользователь',
     frame: true,
-    height: 400,
+    height: 300,
+    autoScroll:true,
     bodyPadding: 10,
-    layout: 'column',
+    layout: 'anchor',
+	defaults: {
+		anchor: '50%',
+	},
     hidden: true,
     tbar: [
         { xtype: 'button', text: 'Сохранить', action: 'save' },        
