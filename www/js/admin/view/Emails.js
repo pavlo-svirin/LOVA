@@ -3,13 +3,15 @@ Ext.define('Loto.view.Emails', {
     alias: 'widget.emails',
     title: 'Почтовые рассылки',
     frame: true,
-    fieldDefaults: {
+    layout: 'anchor',
+    defaults: {
     	labelAlign: 'left',
     	labelWidth: 200,
-  	    width: 600
+  	  	anchor: '50%'
     },
     defaultType: 'textfield',
     buttonAlign: 'left',
+    fileUpload: true,
     items: [
         {
         	xtype: 'combo',
@@ -42,13 +44,17 @@ Ext.define('Loto.view.Emails', {
 	        name: 'subject',
 	        allowBlank: false
 	    },
+	    {
+	    	xtype: 'filefield',
+	    	fieldLabel: 'HTML шаблон',
+		    name: 'template'
+	    },
         {
 	        xtype: 'htmleditor',
+	     	anchor: '100%',	
 	        fieldLabel: 'Письмо',
 	        name: 'body',
-	        width: 800,
-	        height: 300,
-	        allowBlank: false
+	        height: 400
 	    },
     ],
     buttons: [{

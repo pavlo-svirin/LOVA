@@ -149,7 +149,7 @@ sub findSubscribed
     $query .= " JOIN `user_profile` `pa` ON `u`.`id` = `pa`.`user_id` ";
     $query .= " WHERE (`p`.`name` = 'subscribe' AND `p`.`value` = 'true') OR p.name IS NULL";
     $query .= " AND `pa`.`name` = 'validateEmail' ";
-    my $sth = $::sql->handle->prepare( );
+    my $sth = $::sql->handle->prepare( $query );
     my $rv = $sth->execute();
     return () if($rv == 0E0);
     my @users;

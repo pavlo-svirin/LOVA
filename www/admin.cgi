@@ -98,6 +98,18 @@ sub ajaxStage
     	my $subject = $CGI->param("subject");
         my $body = $CGI->param("body");
         my $recipients = $CGI->param("emails");
+        
+         my $lightweight_fh  = $CGI->upload('template');
+         if (defined $lightweight_fh)
+         {
+         	 $body = '';
+         	 my $io_handle = $lightweight_fh->handle;
+             while (my $chars = $io_handle->read(my $buffer, 1024))
+         	 {
+         	 	$body .= $buffer;
+         	 }
+         }
+        	
         if($CGI->param('rcpt') eq 'all')
         {
             $emailService->sendToAllUsers($subject, $body);

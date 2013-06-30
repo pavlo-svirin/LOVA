@@ -19,3 +19,4 @@ $MYSQL{'pass'}='lova';
 our %OPTIONS;
 
 $Sirius::Common::debugFile = '/tmp/loto.log';
+$CGI::POST_MAX = 1024 * 100;

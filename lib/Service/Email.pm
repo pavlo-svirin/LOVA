@@ -40,7 +40,7 @@ sub sendFirstEmail
     print $fh "Для подтверждения регистрации перейдите по следующей ссылке:\n";
     print $fh "http://lova.su/cab/" . $emailCode;
     print $fh "\n\n";
-    print $fh "Информация с более полным содержимым о проекте находится по данной ссылке:\n";
+    print $fh "Информация с более полным содержанием о проекте находится по данной ссылке:\n";
     print $fh "http://kravec.org/mezhdunarodnyj-socialnyj-proekt-lova.html\n";
     print $fh "С уважением, LOVA!\n";
     $fh->close();
@@ -97,7 +97,7 @@ sub sendInviteEmail
     $body .= "\n";
     $body .= "Если Вы не знаете такого человека, или не хотите регистрироваться, просто проигнорируйте это сообщение.\n";
     $body .= "\n\n";
-    $body .= "Информация с более полным содержимым о проекте находится по данной ссылке:\n";
+    $body .= "Информация с более полным содержанием о проекте находится по данной ссылке:\n";
     $body .= "http://kravec.org/mezhdunarodnyj-socialnyj-proekt-lova.html\n\n";
     $body .= "С уважением, LOVA!\n";
     
@@ -161,7 +161,7 @@ sub sendPlainEmail
 sub sendHtmlEmail
 {
     my ($self, $to, $subject, $body) = @_;
-    utf8::decode($body);
+
     my $message = Email::Simple->create(
         header => [
             From    => 'LOVA <lova@pemes.net>',
