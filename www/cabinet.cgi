@@ -80,27 +80,6 @@ if($user)
     $vars->{'data'}->{'user'}->{'like'} = $user->getProfile()->{'like'};
     $vars->{'data'}->{'user'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
     
-    # Show warning for mail.ru, bk.ru, list.ru, inbox.ru, liva.it 
-    $vars->{'data'}->{'user'}->{'showEmailWarning'} = '';
-    my $warnTime = $user->getProfile()->{'showEmailWarning'};
-    if (!$warnTime || (time - $warnTime < 30))
-    {
-    	if(!$warnTime)
-        {
-    	   $user->getProfile()->{'showEmailWarning'} = time;
-    	   $userService->saveProfile($user);
-        }
-    	if (($user->getEmail() =~ /mail\.ru$/)
-    	   || ($user->getEmail() =~ /bk\.ru$/)
-    	   || ($user->getEmail() =~ /list\.ru$/)
-    	   || ($user->getEmail() =~ /inbox\.ru$/)
-    	   || ($user->getEmail() =~ /liva\.it$/)
-        )
-    	{
-    		$vars->{'data'}->{'user'}->{'showEmailWarning'} = '1';
-    	}
-    }
-    
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
@@ -138,6 +117,27 @@ elsif($URL =~ /\/profile(\/|$)/)
 }
 else
 {
+    # Show warning for mail.ru, bk.ru, list.ru, inbox.ru, liva.it 
+    $vars->{'data'}->{'user'}->{'showEmailWarning'} = '';
+    my $warnTime = $user->getProfile()->{'showEmailWarning'};
+    if (!$warnTime || (time - $warnTime < 30))
+    {
+        if(!$warnTime)
+        {
+           $user->getProfile()->{'showEmailWarning'} = time;
+           $userService->saveProfile($user);
+        }
+        if (($user->getEmail() =~ /mail\.ru$/)
+           || ($user->getEmail() =~ /bk\.ru$/)
+           || ($user->getEmail() =~ /list\.ru$/)
+           || ($user->getEmail() =~ /inbox\.ru$/)
+           || ($user->getEmail() =~ /liva\.it$/)
+        )
+        {
+            $vars->{'data'}->{'user'}->{'showEmailWarning'} = '1';
+        }
+    }
+	
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
     $template->process("../tmpl/$lang/cab.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
 }
