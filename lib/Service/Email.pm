@@ -1,9 +1,13 @@
 package Service::Email;
 use strict;
 
-use Mail::Send;
-use Email::Send;
+use Email::Sender::Simple qw(sendmail);
+use Email::Sender::Transport::SMTP;
 use Email::Simple;
+use MIME::Base64;
+
+$Service::Email::SMTP_HOST ||= 'localhost';
+$Service::Email::FROM_ADDRESS ||= 'LOVA <send.lova@pemes.net>';
 
 sub new
 {
@@ -27,23 +31,21 @@ sub sendFirstEmail
     my $emailCode = Sirius::Common::GenerateRandomString(32);
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
-    my $msg = Mail::Send->new();
-    my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
-    $msg->to($userName . "<" . $user->getEmail() . ">");
-    $msg->subject('Регистрация на LOVA');
-    $msg->add("From", 'LOVA <lova@pemes.net>');
-    $msg->add("Content-Type", 'text/plain; charset=utf-8');
-    my $fh = $msg->open('sendmail');
-    print $fh "Здравствуйте.\n\n";
-    print $fh "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
-    print $fh "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
-    print $fh "Для подтверждения регистрации перейдите по следующей ссылке:\n";
-    print $fh "http://lova.su/cab/" . $emailCode;
-    print $fh "\n\n";
-    print $fh "Информация с более полным содержанием о проекте находится по данной ссылке:\n";
-    print $fh "http://kravec.org/mezhdunarodnyj-socialnyj-proekt-lova.html\n";
-    print $fh "С уважением, LOVA!\n";
-    $fh->close();
+
+    my $userName = $user->getFirstName() . ' ' . $user->getLastName();
+    my $to = $userName . "<" . $user->getEmail() . ">"; 
+    my $subject = 'Регистрация на LOVA';
+    my $body = "Здравствуйте.\n\n";
+    $body .= "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
+    $body .= "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
+    $body .= "Для подтверждения регистрации перейдите по следующей ссылке:\n";
+    $body .= "http://lova.su/cab/" . $emailCode;
+    $body .= "\n\n";
+    $body .= "Информация с более полным содержанием о проекте находится по данной ссылке:\n";
+    $body .= "http://kravec.org/mezhdunarodnyj-socialnyj-proekt-lova.html\n\n";
+    $body .= "С уважением, LOVA!\n";
+    
+    $self->sendPlainEmail($to, $subject, $body);
 }
 
 sub sendPasswordEmail
@@ -55,22 +57,20 @@ sub sendPasswordEmail
     my $emailCode = Sirius::Common::GenerateRandomString(32);
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
-    my $msg = Mail::Send->new();
-    my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
-    $msg->to($userName . "<" . $user->getEmail() . ">");
-    $msg->subject('Восстановление пароля на LOVA');
-    $msg->add("From", 'LOVA <lova@pemes.net>');
-    $msg->add("Content-Type", 'text/plain; charset=utf-8');
-    my $fh = $msg->open('sendmail');
-    print $fh "Здравствуйте.\n\n";
-    print $fh "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
-    print $fh "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
-    print $fh "Для изменения пароля перейдите по следующей ссылке:\n";
-    print $fh "http://lova.su/cab/" . $emailCode . "\n";
-    print $fh "и поменяйте пароль в настройках Профиля.";
-    print $fh "\n\n";
-    print $fh "Спасибо.\n";
-    $fh->close();
+
+    my $userName = $user->getFirstName() . ' ' . $user->getLastName();
+    my $to = $userName . "<" . $user->getEmail() . ">";
+    my $subject = 'Восстановление пароля на LOVA';
+    my $body = "Здравствуйте.\n\n";
+    $body .= "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
+    $body .= "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
+    $body .= "Для изменения пароля перейдите по следующей ссылке:\n";
+    $body .= "http://lova.su/cab/" . $emailCode . "\n";
+    $body .= "и поменяйте пароль в настройках Профиля.";
+    $body .= "\n\n";
+    $body .= "Спасибо.\n";
+    
+    $self->sendPlainEmail($to, $subject, $body);
 }
 
 sub sendInviteEmail
@@ -145,36 +145,45 @@ sub sendPlainEmail
 
     my $message = Email::Simple->create(
         header => [
-            From    => 'LOVA <lova@pemes.net>',
+            From    => $Service::Email::FROM_ADDRESS,
             To      => $to,
             Subject => $subject
         ],
         body => $body
     );
     $message->header_set("Content-Type" => 'text/plain; charset=utf-8');
-    
-    my $sender = Email::Send->new({mailer => 'SMTP'});
-    $sender->mailer_args([Host => 'localhost']);
-    $sender->send($message);
+
+    my $transport = Email::Sender::Transport::SMTP->new({
+        host => $Service::Email::SMTP_HOST,
+        port => 25,
+    });
+
+    sendmail($message, { transport => $transport });    
 }
 
 sub sendHtmlEmail
 {
     my ($self, $to, $subject, $body) = @_;
+        
+    $subject = MIME::Base64::encode($subject, "");
+    $subject = "=?UTF-8?B?" . $subject . "?=";
 
     my $message = Email::Simple->create(
         header => [
-            From    => 'LOVA <lova@pemes.net>',
+            From    => $Service::Email::FROM_ADDRESS,
             To      => $to,
             Subject => $subject
         ],
         body => $body
     );
-    $message->header_set("Content-Type" => 'text/html; charset=utf-8');
+    $message->header_set("Content-Type" => 'text/html; charset=cp1251');
     
-    my $sender = Email::Send->new({mailer => 'SMTP'});
-    $sender->mailer_args([Host => 'localhost']);
-    $sender->send($message);
+    my $transport = Email::Sender::Transport::SMTP->new({
+        host => $Service::Email::SMTP_HOST,
+        port => 25,
+    });
+
+    sendmail($message, { transport => $transport });    
 }
 
 1;

@@ -79,6 +79,28 @@ if($user)
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'}->{'like'} = $user->getProfile()->{'like'};
     $vars->{'data'}->{'user'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
+    
+    # Show warning for mail.ru, bk.ru, list.ru, inbox.ru, liva.it 
+    $vars->{'data'}->{'user'}->{'showEmailWarning'} = '';
+    my $warnTime = $user->getProfile()->{'showEmailWarning'};
+    if (!$warnTime || (time - $warnTime < 30))
+    {
+    	if(!$warnTime)
+        {
+    	   $user->getProfile()->{'showEmailWarning'} = time;
+    	   $userService->saveProfile($user);
+        }
+    	if (($user->getEmail() =~ /mail\.ru$/)
+    	   || ($user->getEmail() =~ /bk\.ru$/)
+    	   || ($user->getEmail() =~ /list\.ru$/)
+    	   || ($user->getEmail() =~ /inbox\.ru$/)
+    	   || ($user->getEmail() =~ /liva\.it$/)
+        )
+    	{
+    		$vars->{'data'}->{'user'}->{'showEmailWarning'} = '1';
+    	}
+    }
+    
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';

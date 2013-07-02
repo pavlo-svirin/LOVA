@@ -104,7 +104,7 @@ sub ajaxStage
          {
          	 $body = '';
          	 my $io_handle = $lightweight_fh->handle;
-             while (my $chars = $io_handle->read(my $buffer, 1024))
+             while (my $chars = $io_handle->read(my $buffer, 20480))
          	 {
          	 	$body .= $buffer;
          	 }

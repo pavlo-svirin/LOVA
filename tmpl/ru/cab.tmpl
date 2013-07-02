@@ -80,7 +80,10 @@
         <tr><td>
             [% IF !data.user.validateEmail %]
             <div id="validateEmail" class="alert alert-error">Для подтверждения e-mail перейдите по ссылке в письме, полученном при регистрации.
-            <br>Если вы не получили письмо, проверьте папку Спам, нажмите <a href="#" onclick="sendFirstEmail();return false;">здесь</a> для повторной отправки.</div>
+            <br>Если вы не получили письмо, проверьте папку Спам, нажмите <a href="#" onclick="sendFirstEmail();return false;">здесь</a> для повторной отправки.
+            <br>Если письмо по прежнему не приходит к вам, значит вы используете почтовый ящик: mail.ru, bk.ru, list.ru, inbox.ru, liva.it.
+            <br>Пройдите в профиль и замените свой почтовый адрес (mail.ru, bk.ru, list.ru, inbox.ru, liva.it) на любой другой, который у вас есть.            
+            </div>
             [% END %]
             <table width="100%">
                 <tr><td></td><td></td><td colspan="3" align="right"><i>Прогнозируемый нами, Ваш доход в работающем проекте:<i></td></tr>
@@ -158,6 +161,25 @@
         <button name="invite" type="submit" class="btn btn-primary">Пригласить</button>
       </div>
       </form>
-    </div>        		
+    </div>
+    
+    [% data.user.showEmailWarning %]
+    [% IF data.user.showEmailWarning %]
+    <div id="emailWarningDiv" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="emailWarningLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="restoreLabel">ВНИМАНИЕ!!!</h3>
+      </div>
+      <div class="modal-body">
+        <p>Ваш аккаунт зарегистрирован на почтовый ящик, который располагается у почтовых провайдеров: mail.ru, bk.ru, list.ru, inbox.ru, liva.it
+        <p>Пожалуйста, зайдите в свой профиль и впишите другую свою почту любого другого провайдера.
+        <p>Аккаунты, оставшиеся на почтовых ящиках, что находятся на mail.ru, bk.ru, list.ru, inbox.ru, liva.it, не смогут работать в дальнейшем.
+      </div>
+      <div class="modal-footer">
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+      </div>
+    </div>
+    <script>$('#emailWarningDiv').modal('show')</script>              
+    [% END %]        		
 </body>
 </html>

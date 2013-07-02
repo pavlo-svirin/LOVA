@@ -2,7 +2,7 @@ package Service::User;
 use strict;
 
 my $table = "users";
-my @systemProfileValues = ("like", "emailCode", "validateEmail");
+my @systemProfileValues = ("like", "emailCode", "validateEmail", "showEmailWarning");
 
 sub new
 {
@@ -147,8 +147,9 @@ sub findSubscribed
     my $query = "SELECT `u`.* FROM `$table` `u` ";
     $query .= " LEFT JOIN `user_profile` p ON u.id = p.user_id AND p.name = 'subscribe'";
     $query .= " JOIN `user_profile` `pa` ON `u`.`id` = `pa`.`user_id` ";
-    $query .= " WHERE (`p`.`name` = 'subscribe' AND `p`.`value` = 'true') OR p.name IS NULL";
+    $query .= " WHERE ((`p`.`name` = 'subscribe' AND `p`.`value` = 'true') OR p.name IS NULL)";
     $query .= " AND `pa`.`name` = 'validateEmail' ";
+    
     my $sth = $::sql->handle->prepare( $query );
     my $rv = $sth->execute();
     return () if($rv == 0E0);
@@ -232,6 +233,21 @@ sub countReferals
     $query .= " WHERE `referal` = ? ";
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute($user->getLogin());
+    my $ref = $sth->fetchrow_hashref();
+    return $ref->{'total'};
+}
+
+sub countSubscribed
+{
+    my ($self) = @_;
+    my $query = "SELECT count(`u`.`id`) FROM `$table` `u` ";
+    $query .= " LEFT JOIN `user_profile` p ON u.id = p.user_id AND p.name = 'subscribe'";
+    $query .= " JOIN `user_profile` `pa` ON `u`.`id` = `pa`.`user_id` ";
+    $query .= " WHERE ((`p`.`name` = 'subscribe' AND `p`.`value` = 'true') OR p.name IS NULL)";
+    $query .= " AND `pa`.`name` = 'validateEmail' ";
+    
+    my $sth = $::sql->handle->prepare( $query );
+    my $rv = $sth->execute();
     my $ref = $sth->fetchrow_hashref();
     return $ref->{'total'};
 }

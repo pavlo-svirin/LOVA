@@ -15,7 +15,6 @@ Ext.define('Loto.controller.Emails', {
     
     _send: function(btn) {
     	var form = btn.up('form').getForm();
-    	btn.disable();
         if(form.isValid())
         {
         	form.submit({
