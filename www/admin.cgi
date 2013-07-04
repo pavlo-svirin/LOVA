@@ -197,6 +197,33 @@ sub ajaxStage
             push(@{$response->{data}}, $data);
         }
         print $json->encode($response);
+    }
+    elsif (($URL =~ /\/user\//) && ($URL =~ /\/save\//))
+    {
+        my $user = $userService->findById($CGI->param('id'));
+        $userService->loadProfile($user);
+        $userService->loadAccount($user);
+        # verify login and email
+        $user->setLogin($CGI->param('login'));
+        $user->setEmail($CGI->param('email'));
+        $user->setFirstName($CGI->param('first_name'));
+        $user->setLastName($CGI->param('last_name'));
+        if($CGI->param('password'))
+        {
+            $user->setPassword($CGI->param('password'));
+        }
+        
+        $user->getProfile()->{'skype'} = $CGI->param('profile.skype');
+        $user->getProfile()->{'phone'} = $CGI->param('profile.phone');
+        $user->getProfile()->{'country'} = $CGI->param('profile.country');
+
+        $user->getAccount()->{'personal'} = $CGI->param('account.personal');
+        $user->getAccount()->{'fond'} = $CGI->param('account.fond');
+        $user->getAccount()->{'referal'} = $CGI->param('account.referal');
+        
+        $userService->save($user);
+        $userService->saveProfile($user);
+        $userService->saveAccount($user);
     }    
 }
 

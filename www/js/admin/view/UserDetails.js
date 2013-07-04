@@ -6,9 +6,9 @@ Ext.define('Loto.view.UserDetails', {
     height: 300,
     autoScroll:true,
     bodyPadding: 10,
-    layout: 'anchor',
+    layout: 'column',
 	defaults: {
-		anchor: '50%',
+		columnWidth: 0.5,
 	},
     hidden: true,
     tbar: [
@@ -19,79 +19,93 @@ Ext.define('Loto.view.UserDetails', {
     items: [
         {
             xtype:'fieldset',
-            title: 'Основные настройки',
-        	columnWidth: 0.5,            
-            defaultType: 'textfield',
+            frame: false,
             layout: 'anchor',
         	defaults: {
-        		anchor: '100%',
-            	labelAlign: 'left',
-            	labelWidth: 150
-            },
+        		anchor: '100%'
+        	},
         	items: [
-		        { name: 'login', fieldLabel: 'Login', allowBlank: false },
-		        { name: 'email', fieldLabel: 'E-mail', allowBlank: false },
-		        { name: 'password', fieldLabel: 'Пароль' },
-		        { name: 'first_name', fieldLabel: 'Имя', allowBlank: false },
-		        { name: 'last_name', fieldLabel: 'Фамилия' }
-        	]
+		        {
+		            xtype:'fieldset',
+		            title: 'Основные настройки',
+		            defaultType: 'textfield',
+		            layout: 'anchor',
+		        	defaults: {
+		        		anchor: '100%',
+		            	labelAlign: 'left',
+		            	labelWidth: 150
+		            },
+		        	items: [
+				        { name: 'login', fieldLabel: 'Login', allowBlank: false },
+				        { name: 'email', fieldLabel: 'E-mail', allowBlank: false },
+				        { name: 'password', fieldLabel: 'Пароль' },
+				        { name: 'first_name', fieldLabel: 'Имя', allowBlank: false },
+				        { name: 'last_name', fieldLabel: 'Фамилия' }
+		        	]
+		        },
+		        {
+		            xtype:'fieldset',
+		            title: 'Профиль',
+		            defaultType: 'textfield',
+		            defaults: {
+		            	anchor: '100%',
+		            	labelAlign: 'left',
+		            	labelWidth: 150
+		            },
+		            layout: 'anchor',
+		        	items: [
+				        { name: 'profile.phone', fieldLabel: 'Телефон' },
+				        { name: 'profile.country', fieldLabel: 'Страна' },
+				        { name: 'profile.skype', fieldLabel: 'Скайп' },
+				        { name: 'referal', fieldLabel: 'Пригласил' }
+		        	]
+		        }       
+		    ]
         },
         {
             xtype:'fieldset',
-            title: 'Профиль',
-            defaultType: 'textfield',
-        	columnWidth: 0.5,            
-            defaults: {
-            	anchor: '100%',
-            	labelAlign: 'left',
-            	labelWidth: 150
-            },
-            height: 153,
+            frame: false,
             layout: 'anchor',
-        	items: [
-		        { name: 'profile.phone', fieldLabel: 'Телефон' },
-		        { name: 'profile.country', fieldLabel: 'Страна' },
-		        { name: 'profile.skype', fieldLabel: 'Скайп' },
-		        { name: 'referal', fieldLabel: 'Пригласил' }
-        	]
-        },
-        {
-            xtype:'fieldset',
-            title: 'Счет',
-            layout: 'anchor',
-        	columnWidth: 0.5,            
-            defaultType: 'textfield',
         	defaults: {
-        		anchor: '100%',
-            	labelAlign: 'left',
-            	labelWidth: 150
-            },
+        		anchor: '100%'
+        	},
         	items: [
-		        { name: 'account.personal', fieldLabel: 'Персональный' },
-		        { name: 'account.fond', fieldLabel: 'Фонд' },
-		        { name: 'account.referal', fieldLabel: 'Реферальный' },        	        
-        	]
-        },
-        {
-            xtype:'fieldset',
-            title: 'Информация',
-            layout: 'anchor',
-        	columnWidth: 0.5,            
-            defaultType: 'textfield',
-        	defaults: {
-        		anchor: '100%',
-            	labelAlign: 'left',
-            	labelWidth: 150,
-            	readOnly: true,
-            },
-        	items: [
-		        { name: 'id', fieldLabel: 'ID' },
-		        { name: 'created', fieldLabel: 'Зарегистрирован' },
-		        { name: 'last_seen', fieldLabel: 'Активность' },
-		        { name: 'profile.validateEmail', fieldLabel: 'Активирован', xtype: 'checkbox' },        	        
-		        { name: 'profile.subscribe', fieldLabel: 'Рассылка', xtype: 'checkbox' },
-		        { name: 'profile.like', fieldLabel: 'Поставил лайк', xtype: 'checkbox' }
-		        //{ name: 'meta.referals', fieldLabel: 'Рефералов' }
+    	        {
+    	            xtype:'fieldset',
+    	            title: 'Информация',
+    	            layout: 'anchor',
+    	            defaultType: 'textfield',
+    	        	defaults: {
+    	        		anchor: '100%',
+    	            	labelAlign: 'left',
+    	            	labelWidth: 150,
+    	            	readOnly: true,
+    	            },
+    	        	items: [
+    			        { name: 'id', fieldLabel: 'ID' },
+    			        { name: 'created', fieldLabel: 'Зарегистрирован' },
+    			        { name: 'last_seen', fieldLabel: 'Активность' },
+    			        { name: 'profile.validateEmail', fieldLabel: 'Активирован', xtype: 'checkbox' },        	        
+    			        { name: 'profile.subscribe', fieldLabel: 'Рассылка', xtype: 'checkbox' },
+    			        { name: 'profile.like', fieldLabel: 'Поставил лайк', xtype: 'checkbox' },
+    	        	]
+    	        },
+    	        {
+    	            xtype:'fieldset',
+    	            title: 'Счет',
+    	            layout: 'anchor',
+    	            defaultType: 'textfield',
+    	        	defaults: {
+    	        		anchor: '100%',
+    	            	labelAlign: 'left',
+    	            	labelWidth: 150
+    	            },
+    	        	items: [
+    			        { name: 'account.personal', fieldLabel: 'Персональный' },
+    			        { name: 'account.fond', fieldLabel: 'Фонд' },
+    			        { name: 'account.referal', fieldLabel: 'Реферальный' },        	        
+    	        	]
+    	        }
         	]
         }
     ]    
