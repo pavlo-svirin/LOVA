@@ -54,6 +54,7 @@ if($URL=~/(\w{32})/)
 		$cgiSession->param('userId', $user->getId());
 		$userService->loadProfile($user);
 		$user->getProfile()->{'validateEmail'} = time;
+		$userService->deleteProfile($user, 'validateEmail');
 		$userService->saveProfile($user);
 		$redirect = "/cab/profile/";
 	}
@@ -125,6 +126,7 @@ else
         if(!$warnTime)
         {
            $user->getProfile()->{'showEmailWarning'} = time;
+           $userService->deleteProfile($user, 'showEmailWarning');
            $userService->saveProfile($user);
         }
         if (($user->getEmail() =~ /mail\.ru$/)

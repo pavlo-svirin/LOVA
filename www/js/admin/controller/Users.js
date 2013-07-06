@@ -63,19 +63,22 @@ Ext.define('Loto.controller.Users', {
     
     _selectUser: function(selection, rows)
     {
-        var details = selection.view.up("tabpanel").down("userDetails");
-        details.show();
-    	var user = selection.selected.first();
-    	var userId = user.get("id");
-        
-        Ext.data.StoreManager.lookup('UserDetails').load({
-        	scope: this,
-        	params: { id: userId },
-        	callback: function(records, operation, success) {
-        		var userDetails = records[0];
-        		details.getForm().loadRecord(userDetails);
-    	    }
-        });
+        var user = selection.selected.first();
+        if(user)
+        {
+            var details = selection.view.up("tabpanel").down("userDetails");
+            details.show();
+            var userId = user.get("id");
+            
+            Ext.data.StoreManager.lookup('UserDetails').load({
+            	scope: this,
+            	params: { id: userId },
+            	callback: function(records, operation, success) {
+            		var userDetails = records[0];
+            		details.getForm().loadRecord(userDetails);
+        	    }
+            });
+        }
     },
     
     _closeUser: function(btn)
