@@ -20,7 +20,10 @@ use Service::Scheduler;
 use Service::User;
 use Service::Email;
 
+use DAO::EmailTemplates;
+
 use Data::BaseObject;
 use Data::User;
+use Data::EmailTemplate;
 
 1;

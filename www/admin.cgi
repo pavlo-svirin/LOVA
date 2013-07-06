@@ -18,7 +18,6 @@ our $sql     = Sirius::MySQL->new(host=>$MYSQL{'host'}, db=>$MYSQL{'base'}, user
 my $dbh      = $sql->connect;
 my $CGI      = new CGI;
 my $template = Template->new({RELATIVE=>1});
-
 my $json     = JSON->new->allow_nonref;
 
 
@@ -45,6 +44,8 @@ my $userService = new Service::User();
 my $optionsService = new Service::Options();
 my $schedulerService = new Service::Scheduler(optionsService => $optionsService);
 my $emailService = new Service::Email(userService => $userService);
+
+my $emailTemplateDao = new DAO::EmailTemplates();
 
 #=======================Template Variables================
 
@@ -227,6 +228,23 @@ sub ajaxStage
         $userService->save($user);
         $userService->saveProfile($user);
         $userService->saveAccount($user);
+    }
+    elsif (($URL =~ /\/emailTemplate\//) && ($URL =~ /\/load\//))
+    {
+    	my $response->{'success'} = JSON::true;
+    	printAllSimpleObjects($emailTemplateDao);
+    }
+    elsif (($URL =~ /\/emailTemplate\//) && ($URL =~ /\/save\//))
+    {   
+    	my $params = $CGI->Vars();
+    	my $tmpl = new Data::EmailTemplate(%$params);
+    	$emailTemplateDao->save($tmpl);
+    }    
+    elsif (($URL =~ /\/emailTemplate\//) && ($URL =~ /\/delete\//))
+    {
+    	my $id = $CGI->param('id');
+    	my $tmpl = $emailTemplateDao->findById($id);
+    	$emailTemplateDao->delete($tmpl);
     }    
 }
 
@@ -243,7 +261,7 @@ sub printOptions()
 sub printAllSimpleObjects
 {
   my $service = shift;
-  my $response->{success} = 'true';
+  my $response->{success} = JSON::true;;
   foreach my $obj ($service->findAll())
   {
     push(@{$response->{data}}, $obj->getData());

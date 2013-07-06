@@ -5,7 +5,8 @@ Ext.application({
     controllers: [
       'Options',
       'Users',
-      'Emails'
+      'Emails',
+      'EmailTemplates'
     ],
     launch: function()
     {
@@ -31,7 +32,19 @@ Ext.application({
 	                    ]
     	            },
     	            { xtype: 'usersChart' },
-    	            { xtype: 'emails' }
+    	            { xtype: 'emails' },
+    	            { 
+                    	title: 'Шаблоны почты',
+                    	layout: {
+                    	    type  : 'vbox',
+                    	    align : 'stretch',
+                    	    pack  : 'start'
+                    	},                    	
+                		items: [
+	                      { xtype: 'emailTemplates', flex: 1 },
+	                      { xtype: 'emailTemplate' }
+	                    ]
+    	            }
                 ]
             }]
         });

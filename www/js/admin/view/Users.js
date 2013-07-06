@@ -3,7 +3,6 @@ Ext.require('Ext.ux.grid.FiltersFeature');
 Ext.define('Loto.view.Users', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.users',
-    title: 'Пользователи',
     store: 'User',
     stateful: true,
     features: [{

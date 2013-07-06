@@ -25,11 +25,21 @@ sub sendFirstEmail
 {
     my ($self, $user) = @_;
     my $userService = $self->{'userService'};
-    
+
     $userService->loadProfile($user);
+    my $lang = $user->getProfile()->{'lang'} || 'ru';
     my $emailCode = Sirius::Common::GenerateRandomString(32);
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
+    
+    #my $tmpl = DAO::EmailTemplates->findByCodeAndLang('FIRST_EMAIL', $lang);
+    #if($tmpl)
+    #{
+    # 	my $vars = {};
+    #	$vars->{'emailCode'} = $emailCode; 
+    #	$tmpl->setTemplateVars($vars);
+    #	$self->sendEmailTemplate($user, $tmpl)
+    #}
 
     my $userName = $user->getFirstName() . ' ' . $user->getLastName();
     my $to = $userName . "<" . $user->getEmail() . ">"; 
@@ -105,6 +115,18 @@ sub sendInviteEmail
     $self->sendPlainEmail($to, $subject, $body);
 }
 
+sub sendEmailTemplate
+{
+    my ($self, $user, $tmpl) = @_;
+    
+    my $userName = $user->getFirstName() . ' ' . $user->getLastName();
+    my $to = $userName . "<" . $user->getEmail() . ">";
+    my $subject = $tmpl->getSubject();
+    my $body = $tmpl->getBody();
+    
+	$self->sendPlainEmail($to, $subject, $body);
+}
+
 sub sendToAllUsers
 {
     my ($self, $subject, $body) = @_;
@@ -123,6 +145,7 @@ sub sendToSubscribedUsers
     my @users = $self->{'userService'}->findSubscribed();
     foreach my $user (@users)
     {
+    	Sirius::Common::debug("Subcribed: " . $user->getEmail());
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
         my $email = $userName . "<" . $user->getEmail() . ">";
         $self->sendHtmlEmail($email, $subject, $body);
