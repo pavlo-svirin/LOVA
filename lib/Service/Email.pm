@@ -32,29 +32,14 @@ sub sendFirstEmail
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
     
-    #my $tmpl = DAO::EmailTemplates->findByCodeAndLang('FIRST_EMAIL', $lang);
-    #if($tmpl)
-    #{
-    # 	my $vars = {};
-    #	$vars->{'emailCode'} = $emailCode; 
-    #	$tmpl->setTemplateVars($vars);
-    #	$self->sendEmailTemplate($user, $tmpl)
-    #}
-
-    my $userName = $user->getFirstName() . ' ' . $user->getLastName();
-    my $to = $userName . "<" . $user->getEmail() . ">"; 
-    my $subject = 'Регистрация на LOVA';
-    my $body = "Здравствуйте.\n\n";
-    $body .= "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
-    $body .= "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
-    $body .= "Для подтверждения регистрации перейдите по следующей ссылке:\n";
-    $body .= "http://lova.su/cab/" . $emailCode;
-    $body .= "\n\n";
-    $body .= "Информация с более полным содержанием о проекте находится по данной ссылке:\n";
-    $body .= "http://kravec.org/mezhdunarodnyj-socialnyj-proekt-lova.html\n\n";
-    $body .= "С уважением, LOVA!\n";
-    
-    $self->sendPlainEmail($to, $subject, $body);
+    my $tmpl = DAO::EmailTemplates->findByCodeAndLang('FIRST_EMAIL', $lang);
+    if($tmpl)
+    {
+     	my $vars = {};
+    	$vars->{'emailCode'} = $emailCode; 
+    	$tmpl->setTemplateVars($vars);
+    	$self->sendEmailTemplate($user, $tmpl)
+    }
 }
 
 sub sendPasswordEmail
@@ -63,23 +48,19 @@ sub sendPasswordEmail
     my $userService = $self->{'userService'};
     
     $userService->loadProfile($user);
+    my $lang = $user->getProfile()->{'lang'} || 'ru';
     my $emailCode = Sirius::Common::GenerateRandomString(32);
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
-
-    my $userName = $user->getFirstName() . ' ' . $user->getLastName();
-    my $to = $userName . "<" . $user->getEmail() . ">";
-    my $subject = 'Восстановление пароля на LOVA';
-    my $body = "Здравствуйте.\n\n";
-    $body .= "Вы получили это письмо, так как данный адрес электронной почты (e-mail) был использован при регистрации на сайте LoVa.su\n";
-    $body .= "Если Вы не регистрировались на этом сайте, просто проигнорируйте это письмо и удалите его.\n";
-    $body .= "Для изменения пароля перейдите по следующей ссылке:\n";
-    $body .= "http://lova.su/cab/" . $emailCode . "\n";
-    $body .= "и поменяйте пароль в настройках Профиля.";
-    $body .= "\n\n";
-    $body .= "Спасибо.\n";
     
-    $self->sendPlainEmail($to, $subject, $body);
+    my $tmpl = DAO::EmailTemplates->findByCodeAndLang('PASSWORD_RESET', $lang);
+    if($tmpl)
+    {
+        my $vars = {};
+        $vars->{'emailCode'} = $emailCode; 
+        $tmpl->setTemplateVars($vars);
+        $self->sendEmailTemplate($user, $tmpl)
+    }
 }
 
 sub sendInviteEmail
@@ -88,31 +69,32 @@ sub sendInviteEmail
     my $userService = $self->{'userService'};
     
     $userService->loadProfile($user);
+    my $lang = $user->getProfile()->{'lang'} || 'ru';
     my $emailCode = Sirius::Common::GenerateRandomString(32);
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
     
-    my $userName = $user->getFirstName(); 
-    my $inviteName = $user->getReferal();
-    my $invitee = $userService->findByLogin($user->getReferal());
-    if($invitee)
+    my $tmpl = DAO::EmailTemplates->findByCodeAndLang('INVITE', $lang);
+    if($tmpl)
     {
-    	$inviteName = $invitee->getFirstName();
-    }
+        my $vars = {};
+        $vars->{'emailCode'} = $emailCode;
+        $vars->{'rcptName'} = $user->getFirstName();
+        $vars->{'senderLogin'} = $user->getReferal();
 
-    my $body = "Проект LOVA приветствует Вас, $userName!\n\n";
-    $body .= "Ваш друг $inviteName зарегистрировал Вас в проекте lova.su, пройдите по этой ссылке для завершения регистрации:\n";
-    $body .= "http://lova.su/cab/" . $emailCode;
-    $body .= "\n";
-    $body .= "Если Вы не знаете такого человека, или не хотите регистрироваться, просто проигнорируйте это сообщение.\n";
-    $body .= "\n\n";
-    $body .= "Информация с более полным содержанием о проекте находится по данной ссылке:\n";
-    $body .= "http://kravec.org/mezhdunarodnyj-socialnyj-proekt-lova.html\n\n";
-    $body .= "С уважением, LOVA!\n";
-    
-    my $to = $userName . "<" . $user->getEmail() . ">";
-    my $subject = 'Регистрация на LOVA';
-    $self->sendPlainEmail($to, $subject, $body);
+        $vars->{'senderFirstName'} = "";
+        $vars->{'senderLastName'} = "";
+        
+        my $invitee = $userService->findByLogin($user->getReferal());
+        if($invitee)
+        {
+        	$vars->{'senderFirstName'} = $invitee->getFirstName();
+            $vars->{'senderLastName'} = $invitee->getLastName();
+        }
+
+        $tmpl->setTemplateVars($vars);
+        $self->sendEmailTemplate($user, $tmpl)
+    }
 }
 
 sub sendEmailTemplate
