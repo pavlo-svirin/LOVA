@@ -126,7 +126,6 @@ sub ajaxStage
             $userService->loadProfile($user);
             unless ($user->getProfile()->{'like'})
             {
-            	$userService->deleteProfile($user, 'like');
             	$user->getProfile()->{'like'} = time;
             	$userService->saveProfile($user);
             }

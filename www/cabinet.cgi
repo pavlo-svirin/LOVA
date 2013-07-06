@@ -51,10 +51,10 @@ if($URL =~ /(\w{32})/)
 	my $user = $userService->findByEmailCode($emailCode);
 	if($user)
 	{
+		$userService->deleteProfile($user, 'emailCode');
 		$cgiSession->param('userId', $user->getId());
 		$userService->loadProfile($user);
 		$user->getProfile()->{'validateEmail'} = time;
-		$userService->deleteProfile($user, 'validateEmail');
 		$userService->saveProfile($user);
 		$redirect = "/cab/profile/";
 	}
@@ -126,7 +126,6 @@ else
         if(!$warnTime)
         {
            $user->getProfile()->{'showEmailWarning'} = time;
-           $userService->deleteProfile($user, 'showEmailWarning');
            $userService->saveProfile($user);
         }
         if (($user->getEmail() =~ /mail\.ru$/)
