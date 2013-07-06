@@ -45,7 +45,7 @@ my $optionsService = new Service::Options();
 $optionsService->load();
 my $emailService = new Service::Email(userService => $userService);
 
-if($URL=~/(\w{32})/)
+if($URL =~ /(\w{32})/)
 {
 	my $emailCode = $1;
 	my $user = $userService->findByEmailCode($emailCode);

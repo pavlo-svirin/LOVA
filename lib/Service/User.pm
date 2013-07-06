@@ -392,7 +392,11 @@ sub saveProfile()
     	my $value = $profile->{$name};
     	if($value)
     	{
-            my $flag_id = $self->getProfileValueFlag($name);    		
+            my $flag_id = $self->getProfileValueFlag($name);
+            if($flag_id == 1) # system value
+            {
+            	$self->deleteProfile($user, $name);
+            }    		
 	        my $sth = $::sql->handle->prepare("INSERT INTO `user_profile` (`user_id`, `name`, `value`, `flag_id`) VALUES (?, ?, ?, ?)");
 	        $sth->execute($user->getId(), $name, $profile->{$name}, $flag_id);
     	}
