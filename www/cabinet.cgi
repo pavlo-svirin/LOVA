@@ -4,7 +4,6 @@ use utf8;
 
 use FindBin qw($Bin);
 use lib "$Bin/../lib/";
-use CGI::Carp qw ( fatalsToBrowser );
 
 use Sirius::Common qw(debug);
 

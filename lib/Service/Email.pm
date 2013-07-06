@@ -4,7 +4,6 @@ use strict;
 use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTP;
 use Email::Simple;
-use MIME::Base64;
 
 $Service::Email::SMTP_HOST ||= 'localhost';
 $Service::Email::FROM_ADDRESS ||= 'LOVA <send.lova@pemes.net>';
@@ -161,13 +160,11 @@ sub sendPlainEmail
     sendmail($message, { transport => $transport });    
 }
 
+# Send cp1251 email
 sub sendHtmlEmail
 {
     my ($self, $to, $subject, $body) = @_;
         
-    $subject = MIME::Base64::encode($subject, "");
-    $subject = "=?UTF-8?B?" . $subject . "?=";
-
     my $message = Email::Simple->create(
         header => [
             From    => $Service::Email::FROM_ADDRESS,

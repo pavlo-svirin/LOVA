@@ -5,6 +5,7 @@ use utf8;
 use FindBin qw($Bin);
 use lib "$Bin/../lib/";
 use CGI::Carp qw ( fatalsToBrowser );
+use Encode;
 
 use options;
 use global;
@@ -96,7 +97,9 @@ sub ajaxStage
     elsif($URL =~ /\/send\//)
     {
     	my $subject = $CGI->param("subject");
-        my $body = $CGI->param("body");
+    	Encode::from_to($subject, 'utf-8', 'cp1251');
+        my $body =  $CGI->param("body");
+        Encode::from_to($body, 'utf-8', 'cp1251');
         my $recipients = $CGI->param("emails");
         
          my $lightweight_fh  = $CGI->upload('template');
