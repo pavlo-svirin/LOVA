@@ -12,6 +12,9 @@ Ext.define('Loto.controller.EmailTemplates', {
             'emailTemplates button[action=add]': {
                 click: this._add
             },
+            'emailTemplates button[action=copy]': {
+                click: this._copy
+            },
             'emailTemplate button[action=close]': {
                 click: this._close
             },
@@ -36,6 +39,19 @@ Ext.define('Loto.controller.EmailTemplates', {
         }
     },
 
+    _copy: function(btn)
+    {
+        var template = btn.up("emailTemplates").getSelectionModel().selected.first();
+        btn.up("emailTemplates").getSelectionModel().deselectAll();
+        if(template)
+        {
+            var details = btn.up("tabpanel").down("emailTemplate");
+            details.show();
+            details.getForm().loadRecord(template);
+            details.down("hidden[name=id]").setValue("");
+        }
+    },
+    
     _add: function(btn)
     {
         var tmpl = btn.up("tabpanel").down("emailTemplate");

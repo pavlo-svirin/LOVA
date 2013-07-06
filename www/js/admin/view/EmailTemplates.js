@@ -4,7 +4,8 @@ Ext.define('Loto.view.EmailTemplates', {
     store: 'EmailTemplate',
     stateful: true,
     tbar: [
-       { xtype: 'button', text: 'Добавить', action: 'add' }
+       { xtype: 'button', text: 'Добавить', action: 'add' },
+       { xtype: 'button', text: 'Копировать', action: 'copy' }
     ],
     columns: [
         { text: 'Код', dataIndex: 'code', width: 240 },        
