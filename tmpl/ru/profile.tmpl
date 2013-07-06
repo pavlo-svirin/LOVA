@@ -21,6 +21,17 @@
         <h3>Профиль</h3>
         <form class="form-horizontal" id="profileForm" data-async method="POST" action="/cab/profile/save/">
           <div class="control-group">
+            <label class="control-label" for="subscribe">Язык</label>
+            <div class="controls">
+                <select name="lang">
+                    <option value="ru" [% "selected" IF data.user.getProfile().lang == 'ru' %]>Русский</option>
+                    <option value="en" [% "selected" IF data.user.getProfile().lang == 'en' %]>English</option>
+                    <option value="ua" [% "selected" IF data.user.getProfile().lang == 'ua' %]>Українська</option>
+                </select>
+                <span class="help-inline"></span>
+            </div>
+          </div>
+          <div class="control-group">
             <label class="control-label" for="first_name">Имя*</label>
             <div class="controls">
                 <input type="text" name="first_name" value="[% data.user.getFirstName() %]" required>

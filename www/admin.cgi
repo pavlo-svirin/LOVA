@@ -220,6 +220,7 @@ sub ajaxStage
         $user->getProfile()->{'skype'} = $CGI->param('profile.skype');
         $user->getProfile()->{'phone'} = $CGI->param('profile.phone');
         $user->getProfile()->{'country'} = $CGI->param('profile.country');
+        $user->getProfile()->{'lang'} = $CGI->param('profile.lang');
 
         $user->getAccount()->{'personal'} = $CGI->param('account.personal');
         $user->getAccount()->{'fond'} = $CGI->param('account.fond');

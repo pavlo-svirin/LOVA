@@ -201,7 +201,7 @@ sub saveProfile
     if($validationStatus->{'success'} eq 'true')
     {
         $userService->save($newUser);
-        foreach my $name("skype", "country", "phone", "subscribe")
+        foreach my $name("skype", "country", "phone", "subscribe", "lang")
         {
             if($CGI->param($name))
             {
