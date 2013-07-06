@@ -29,6 +29,7 @@ sub sendFirstEmail
     
     $userService->loadProfile($user);
     my $emailCode = Sirius::Common::GenerateRandomString(32);
+    $userService->deleteProfile($user, 'emailCode');
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
 
@@ -55,6 +56,7 @@ sub sendPasswordEmail
     
     $userService->loadProfile($user);
     my $emailCode = Sirius::Common::GenerateRandomString(32);
+    $userService->deleteProfile($user, 'emailCode');
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
 
@@ -80,6 +82,7 @@ sub sendInviteEmail
     
     $userService->loadProfile($user);
     my $emailCode = Sirius::Common::GenerateRandomString(32);
+    $userService->deleteProfile($user, 'emailCode');    
     $user->getProfile()->{'emailCode'} = $emailCode;
     $userService->saveProfile($user);
     

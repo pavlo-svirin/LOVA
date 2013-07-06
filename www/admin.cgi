@@ -13,7 +13,7 @@ use Sirius::Common qw(debug);
 
 #=======================Variables=========================
 
-our $sql      = Sirius::MySQL->new(host=>$MYSQL{'host'}, db=>$MYSQL{'base'}, user=>$MYSQL{'user'}, password=>$MYSQL{'pass'}, debug=>1);
+our $sql     = Sirius::MySQL->new(host=>$MYSQL{'host'}, db=>$MYSQL{'base'}, user=>$MYSQL{'user'}, password=>$MYSQL{'pass'}, debug=>1);
 my $dbh      = $sql->connect;
 my $CGI      = new CGI;
 my $template = Template->new({RELATIVE=>1});
