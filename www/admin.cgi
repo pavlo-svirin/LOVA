@@ -239,12 +239,17 @@ sub ajaxStage
     	my $params = $CGI->Vars();
     	my $tmpl = new Data::EmailTemplate(%$params);
     	$emailTemplateDao->save($tmpl);
+        my $response->{'success'} = JSON::true;
+        print $json->encode($response);
+    	
     }    
     elsif (($URL =~ /\/emailTemplate\//) && ($URL =~ /\/delete\//))
     {
     	my $id = $CGI->param('id');
     	my $tmpl = $emailTemplateDao->findById($id);
     	$emailTemplateDao->delete($tmpl);
+        my $response->{'success'} = JSON::true;
+        print $json->encode($response);
     }    
 }
 
