@@ -38,11 +38,15 @@ $cgiSession->expire('+3M');
 # Cookie с идентификатором сессии к клиенту
 my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession->id());
 
+# DAO
+my $htmlContentDao = new DAO::HtmlContent();
+
 # Services
 my $userService = new Service::User();
 my $emailService = new Service::Email(userService => $userService);
 my $optionsService = new Service::Options();
 $optionsService->load();
+
 
 checkUserLogin();
 checkReferal();
@@ -54,6 +58,7 @@ $vars->{'error'} = "";
 $vars->{'url'} = $URL;
 $vars->{'userId'} = $cgiSession->param('userId');
 $vars->{'contentRu'} = $optionsService->get("contentRu");
+$vars->{'content'} = $htmlContentDao->findByCodeAndLang('MAIN_PAGE', $lang)->getContent();
 
 #=======================Main Stage========================
 

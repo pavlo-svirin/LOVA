@@ -6,7 +6,8 @@ Ext.application({
       'Options',
       'Users',
       'Emails',
-      'EmailTemplates'
+      'EmailTemplates',
+      'HtmlContent'
     ],
     launch: function()
     {
@@ -44,7 +45,20 @@ Ext.application({
 	                      { xtype: 'emailTemplates', flex: 1 },
 	                      { xtype: 'emailTemplate' }
 	                    ]
+    	            },
+    	            { 
+                    	title: 'Контент',
+                    	layout: {
+                    	    type  : 'vbox',
+                    	    align : 'stretch',
+                    	    pack  : 'start'
+                    	},                    	
+                		items: [
+	                      { xtype: 'htmlContentList', flex: 1 },
+	                      { xtype: 'htmlContent' }
+	                    ]
     	            }
+    	            
                 ]
             }]
         });

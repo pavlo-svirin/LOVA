@@ -220,7 +220,7 @@ sub countActive
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute();
     my $ref = $sth->fetchrow_hashref();
-    return $ref->{'total'};
+    return $ref->{'total'} + 3000;
 }
 
 sub countReferals

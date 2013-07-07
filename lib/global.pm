@@ -21,9 +21,11 @@ use Service::User;
 use Service::Email;
 
 use DAO::EmailTemplates;
+use DAO::HtmlContent;
 
 use Data::BaseObject;
 use Data::User;
 use Data::EmailTemplate;
+use Data::HtmlContent;
 
 1;

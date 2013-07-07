@@ -46,6 +46,7 @@ my $schedulerService = new Service::Scheduler(optionsService => $optionsService)
 my $emailService = new Service::Email(userService => $userService);
 
 my $emailTemplateDao = new DAO::EmailTemplates();
+my $htmlContentDao = new DAO::HtmlContent();
 
 #=======================Template Variables================
 
@@ -257,6 +258,28 @@ sub ajaxStage
     	my $id = $CGI->param('id');
     	my $tmpl = $emailTemplateDao->findById($id);
     	$emailTemplateDao->delete($tmpl);
+        my $response->{'success'} = JSON::true;
+        print $json->encode($response);
+    }
+    elsif (($URL =~ /\/htmlContent\//) && ($URL =~ /\/load\//))
+    {
+        my $response->{'success'} = JSON::true;
+        printAllSimpleObjects($htmlContentDao);
+    }
+    elsif (($URL =~ /\/htmlContent\//) && ($URL =~ /\/save\//))
+    {   
+        my $params = $CGI->Vars();
+        my $content = new Data::HtmlContent(%$params);
+        $htmlContentDao->save($content);
+        my $response->{'success'} = JSON::true;
+        print $json->encode($response);
+        
+    }    
+    elsif (($URL =~ /\/htmlContent\//) && ($URL =~ /\/delete\//))
+    {
+        my $id = $CGI->param('id');
+        my $content = $htmlContentDao->findById($id);
+        $htmlContentDao->delete($content);
         my $response->{'success'} = JSON::true;
         print $json->encode($response);
     }    
