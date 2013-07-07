@@ -81,6 +81,19 @@ sub getCreatedByScale
 	
 }
 
+sub getActivatedByScale
+{
+    my ($self, $scale) = @_;
+    $scale = $scale || "day";
+    my $activation = $self->getProfile()->{'validateEmail'}; 
+    return unless ($activation);
+
+    return DateTime->from_epoch(epoch => $activation) 
+        ->truncate( to => $scale )
+        ->ymd('-');
+    
+}
+
 sub getCreatedUnixTime
 {
     my ($self) = @_;

@@ -227,10 +227,9 @@ sub countReferals
 {
     my ($self, $user) = @_;
     my $query = "SELECT count(`u`.`id`) AS `total` FROM `$table` `u`";
-#    $query .= " JOIN `user_profile` `p` ON `u`.`id` = `p`.`user_id` ";
-#    $query .= " WHERE `p`.`name` = 'validateEmail' ";
-#    $query .= " AND `referal` = ? ";
-    $query .= " WHERE `referal` = ? ";
+    $query .= " JOIN `user_profile` `p` ON `u`.`id` = `p`.`user_id` ";
+    $query .= " WHERE `p`.`name` = 'validateEmail' ";
+    $query .= " AND `referal` = ? ";
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute($user->getLogin());
     my $ref = $sth->fetchrow_hashref();

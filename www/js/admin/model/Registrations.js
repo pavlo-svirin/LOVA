@@ -3,6 +3,7 @@ Ext.define('Loto.model.Registrations', {
 	fields: [
         "date",
         {name: "registered", type: 'int'},
+        {name: "activated", type: 'int'},
         {name: "referals", type: 'int'}
     ]
 });

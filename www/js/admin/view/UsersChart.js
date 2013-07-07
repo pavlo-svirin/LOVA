@@ -62,7 +62,7 @@ Ext.define('Loto.view.UsersChart', {
 				{
 					type:"Numeric",
 					position:"left",
-					fields:["registered", "referals"],
+					fields:["registered", "activated", "referals"],
 					grid: true,
 					minimum:0,
 					minorTickSteps: 1
@@ -82,7 +82,7 @@ Ext.define('Loto.view.UsersChart', {
 		            tips: {
 		                trackMouse: true,
 		                width: 160,
-		                height: 55,
+		                height: 65,
 		                renderer: function(storeItem, item) {
 		                  this.setTitle(
 		                      storeItem.get('date')
@@ -90,11 +90,44 @@ Ext.define('Loto.view.UsersChart', {
 		                      + 'Зарегистрировано: '
 		                      + storeItem.get('registered')
 		                      + "<br>"
+		                      + 'Активировано: '
+		                      + storeItem.get('activated')
+		                      + "<br>"
 		                      + 'Рефералов: '
 		                      + storeItem.get('referals')
 		                  );
 		                }
-   	                },					
+   	                }				
+				},
+				{
+					type:"line",
+					axis:"left",
+					xField:"date",
+					yField:["activated"],
+		            tips: {
+		                trackMouse: true,
+		                width: 160,
+		                height: 65,
+		                renderer: function(storeItem, item) {
+		                  this.setTitle(
+		                      storeItem.get('date')
+		                      + '<br>'
+		                      + 'Зарегистрировано: '
+		                      + storeItem.get('registered')
+		                      + "<br>"
+		                      + 'Активировано: '
+		                      + storeItem.get('activated')
+		                      + "<br>"
+		                      + 'Рефералов: '
+		                      + storeItem.get('referals')
+		                  );
+		                }
+   	                },
+   	                style: {
+   	                	stroke: '#ff0000',
+   	                	'stroke-width': 1,
+   	                	opacity: 0.6
+   	            	}   	               
 				},
 				{
 					type:"column",
@@ -115,6 +148,7 @@ Ext.define('Loto.view.UsersChart', {
     	  columns: [
     	      { text : 'Период', dataIndex: 'date', flex: 1 },
     	      { text : 'Зарегистрировано', dataIndex: 'registered', flex: 1 },
+    	      { text : 'Активировано', dataIndex: 'activated', flex: 1 },
     	      { text : 'Рефералов', dataIndex: 'referals', flex: 1 }
     	  ]
       }

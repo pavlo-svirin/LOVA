@@ -137,12 +137,19 @@ sub ajaxStage
 
         foreach my $user (@users)
         {
-        	my $date = $user->getCreatedByScale($CGI->param('scale')); 
-            $usersByDate{$date}->{'registered'}++;
+            my $date = $user->getCreatedByScale($CGI->param('scale'));
+        	$usersByDate{$date}->{'registered'}++;
             if($user->getReferal())
             {
                 $usersByDate{$date}->{'referals'}++;
             }
+            $userService->loadProfile($user);
+            my $activationDate = $user->getActivatedByScale($CGI->param('scale'));
+            if ($activationDate)
+            {
+                $usersByDate{$activationDate}->{'activated'}++;
+            }
+            
         }
 
         my $result->{'success'} = JSON::true;
@@ -151,6 +158,7 @@ sub ajaxStage
         {
         	my $row->{'date'} = $date;
         	$row->{'registered'} = $usersByDate{$date}->{'registered'} || 0;
+        	$row->{'activated'} = $usersByDate{$date}->{'activated'} || 0;
             $row->{'referals'} = $usersByDate{$date}->{'referals'} || 0;
         	push(@{$result->{'data'}}, $row);
         }
