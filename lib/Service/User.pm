@@ -476,8 +476,8 @@ sub deleteAccount()
 sub runAccount()
 {
     my ($self, $rateFond, $rateReferal) = @_;
-    my $fondReward = ($self->countAll() * $rateFond) || 0;
-    foreach my $user ($self->findAll())
+    my $fondReward = ($self->countActive() * $rateFond) || 0;
+    foreach my $user ($self->findActive())
     {
     	$self->loadAccount($user);
         my $referalReward = ($self->countReferals($user) * $rateReferal) || 0;
