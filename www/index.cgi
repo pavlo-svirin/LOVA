@@ -136,9 +136,9 @@ sub checkUserLogin
 {
     if($URL =~ /\/login(\/|$)/)
     {
-    	my $login = $CGI->param("login");
+    	my $email = $CGI->param("email");
         my $pwd = $CGI->param("password");
-    	my $user = $userService->findByLogin($login);
+    	my $user = $userService->findByEmail($email);
     	if($user && $user->checkPassword($pwd))
     	{
             $cgiSession->param('userId', $user->getId());

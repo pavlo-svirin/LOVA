@@ -3,9 +3,9 @@ function loginAction()
 	$(".login").css('visibility', 'visible');
 	
 	var $form = $('#loginForm');
-	var login = $form.find("input[name=login]");
+	var email = $form.find("input[name=email]");
 
-	if(login[0].value)
+	if(email[	0].value)
 	{
 		$form.submit();
 	}
