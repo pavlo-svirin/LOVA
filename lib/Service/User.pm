@@ -91,7 +91,17 @@ sub findExtJs
     my $direction = ($config->{'dir'} eq "ASC") ? "ASC" : "DESC";
     my @filters = $self->parseFilters($config);
     
-    my $query = "SELECT * FROM `$table`";
+    my $query = "SELECT `$table`.* FROM `$table`";
+    if($config->{'sort'} eq 'meta.referals')
+    {
+    	$order = "meta.referals";
+    	$query .= " left join ( 
+                        select count(*) as referals, referal from users u 
+                        join user_profile p on u.id = p.user_id
+                        where p.name = 'validateEmail'
+                        group by u.referal
+                    ) meta on users.login = meta.referal";
+    }
     $query .= " WHERE 1 = 1 ";
     for my $filter (@filters)
     {
@@ -101,6 +111,7 @@ sub findExtJs
     }
     $query .= " ORDER BY $order $direction ";
     $query .= " LIMIT ?, ?";
+    
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute( $start, $limit);
     return () if($rv == 0E0);
