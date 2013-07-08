@@ -58,7 +58,16 @@ $vars->{'error'} = "";
 $vars->{'url'} = $URL;
 $vars->{'userId'} = $cgiSession->param('userId');
 $vars->{'contentRu'} = $optionsService->get("contentRu");
-$vars->{'content'} = $htmlContentDao->findByCodeAndLang('MAIN_PAGE', $lang)->getContent();
+my $content = $htmlContentDao->find({
+	page => 'MAIN_PAGE',
+	code => 'CONTENT',
+	lang =>  $lang
+});
+if($content)
+{
+    $vars->{'content'} = $content->getContent();
+}
+
 
 #=======================Main Stage========================
 

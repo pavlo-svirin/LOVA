@@ -8,7 +8,9 @@ Ext.define('Loto.view.HtmlContentList', {
        { xtype: 'button', text: 'Копировать', action: 'copy' }
     ],
     columns: [
-        { text: 'Код', dataIndex: 'code', width: 240 },
-        { text: 'Язык', dataIndex: 'lang' }
+        { text: 'Язык', dataIndex: 'lang', flex: 1 },
+        { text: 'Страница', dataIndex: 'page', flex: 1 },
+        { text: 'Код', dataIndex: 'code', flex: 1 },
+        { text: 'Тип', dataIndex: 'type', flex: 1 }
     ]
  });

@@ -9,8 +9,10 @@ sub getFields
 	return
 	(
 	    'id' => 'id',
+	    'page' => 'page',
 	    'code' => 'code',
 	    'lang' => 'lang',
+	    'type' => 'type',
 	    'content' => 'content'
 	)
 };
