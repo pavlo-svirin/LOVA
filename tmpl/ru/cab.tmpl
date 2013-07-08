@@ -44,7 +44,7 @@
             <a rel="nofollow" class="ok" title="Добавить в Одноклассники" target="_blank" href="#http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1&st._surl=lova.su" onClick='okShare();return false;'></a>
             <a rel="nofollow" class="mm" title="Поделиться в Моем Мире @Mail.ru" target="_blank" href="http://connect.mail.ru/share" onClick='mmShare(); return false;'></a>
           </span>
-          [% IF !data.user.like %]
+          [% IF !data.profile.like %]
             <div class="alert alert-error arrow" style="float: right; width: 670px" id="alert">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
               <strong>ВНИМАНИЕ:</strong> Чтобы использовать все возможности кабинета, поставьте, пожалуйста, лайк!
@@ -78,7 +78,7 @@
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td>
-            [% IF !data.user.validateEmail %]
+            [% IF !data.profile.validateEmail %]
             <div id="validateEmail" class="alert alert-error">Для подтверждения e-mail перейдите по ссылке в письме, полученном при регистрации.
             <br>Если вы не получили письмо, проверьте папку Спам, нажмите <a href="#" onclick="sendFirstEmail();return false;">здесь</a> для повторной отправки.
             <br>Если письмо по прежнему не приходит к вам, значит вы используете почтовый ящик: mail.ru, bk.ru, list.ru, inbox.ru, liva.it.
@@ -137,6 +137,9 @@
         <h3 id="restoreLabel">Пригласи друга</h3>
       </div>
       <div class="modal-body">
+          [% IF !data.user.getLastName() %]
+          <div class="alert alert-error">Для того, что бы отправлять приглашения, в вашем профиле должно быть заполнено поле "Фамилия"</div>
+          [% END %]
           <div class="alert alert-error hide">Имя и e-mail обязательны</div>
           <div class="alert alert-success hide">Приглашение отправлено, Вы можете пригласить ещё одного друга!</div>
           <div class="control-group">
@@ -156,13 +159,14 @@
       </div>
       <div class="modal-footer">
         <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        [% IF data.user.getLastName() %]
         <button name="invite" type="submit" class="btn btn-primary">Пригласить</button>
+        [% END %]
       </div>
       </form>
     </div>
     
-    [% data.user.showEmailWarning %]
-    [% IF data.user.showEmailWarning %]
+    [% IF data.profile.showEmailWarning %]
     <div id="emailWarningDiv" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="emailWarningLabel" aria-hidden="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
