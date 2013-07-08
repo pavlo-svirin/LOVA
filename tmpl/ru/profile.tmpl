@@ -19,6 +19,9 @@
         <tr><td class="row-separator"></td></tr>
         <tr><td valign="top">
         <h3>Профиль</h3>
+        [% IF !data.user.getFirstName() || !data.user.getEmail() || !data.user.getLogin() %]
+        <div class="alert alert-error">Пожалуйста, заполните обязательные поля.</div>
+        [% END %]
         <form class="form-horizontal" id="profileForm" data-async method="POST" action="/cab/profile/save/">
           <div class="control-group">
             <label class="control-label" for="subscribe">Язык</label>

@@ -84,7 +84,13 @@ if($user)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
     }
-    $vars->{'data'}->{'usersLeft'} = getUsersLeft(); 
+    $vars->{'data'}->{'usersLeft'} = getUsersLeft();
+   
+    # Force user to fill profile 
+    if((!$user->getLogin() || !$user->getFirstName() || !$user->getEmail()) && not ($URL =~ /\/profile(\/|$)/))
+    {
+    	$redirect = "/cab/profile/";
+    }
 }
 else
 {

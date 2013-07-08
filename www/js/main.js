@@ -143,7 +143,7 @@ jQuery(function($) {
             	
     			if(data.success === "true")
     			{
-    				alert("Настройки сохранены.");
+    				top.location = "/cab/";
     			}
     			else
     			{
