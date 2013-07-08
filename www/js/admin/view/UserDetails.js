@@ -88,6 +88,7 @@ Ext.define('Loto.view.UserDetails', {
     			        { name: 'profile.validateEmail', fieldLabel: 'Активирован', xtype: 'checkbox' },        	        
     			        { name: 'profile.subscribe', fieldLabel: 'Рассылка', xtype: 'checkbox' },
     			        { name: 'profile.like', fieldLabel: 'Поставил лайк', xtype: 'checkbox' },
+    			        { name: 'meta.referals', fieldLabel: 'Рефералов' },
     	        	]
     	        },
     	        {

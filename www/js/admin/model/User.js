@@ -8,7 +8,8 @@ Ext.define('Loto.model.User', {
     {name: 'email', type: 'email'},
     {name: 'referal', type: 'string'},
     {name: 'created', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-    {name: 'last_seen', type: 'date', dateFormat: 'Y-m-d H:i:s'}
+    {name: 'last_seen', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+    {name: 'meta.referals', type: 'int'}
   ],
   autoLoad: true,
 });

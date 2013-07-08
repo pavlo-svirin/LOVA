@@ -174,7 +174,9 @@ sub ajaxStage
         my @users = $userService->findExtJs($params);
         foreach my $user (@users)
         {
-            push(@{$response->{data}}, $user->getData());
+        	my $data = $user->getData();
+        	$data->{'meta'}->{'referals'} = $userService->countReferals($user);
+            push(@{$response->{data}}, $data);
 		}
 		print $json->encode($response);
     }
@@ -206,8 +208,9 @@ sub ajaxStage
                 $user->getProfile()->{'like'} = JSON::true;
             }
         	my $data =  $user->getData();
-            $response->{'success'} = JSON::true;
+            $data->{'meta'}->{'referals'} = $userService->countReferals($user);
             push(@{$response->{data}}, $data);
+            $response->{'success'} = JSON::true;
         }
         print $json->encode($response);
     }

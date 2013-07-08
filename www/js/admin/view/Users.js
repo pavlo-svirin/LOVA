@@ -53,7 +53,13 @@ Ext.define('Loto.view.Users', {
           text     	: 'Пригласил',
           dataIndex	: 'referal',
           flex	 	: 1
+      },
+      {
+          text     	: 'Рефералов',
+          dataIndex	: 'meta.referals',
+          width	 	: 120
       }
+      
     ],
     dockedItems: [{
         xtype: 'pagingtoolbar',
