@@ -105,13 +105,14 @@ sub findExtJs
     $query .= " WHERE 1 = 1 ";
     for my $filter (@filters)
     {
-        $query .= " AND " . $::sql->handle->quote_identifier($filter->{'field'});
+        $query .= " AND `$table`." . $::sql->handle->quote_identifier($filter->{'field'});
         $query .= " LIKE ";
         $query .= $::sql->handle->quote("%" . $filter->{'value'} . "%");     	
     }
     $query .= " ORDER BY $order $direction ";
     $query .= " LIMIT ?, ?";
-    
+
+    Sirius::Common::debug($query);    
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute( $start, $limit);
     return () if($rv == 0E0);
