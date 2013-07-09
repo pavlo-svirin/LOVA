@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LOVA - cabinet</title>
+    <title>[% content.PAGE_TITLE %]</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="LOVA" />
-    <meta name="description" content="Я зарегистрирован на lova.su. Там вся страна!" />        
+    <meta name="title" content="[% content.PAGE_TITLE %]" />
+    <meta name="description" content="[% content.PAGE_DESCRIPTION %]" />        
     <link rel="image_src" href="http://lova.su/img/logo.jpg" />
     
     <script src="http://code.jquery.com/jquery.js"></script>
@@ -36,18 +36,17 @@
 <body style="background:url(/img/tile3.jpg)">
     <table class="container">
         <tr><td class="logo"><img alt="LoVa" src="/img/logo.gif"></td></tr>
-        <tr><td align="right" valign="top"><a href="/cab/profile/">Профиль</a> | <a href="/cab/logout/">Выйти</a></td></tr>
+        <tr><td align="right" valign="top"><a href="/cab/profile/">[% content.PROFILE %]</a> | <a href="/cab/logout/">[% content.LOGOUT %]</a></td></tr>
         <tr><td>
           <span class="network-icons">
-            <a rel="nofollow" class="fb" title="Поделиться в Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare();return false;' style="margin-left: 0px"></a>
-            <a rel="nofollow" class="vk" title="Поделиться В Контакте" target="_blank" href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);return false;"></a>            
-            <a rel="nofollow" class="ok" title="Добавить в Одноклассники" target="_blank" href="#http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1&st._surl=lova.su" onClick='okShare();return false;'></a>
-            <a rel="nofollow" class="mm" title="Поделиться в Моем Мире @Mail.ru" target="_blank" href="http://connect.mail.ru/share" onClick='mmShare(); return false;'></a>
+            <a rel="nofollow" class="fb" title="[% content.SHARE_HINT_FACEBOOK %]" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare();return false;' style="margin-left: 0px"></a>
+            <a rel="nofollow" class="vk" title="[% content.SHARE_HINT_VK %]" target="_blank" href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);return false;"></a>            
+            <a rel="nofollow" class="mm" title="[% content.SHARE_HINT_MY_MAIL %]" target="_blank" href="http://connect.mail.ru/share" onClick='mmShare(); return false;'></a>
           </span>
           [% IF !data.profile.like %]
             <div class="alert alert-error arrow" style="float: right; width: 670px" id="alert">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
-              <strong>ВНИМАНИЕ:</strong> Чтобы использовать все возможности кабинета, поставьте, пожалуйста, лайк!
+              [% content.ALERT_LIKE %]
             </div>
           [% END %]
         </td></tr>
@@ -70,30 +69,26 @@
                     $("#countdown").jCountdown('start');
                 });
             </script>
-            Установленный минимум регистраций до старта:
+            [% content.COUNTDOWN_HEADER %]
             <div id="countdown"></div>
-            Ускорь старт проекта, <a href="#inviteDiv" data-toggle="modal">пригласи друзей</a>!
+            [% content.COUNTDOWN_FOOTER %]
         </td></tr>                         
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td>
             [% IF !data.profile.validateEmail %]
-            <div id="validateEmail" class="alert alert-error">Для подтверждения e-mail перейдите по ссылке в письме, полученном при регистрации.
-            <br>Если вы не получили письмо, проверьте папку Спам, нажмите <a href="#" onclick="sendFirstEmail();return false;">здесь</a> для повторной отправки.
-            <br>Если письмо по прежнему не приходит к вам, значит вы используете почтовый ящик: mail.ru, bk.ru, list.ru, inbox.ru, liva.it.
-            <br>Пройдите в профиль и замените свой почтовый адрес (mail.ru, bk.ru, list.ru, inbox.ru, liva.it) на любой другой, который у вас есть.            
-            </div>
+            <div id="validateEmail" class="alert alert-error">[% content.ALERT_EMAIL %]</div>
             [% END %]
             <table width="100%">
-                <tr><td></td><td></td><td colspan="3" align="right"><i>Прогнозируемый нами, Ваш доход в работающем проекте:<i></td></tr>
+                <tr><td></td><td></td><td colspan="3" align="right">[% content.ACCOUNT_HEADER %]</td></tr>
                 <tr>
-                    <td width="30%" class="statHeader registered">Зарегистрировано</td>
+                    <td width="30%" class="statHeader registered">[% content.ACCOUNT_REGISTERED %]</td>
                     <td width="5%"></td> 
-                    <td width="30%" class="statHeader">За участие в фонде</td>
+                    <td width="30%" class="statHeader">[% content.ACCOUNT_FOND %]</td>
                     <td width="5%"></td>                    
-                    <td width="15%" class="statHeader" style="border-right: 1px solid #ffffff">За привлечение</td>
-                    <td width="15%" class="statHeader" style="border-left: 1px solid #ffffff">Вы пригласили</td>
+                    <td width="15%" class="statHeader" style="border-right: 1px solid #ffffff">[% content.ACCOUNT_REFERALS %]</td>
+                    <td width="15%" class="statHeader" style="border-left: 1px solid #ffffff">[% content.ACCOUNT_REFERALS_INVITED %]</td>
                 </tr>
                 <tr>
                     <td class="stat" rowspan="2"><h2>[% data.users %]</h2></td>
@@ -104,53 +99,37 @@
                     <td class="stat"><h3>[% data.referals || "0" %]</h2></td>
                 </tr>                    
                 <tr>
-                    <td class="stat" colspan="2">Ваша ссылка для приглашения<br>http://lova.su/[% data.refLink %]</td>
+                    <td class="stat" colspan="2">[% content.REF_LINK_LABEL %]<br>http://lova.su/[% data.refLink %]</td>
                 </tr>                    
             </table>
         </td></tr>        
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
-        <tr><td>Пригласив сейчас как можно большее количество друзей,<br> Вы получите ощутимую и постоянно нарастающую выгоду в будущем.<br>
-        <br>Присоединиться к движению, и следить за событиями, можно по ссылкам:</td></tr>
-        <tr><td>
-            <table class="container" style="max-width: 100%; background-color: transparent; border-collapse: collapse; border-spacing: 0px; width: 940px; margin-right: auto; margin-left: auto; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px;" border="0">
-            <tr>
-                <td><span style="font-size: medium;"><strong><em>
-                    <a href="http://plus.google.com/u/0/communities/115325367202810045104" target="_blank">Google+</a>
-                    &nbsp;<a href="http://www.vk.com/public54754540" target="_blank">ВКонтакте</a>
-                    &nbsp;<a href="http://www.facebook.com/groups/568943719823000" target="_blank">Facebook</a>
-                    &nbsp;<a href="http://www.twitter.com/wwwlovasu" target="_blank">Twitter</a>
-                </em></strong></span></td>
-            </tr>
-            </table>
-        </td></tr>        
-        <tr><td class="row-separator"></td></tr>
-        <tr><td class="row-separator"></td></tr>
-		<tr><td>lova@pemes.net - техподдержка</td></tr>
+        <tr><td>[% content.FOOTER %]</td></tr>
 		</table>
 		
     <div id="inviteDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="inviteLabel" aria-hidden="true">
       <form id="inviteForm" data-async class="form-horizontal" method="POST" action="/cab/invite/">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="restoreLabel">Пригласи друга</h3>
+        <h3 id="restoreLabel">[% content.INVITE_LABEL %]</h3>
       </div>
       <div class="modal-body">
           [% IF !data.user.getLastName() %]
-          <div class="alert alert-error">Для того, что бы отправлять приглашения, в вашем профиле должно быть заполнено поле "Фамилия"</div>
+          <div class="alert alert-error">[% content.INVITE_ALERT_PROFILE %]</div>
           [% END %]
-          <div class="alert alert-error hide">Имя и e-mail обязательны</div>
-          <div class="alert alert-success hide">Приглашение отправлено, Вы можете пригласить ещё одного друга!</div>
+          <div class="alert alert-error hide">[% content.INVITE_ALERT_FIELDS_REQUIRED %]</div>
+          <div class="alert alert-success hide">[% content.INVITE_ALERT_SEND %]</div>
           <div class="control-group">
-            <label class="control-label" for="first_name">Введите имя друга</label>
+            <label class="control-label" for="first_name">[% content.INVITE_FRIEND_NAME %]</label>
             <div class="controls">
                 <input type="text" name="first_name" required>
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="email">и его e-mail</label>
+            <label class="control-label" for="email">[% content.INVITE_FRIEND_EMAIL %]</label>
             <div class="controls">
                 <input type="email" name="email" required>
                 <span class="help-inline"></span>
@@ -158,9 +137,9 @@
           </div>
       </div>
       <div class="modal-footer">
-        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">[% content.INVITE_BUTTON_CLOSE %]</button>
         [% IF data.user.getLastName() %]
-        <button name="invite" type="submit" class="btn btn-primary">Пригласить</button>
+        <button name="invite" type="submit" class="btn btn-primary">[% content.INVITE_BUTTON_SEND %]</button>
         [% END %]
       </div>
       </form>
@@ -170,15 +149,11 @@
     <div id="emailWarningDiv" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="emailWarningLabel" aria-hidden="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="restoreLabel">ВНИМАНИЕ!!!</h3>
+        <h3 id="emailWarningLabel">[% content.EMAIL_WARN_LABEL %]</h3>
       </div>
-      <div class="modal-body">
-        <p>Ваш аккаунт зарегистрирован на почтовый ящик, который располагается у почтовых провайдеров: mail.ru, bk.ru, list.ru, inbox.ru, liva.it
-        <p>Пожалуйста, зайдите в свой профиль и впишите другую свою почту любого другого провайдера.
-        <p>Аккаунты, оставшиеся на почтовых ящиках, что находятся на mail.ru, bk.ru, list.ru, inbox.ru, liva.it, не смогут работать в дальнейшем.
-      </div>
+      <div class="modal-body">[% content.EMAIL_WARN_BODY %]</div>
       <div class="modal-footer">
-        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">[% content.EMAIL_WARN_BUTTON_CLOSE %]</button>
       </div>
     </div>
     <script>$('#emailWarningDiv').modal('show')</script>              

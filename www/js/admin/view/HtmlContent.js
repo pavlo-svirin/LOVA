@@ -18,10 +18,28 @@ Ext.define('Loto.view.HtmlContent', {
     ],
     items: [
         { name: 'id', xtype: 'hidden' },
-        { name: 'page', fieldLabel: 'Страница' },
+        { 
+     	   xtype: 'combo',
+     	   name: 'lang',
+     	   fieldLabel: 'Язык',
+     	   store: 'Languages',
+     	   queryMode: 'local',
+     	   displayField: 'caption',
+     	   valueField: 'code',
+     	   emptyText: "--- выберите ---",
+        },
+        { 
+     	   xtype: 'combo',
+     	   name: 'page',
+     	   fieldLabel: 'Страница',
+     	   store: 'Pages',
+     	   queryMode: 'local',
+     	   displayField: 'caption',
+     	   valueField: 'code',
+     	   emptyText: "--- выберите ---",
+        },        
         { name: 'code', fieldLabel: 'Код' },
         { name: 'type', fieldLabel: 'Тип' },
-        { name: 'lang', fieldLabel: 'Язык' },
         { xtype: 'htmleditor', name: 'content', fieldLabel: 'Содержание', height: 300 }
 
     ]    

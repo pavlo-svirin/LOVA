@@ -19,6 +19,7 @@ use Service::Options;
 use Service::Scheduler;
 use Service::User;
 use Service::Email;
+use Service::HtmlContent;
 
 use DAO::Abstract;
 use DAO::EmailTemplates;

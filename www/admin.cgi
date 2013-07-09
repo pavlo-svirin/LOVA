@@ -266,8 +266,15 @@ sub ajaxStage
     }
     elsif (($URL =~ /\/htmlContent\//) && ($URL =~ /\/load\//))
     {
+    	my $lang = $CGI->param('lang');
+    	my $page = $CGI->param('page');
         my $response->{'success'} = JSON::true;
-        printAllSimpleObjects($htmlContentDao);
+        my @objects = $htmlContentDao->find({ lang => $lang, page => $page });
+        foreach my $obj (@objects)
+        {
+            push(@{$response->{data}}, $obj->getData());
+        }
+        print $json->encode($response);
     }
     elsif (($URL =~ /\/htmlContent\//) && ($URL =~ /\/save\//))
     {   

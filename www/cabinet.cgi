@@ -38,11 +38,15 @@ $cgiSession->expire('+3M');
 # Cookie с идентификатором сессии к клиенту
 my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession->id());
 
+# DAO
+my $htmlContentDao = new DAO::HtmlContent();
+
 # Services
 my $userService = new Service::User();
 my $optionsService = new Service::Options();
 $optionsService->load();
 my $emailService = new Service::Email(userService => $userService);
+my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao);
 
 if($URL =~ /(\w{32})/)
 {
@@ -117,6 +121,7 @@ elsif($redirect)
 }
 elsif($URL =~ /\/profile(\/|$)/)
 {
+	$vars->{'content'} = $htmlContentService->getContentForPage('PROFILE', $lang);
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'} = $user;
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
@@ -124,6 +129,7 @@ elsif($URL =~ /\/profile(\/|$)/)
 }
 else
 {
+	$vars->{'content'} = $htmlContentService->getContentForPage('CABINET', $lang);
     # Show warning for mail.ru, bk.ru, list.ru, inbox.ru, liva.it 
     $vars->{'data'}->{'profile'}->{'showEmailWarning'} = '';
     my $warnTime = $user->getProfile()->{'showEmailWarning'};
