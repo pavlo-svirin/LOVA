@@ -117,7 +117,7 @@ Ext.define('Loto.controller.Users', {
     	btn.up("userDetails").getForm().submit({
     		url: '/admin/user/save/ajax/',
     		success: function(form, action) {
-    			debugger;
+ 			   Ext.data.StoreManager.lookup('User').load();
     		}
     	});
     }

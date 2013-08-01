@@ -228,6 +228,7 @@ sub ajaxStage
         {
             $user->setPassword($CGI->param('password'));
         }
+        $user->setReferal($CGI->param('referal'));
         
         $user->getProfile()->{'skype'} = $CGI->param('profile.skype');
         $user->getProfile()->{'phone'} = $CGI->param('profile.phone');
@@ -241,6 +242,8 @@ sub ajaxStage
         $userService->save($user);
         $userService->saveProfile($user);
         $userService->saveAccount($user);
+        my $response->{'success'} = JSON::true;
+        print $json->encode($response);
     }
     elsif (($URL =~ /\/emailTemplate\//) && ($URL =~ /\/load\//))
     {
