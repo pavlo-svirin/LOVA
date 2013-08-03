@@ -202,6 +202,16 @@ sub countAll
     return $ref->{'total'};
 }
 
+sub countAllExceptLatest
+{
+    my ($self) = @_;
+    my $sth = $::sql->handle->prepare("SELECT count(*) AS `total` FROM `$table` WHERE `created` < DATE_SUB(NOW(), INTERVAL 2 HOUR)");
+    my $rv = $sth->execute();
+    my $ref = $sth->fetchrow_hashref();
+    return $ref->{'total'};
+}
+
+
 sub countExtJs
 {
     my ($self, $config) = @_;
