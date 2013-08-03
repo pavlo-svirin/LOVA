@@ -46,7 +46,7 @@ my $userService = new Service::User();
 my $optionsService = new Service::Options();
 $optionsService->load();
 my $emailService = new Service::Email(userService => $userService);
-my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao);
+my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
 
 if($URL =~ /(\w{32})/)
 {
@@ -236,15 +236,15 @@ sub sendInvite
     my $email = $CGI->param('email');   
     if (!$name || !$email)
     {
-        $result->{'error'} = $htmlContentDao->find({page => 'CABINET', lang => $lang, code => 'INVITE_ALERT_REQUIRED_FIELDS'})->getContent();
+        $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_REQUIRED_FIELDS');
     }
     elsif ($userService->findByEmail($email))
     {
-        $result->{'error'} = $htmlContentDao->find({page => 'CABINET', lang => $lang, code => 'INVITE_ALERT_EMAIL_EXISTS'})->getContent();
+        $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_EMAIL_EXISTS');
     }
     elsif ($userService->countLatestInvitedUsers({ referal => $user->getLogin(), interval => 60 }) > $optionsService->get("invitesLimit"))
     {
-        $result->{'error'} = $htmlContentDao->find({page => 'CABINET', lang => $lang, code => 'INVITE_ALERT_LIMIT'})->getContent();
+        $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_LIMIT');
     }
     else
     {
