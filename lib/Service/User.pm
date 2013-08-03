@@ -370,6 +370,11 @@ sub validate
             $result->{'fields'}->{'referal'} = 'Пользователь с таким ником не найден';
             $result->{'success'} = 'false';
         }
+        if($user->getReferal() eq $user->getLogin())
+        {
+            $result->{'fields'}->{'referal'} = 'Нельзя использовать свой ник';
+            $result->{'success'} = 'false';
+        }
     }   
          
     if($result->{'success'} eq 'false ')

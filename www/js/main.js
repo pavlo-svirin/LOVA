@@ -152,6 +152,7 @@ jQuery(function($) {
     					$("#profileForm")
     						.find("input[name='" + field + "']")
     						.closest('.control-group')
+    						.removeClass('info')
     						.addClass('error');
     					$("#profileForm")
     						.find("input[name='" + field + "']")
