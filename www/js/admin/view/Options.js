@@ -47,6 +47,11 @@ Ext.define('Loto.view.Options', {
               allowDecimals: true,
               decimalPrecision: 6,
               step: 0.001
+          },
+          {
+  	         xtype: 'textfield',
+        	 name: 'inviteLimits',
+             fieldLabel: 'Ограничение на количество приглашений в час'
           }
         ]
       },

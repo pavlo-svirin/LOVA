@@ -236,11 +236,15 @@ sub sendInvite
     my $email = $CGI->param('email');   
     if (!$name || !$email)
     {
-        $result->{'error'} = "Пожалуйста, укажите имя и e-mail.";
+        $result->{'error'} = $htmlContentDao->find({page => 'CABINET', lang => $lang, code => 'INVITE_ALERT_REQUIRED_FIELDS'})->getContent();
     }
     elsif ($userService->findByEmail($email))
     {
-        $result->{'error'} = "Такой e-mail уже зарегистрирован.";
+        $result->{'error'} = $htmlContentDao->find({page => 'CABINET', lang => $lang, code => 'INVITE_ALERT_EMAIL_EXISTS'})->getContent();
+    }
+    elsif ($userService->countLatestInvitedUsers({ referal => $user->getLogin(), interval => 60 }) > $optionsService->get("invitesLimit"))
+    {
+        $result->{'error'} = $htmlContentDao->find({page => 'CABINET', lang => $lang, code => 'INVITE_ALERT_LIMIT'})->getContent();
     }
     else
     {

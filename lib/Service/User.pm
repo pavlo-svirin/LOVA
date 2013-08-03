@@ -211,6 +211,23 @@ sub countAllExceptLatest
     return $ref->{'total'};
 }
 
+sub countLatestInvitedUsers
+{
+    my $self = shift;
+    my $conf = shift;
+    my $interval = int($conf->{'interval'}) || 60; # minutes
+    my $referal = $conf->{'referal'};
+    my $query = "SELECT count(*) AS `total` FROM `$table`";
+    $query .= " WHERE `login` IS NULL";
+    $query .= " AND `referal` = ?";
+    $query .= " AND `created` > DATE_SUB(NOW(), INTERVAL $interval MINUTE)";
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute($referal);
+    my $ref = $sth->fetchrow_hashref();
+    return $ref->{'total'};
+}
+
+
 
 sub countExtJs
 {
