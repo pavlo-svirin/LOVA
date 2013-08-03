@@ -79,7 +79,7 @@
             <td width="25%" valign="top" align="center">
               <div style="margin-top: 30px">[% content.SMALL_COUNTDOWN_HEADER %]</div>
               <div class="jCountdownContainer" style="width: 204px; height: 35px">
-              <div class="jCountdownScale" style="-webkit-transform: scale(0.513853904); left: -94px; top: -14px;">
+              <div class="jCountdownScale" style="transform: scale(0.513853904); -webkit-transform: scale(0.513853904); -ms-transform: scale(0.513853904); -moz-transform: scale(0.513853904); left: -94px; top: -14px;">
                 <div class="jCountdown crystal white">
                     <div class="group">
                         [% FOREACH num IN data.users.all.chunk(1) %]
@@ -167,7 +167,7 @@
       </form>
     </div>
     
-    [% IF 0 && data.profile.showEmailWarning %]
+    [% IF data.profile.showEmailWarning0 %]
     <div id="emailWarningDiv" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="emailWarningLabel" aria-hidden="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
