@@ -74,7 +74,8 @@ $vars->{'error'} = "";
 
 if($user)
 {
-	$vars->{'data'}->{'users'} = $userService->countActive();
+	$vars->{'data'}->{'users'}->{'active'} = $userService->countActive();
+	$vars->{'data'}->{'users'}->{'all'} = sprintf("%06d", $userService->countAll());
 	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
     $vars->{'data'}->{'referals'} = $userService->countReferals($user);
 	$userService->loadAccount($user);
