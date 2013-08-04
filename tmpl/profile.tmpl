@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LOVA - cabinet</title>
+    <title>[% content.PAGE_TITLE %]</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,93 +20,93 @@
         <tr><td valign="top">
         <h3>Профиль</h3>
         [% IF !data.user.getFirstName() || !data.user.getEmail() || !data.user.getLogin() %]
-        <div class="alert alert-error">Пожалуйста, заполните обязательные поля.</div>
+        <div class="alert alert-error">[% content.REQUIRED_FIELDS %]</div>
         [% END %]
         <form class="form-horizontal" id="profileForm" data-async method="POST" action="/cab/profile/save/">
           <div class="control-group">
-            <label class="control-label" for="subscribe">Язык</label>
+            <label class="control-label" for="subscribe">[% content.PROFILE_LANG %]</label>
             <div class="controls">
                 <select name="lang">
-                    <option value="ru" [% "selected" IF data.user.getProfile().lang == 'ru' %]>Русский</option>
-                    <option value="en" [% "selected" IF data.user.getProfile().lang == 'en' %]>English</option>
-                    <option value="ua" [% "selected" IF data.user.getProfile().lang == 'ua' %]>Українська</option>
+                    <option value="ru" [% "selected" IF data.user.getProfile().lang == 'ru' %]>[% content.PROFILE_LANG_RU %]</option>
+                    <option value="en" [% "selected" IF data.user.getProfile().lang == 'en' %]>[% content.PROFILE_LANG_EN %]</option>
+                    <option value="ua" [% "selected" IF data.user.getProfile().lang == 'ua' %]>[% content.PROFILE_LANG_UA %]</option>
                 </select>
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="first_name">Имя*</label>
+            <label class="control-label" for="first_name">[% content.PROFILE_FIRST_NAME %]*</label>
             <div class="controls">
                 <input type="text" name="first_name" value="[% data.user.getFirstName() %]" required>
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="last_name">Фамилия</label>
+            <label class="control-label" for="last_name">[% content.PROFILE_LAST_NAME %]</label>
             <div class="controls">
                 <input type="text" name="last_name" value="[% data.user.getLastName() %]">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="login">Ник*</label>
+            <label class="control-label" for="login">[% content.PROFILE_LOGIN %]*</label>
             <div class="controls">
                 <input type="text" name="login" required [% IF data.user.getLogin() %]disabled[% END %] value="[% data.user.getLogin() %]">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="email">Почта*</label>
+            <label class="control-label" for="email">[% content.PROFILE_EMAIL %]*</label>
             <div class="controls">
                 <input type="email" name="email" required value="[% data.user.getEmail() %]">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="password">Пароль</label>
+            <label class="control-label" for="password">[% content.PROFILE_PASSWORD %]</label>
             <div class="controls">
                 <input type="password" name="password">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="phone">Телефон</label>
+            <label class="control-label" for="phone">[% content.PROFILE_PHONE %]</label>
             <div class="controls">
                 <input type="text" name="phone" value="[% data.user.getProfile().phone %]">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="country">Страна</label>
+            <label class="control-label" for="country">[% content.PROFILE_COUNTRY %]</label>
             <div class="controls">
                 <input type="text" name="country" value="[% data.user.getProfile().country %]">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="skype">Скайп</label>
+            <label class="control-label" for="skype">[% content.PROFILE_SKYPE %]</label>
             <div class="controls">
                 <input type="text" name="skype" value="[% data.user.getProfile().skype %]">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group info">
-            <label class="control-label" for="referal">Пригласил</label>
+            <label class="control-label" for="referal">[% content.PROFILE_REFERAL %]</label>
             <div class="controls">
                 <input type="text" name="referal" [% data.profile.referalDisabled %] value="[% data.user.getReferal() %]">
-                <span class="help-inline">поле можно изменить в течении 7 дней с момента регистрации</span>
+                <span class="help-inline">[% content.PROFILE_REFERAL_HINT %]</span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="subscribe">Получать еженедельную рассылку</label>
+            <label class="control-label" for="subscribe">[% content.PROFILE_SUBSCRIBE %]</label>
             <div class="controls">
                 <input type="checkbox" name="subscribe" value="true" [% IF data.user.getProfile().subscribe != "false" %]checked[% END %]>
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class=" class="form-actions">
-            <button name="save" type="submit" class="btn btn-primary">Сохранить</button>
-            <a class="btn" href="/cab/">Закрыть</a>                       
+            <button name="save" type="submit" class="btn btn-primary">[% content.PROFILE_SAVE_BTN %]</button>
+            <a class="btn" href="/cab/">[% content.PROFILE_CLOSE_BTN %]</a>                       
           </div>
         </form>
         </td></tr>

@@ -167,18 +167,5 @@
       </form>
     </div>
     
-    [% IF data.profile.showEmailWarning0 %]
-    <div id="emailWarningDiv" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="emailWarningLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="emailWarningLabel">[% content.EMAIL_WARN_LABEL %]</h3>
-      </div>
-      <div class="modal-body">[% content.EMAIL_WARN_BODY %]</div>
-      <div class="modal-footer">
-        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">[% content.EMAIL_WARN_BUTTON_CLOSE %]</button>
-      </div>
-    </div>
-    <script>$('#emailWarningDiv').modal('show')</script>              
-    [% END %]        		
 </body>
 </html>

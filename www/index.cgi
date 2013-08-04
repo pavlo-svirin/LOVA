@@ -23,7 +23,6 @@ my $json     = JSON->new->allow_nonref;
 # lang - текущий язык, устанавливается функцией get_lang
 # redirect - флаг переадрессации,содержит новый адрес
 my ($vars, $redirect);
-my $lang = 'ru';
 
 # Cookies - принимаем Cookie от клиента, ожидаем sid
 my %cookies = fetch CGI::Cookie;
@@ -47,6 +46,9 @@ my $emailService = new Service::Email(userService => $userService);
 my $optionsService = new Service::Options();
 $optionsService->load();
 
+my $lang = &getLang();
+my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'MAIN');
+
 
 checkUserLogin();
 checkReferal();
@@ -57,17 +59,7 @@ $vars->{'lang'} = $lang;
 $vars->{'error'} = "";
 $vars->{'url'} = $URL;
 $vars->{'userId'} = $cgiSession->param('userId');
-$vars->{'contentRu'} = $optionsService->get("contentRu");
-my $content = $htmlContentDao->find({
-	page => 'MAIN_PAGE',
-	code => 'CONTENT',
-	lang =>  $lang
-});
-if($content)
-{
-    $vars->{'content'} = $content->getContent();
-}
-
+$vars->{'content'} = $htmlContentService->getContentForPage('MAIN', $lang);
 
 #=======================Main Stage========================
 
@@ -83,7 +75,7 @@ elsif($redirect)
 else
 {
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
-    $template->process("../tmpl/$lang/main.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
+    $template->process("../tmpl/main.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
 }
 
 #=======================End Main Stage====================
@@ -105,6 +97,10 @@ sub ajaxStage
     	{
     		$user->setReferal($cgiSession->param('ref'));
             $userService->save($user);
+            $userService->loadProfile($user);
+            $user->getProfile()->{'lang'} = $lang;
+            $user->getProfile()->{'subscribe'} = 'true';
+            $userService->saveProfile($user);
             $emailService->sendFirstEmail($user);
             $cgiSession->param('userId', $user->getId());
     	}
@@ -168,4 +164,22 @@ sub checkReferal
 	{
         $cgiSession->param('ref', $ref);       
 	}
+}
+
+sub getLang
+{
+    my $lang = $cgiSession->param('lang');
+    my $userId = $cgiSession->param('userId'); 
+    if($userId)
+    {
+    	my $user = $userService->findById($userId);
+    	$userService->loadProfile($user);
+        $lang = $user->getProfile()->{'lang'} if($user);    
+    }
+    if($URL =~ /(ru|ua|en)/)
+    {
+        $lang = $1; 
+    	$cgiSession->param('lang', $lang);
+    }
+    return $lang || 'ru';
 }

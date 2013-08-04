@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LOVA</title>
+    <title>[% content.PAGE_TITLE %]</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="LOVA" />
-    <meta name="description" content="Я зарегистрирован на lova.su. Там вся страна!" />
-    <link rel="image_src" href="http://lova.su/img/logoло.jpg" />
+    <meta name="title" content="[% content.PAGE_TITLE %]" />
+    <meta name="description" content="[% content.PAGE_DESCRIPTION %]" />
+    <link rel="image_src" href="http://lova.su/img/logo.jpg" />
     <!-- Bootstrap -->
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="http://code.jquery.com/jquery.js"></script>
@@ -27,35 +27,35 @@
 <body>
     <table class="container">
         <tr><td class="login" [% url.search('login') ? '' : 'style="visibility:hidden"' %]>
-                <a href="#restoreDiv" data-toggle="modal">Забыли пароль?</a>
+                <a href="#restoreDiv" data-toggle="modal">[% content.FORGOT_PASSWORD_LINK %]</a>
             </td>
             <td></td>
         </tr>
         <tr><td class="login" [% url.search('login') ? '' : 'style="visibility:hidden"' %]>
                 <form id="loginForm" method="POST" action = "/login/" class="form-inline">
-                    <label class="control-label" for="email">Введите адрес почтового ящика</label>
-                    <input name="email"    type="text"     class="input-small" placeholder="E-mail">
-                    <label class="control-label" for="password">и пароль</label>
-                    <input name="password" type="password" class="input-small" placeholder="Пароль">
+                    <label class="control-label" for="email">[% content.LOGIN_EMAIL %]</label>
+                    <input name="email"    type="text"     class="input-small" placeholder="[% content.LOGIN_EMAIL_HINE %]">
+                    <label class="control-label" for="password">[% content.LOGIN_PASSWORD %]</label>
+                    <input name="password" type="password" class="input-small" placeholder="[% content.LOGIN_PASSWORD_HINT %]">
                 </form>
             </td>
             <td class="login-control">
-                <a [% IF userId %]href="/cab/"[% ELSE %]href="javascript:loginAction();"[% END %] class="btn btn-primary">Войти</a>
+                <a [% IF userId %]href="/cab/"[% ELSE %]href="javascript:loginAction();"[% END %] class="btn btn-primary">[% content.LOGIN %]</a>
                 <a href="/ru/"><img src="http://pemes.net/templates/images/ru.gif" class="img-rounded"></a>
                 <a href="/en/"><img src="http://pemes.net/templates/images/gb.gif" class="img-rounded"></a>
             </td>
         </tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td></td>
-            <td class="register"><a href="#registerDiv" data-toggle="modal" class="btn btn-success btn-large btn-block">Регистрация</a></td>
+            <td class="register"><a href="#registerDiv" data-toggle="modal" class="btn btn-success btn-large btn-block">[% content.REGISTER %]</a></td>
         </tr>
         <tr><td class="row-separator"></td></tr>
-        <tr><td rowspan="2">[% contentRu %]</td>
+        <tr><td rowspan="2">[% content.CONTENT %]</td>
             <td class="network-icons">
-                <a rel="nofollow" class="fb" title="Поделиться в Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare(); return false;' style="margin-left: 0px"></a>
-                <a rel="nofollow" class="vk" title="Поделиться В Контакте" target="_blank"href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);"></a>            
-                <a rel="nofollow" class="ok" title="Добавить в Одноклассники" target="_blank" href="http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1&st._surl=lova.su" onClick='okShare(); return false;'></a>
-                <a rel="nofollow" class="mm" title="Поделиться в Моем Мире @Mail.ru" target="_blank" href="http://connect.mail.ru/share" onClick='mmShare(); return false;'></a>
+                <a rel="nofollow" class="fb" title="[% content.SHARE_FACEBOOK %]" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare(); return false;' style="margin-left: 0px"></a>
+                <a rel="nofollow" class="vk" title="[% content.SHARE_VK %]" target="_blank"href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);"></a>            
+                <a rel="nofollow" class="ok" title="[% content.SHARE_ODNOKLASSNIKI %]" target="_blank" href="http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1&st._surl=lova.su" onClick='okShare(); return false;'></a>
+                <a rel="nofollow" class="mm" title="[% content.SHARE_MAILRU %]" target="_blank" href="http://connect.mail.ru/share" onClick='mmShare(); return false;'></a>
             </td>
         </tr>
         <tr><td class="content" colspan="2">
@@ -69,49 +69,48 @@
       <form id="registerForm" data-async class="form-horizontal" method="POST" action="/register/">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="registerLabel">Регистрация</h3>
+        <h3 id="registerLabel">[% content.REGISTER_WINDOW_CAPTION %]</h3>
       </div>
       <div class="modal-body">
           <div class="control-group">
-            <label class="control-label" for="first_name">Имя*</label>
+            <label class="control-label" for="first_name">[% content.REGISTER_WINDOW_FIRST_NAME %]*</label>
             <div class="controls">
                 <input type="text" name="first_name" required>
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="last_name">Фамилия</label>
+            <label class="control-label" for="last_name">[% content.REGISTER_WINDOW_LAST_NAME %]</label>
             <div class="controls">
                 <input type="text" name="last_name">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="login">Ник*</label>
+            <label class="control-label" for="login">[% content.REGISTER_WINDOW_LOGIN %]*</label>
             <div class="controls">
                 <input type="text" name="login" required>
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="password">Пароль*</label>
+            <label class="control-label" for="password">[% content.REGISTER_WINDOW_PASSWORD %]*</label>
             <div class="controls">
                 <input type="password" name="password" required>
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="email">Почта*</label>
+            <label class="control-label" for="email">[% content.REGISTER_WINDOW_EMAIL %]*</label>
             <div class="controls">
                 <input type="email" name="email" required>
                 <span class="help-inline"></span>
             </div>
           </div>
-          <div class="alert alert-error">Для регистрации используйте любые почтовые операторы, кроме mail.ru, bk.ru, list.ru, inbox.ru, liva.it.</div>
       </div>
       <div class="modal-footer">
-        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-        <button name="register" type="submit" class="btn btn-primary">Регистрация</button>
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">[% content.REGISTER_WINDOW_CLOSE_BTN %]</button>
+        <button name="register" type="submit" class="btn btn-primary">[% content.REGISTER_WINDOW_REGISTER_BTN %]</button>
       </div>
       </form>
     </div>        
@@ -120,20 +119,20 @@
       <form id="restoreForm" data-async class="form-horizontal" method="POST" action="/restore/">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="restoreLabel">Восстановление пароля</h3>
+        <h3 id="restoreLabel">[% content.RESTORE_WINDOW_CAPTION %]</h3>
       </div>
       <div class="modal-body">
-          <div class="alert alert-error hide">Логин или E-mail не найден</div>
-          <div class="alert alert-success hide">Сcылка для восстановления пароля отправлена на почту</div>
+          <div class="alert alert-error hide">[% content.RESTORE_WINDOW_USER_NOT_FOUND %]</div>
+          <div class="alert alert-success hide">[% content.RESTORE_WINDOW_EMAIL_WAS_SENT %]</div>
           <div class="control-group">
-            <label class="control-label" for="first_name">Введите логин</label>
+            <label class="control-label" for="first_name">[% content.RESTORE_WINDOW_LOGIN %]</label>
             <div class="controls">
                 <input type="text" name="login">
                 <span class="help-inline"></span>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="email">Или e-mail</label>
+            <label class="control-label" for="email">[% content.RESTORE_WINDOW_EMAIL %]</label>
             <div class="controls">
                 <input type="email" name="email">
                 <span class="help-inline"></span>
@@ -141,8 +140,8 @@
           </div>
       </div>
       <div class="modal-footer">
-        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
-        <button name="restore" type="submit" class="btn btn-primary">Восстановить</button>
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">[% content.RESTORE_WINDOW_CLOSE_BTN %]</button>
+        <button name="restore" type="submit" class="btn btn-primary">[% content.RESTORE_WINDOW_RESTORE_BTN %]</button>
       </div>
       </form>
     </div>        

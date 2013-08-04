@@ -23,7 +23,6 @@ my $json     = JSON->new->allow_nonref;
 # lang - текущий язык, устанавливается функцией get_lang
 # redirect - флаг переадрессации,содержит новый адрес
 my ($vars, $redirect);
-my $lang = 'ru';
 
 # Cookies - принимаем Cookie от клиента, ожидаем sid
 my %cookies = fetch CGI::Cookie;
@@ -45,8 +44,6 @@ my $htmlContentDao = new DAO::HtmlContent();
 my $userService = new Service::User();
 my $optionsService = new Service::Options();
 $optionsService->load();
-my $emailService = new Service::Email(userService => $userService);
-my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
 
 if($URL =~ /(\w{32})/)
 {
@@ -65,6 +62,10 @@ if($URL =~ /(\w{32})/)
 
 my $userId = $cgiSession->param('userId');
 my $user = $userService->findById($userId);
+
+my $lang = &getLang();
+my $emailService = new Service::Email(userService => $userService);
+my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
 
 
 #=======================Template Variables================
@@ -126,34 +127,13 @@ elsif($URL =~ /\/profile(\/|$)/)
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'} = $user;
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
-    $template->process("../tmpl/$lang/profile.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
+    $template->process("../tmpl/profile.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
 }
 else
 {
 	$vars->{'content'} = $htmlContentService->getContentForPage('CABINET', $lang);
-    # Show warning for mail.ru, bk.ru, list.ru, inbox.ru, liva.it 
-    $vars->{'data'}->{'profile'}->{'showEmailWarning'} = '';
-    my $warnTime = $user->getProfile()->{'showEmailWarning'};
-    if (!$warnTime || (time - $warnTime < 30))
-    {
-        if(!$warnTime)
-        {
-           $user->getProfile()->{'showEmailWarning'} = time;
-           $userService->saveProfile($user);
-        }
-        if (($user->getEmail() =~ /mail\.ru$/)
-           || ($user->getEmail() =~ /bk\.ru$/)
-           || ($user->getEmail() =~ /list\.ru$/)
-           || ($user->getEmail() =~ /inbox\.ru$/)
-           || ($user->getEmail() =~ /liva\.it$/)
-        )
-        {
-            $vars->{'data'}->{'profile'}->{'showEmailWarning'} = '1';
-        }
-    }
-	
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
-    $template->process("../tmpl/$lang/cab.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
+    $template->process("../tmpl/cab.tmpl", $vars) || die "Template process failed: ", $template->error(), "\n";
 }
 
 #=======================End Main Stage====================
@@ -269,3 +249,10 @@ sub getUsersLeft
     return $left;
 }
 
+sub getLang
+{
+    my $lang = $cgiSession->param('lang');
+    $lang = $user->getProfile()->{'lang'} if($user);	
+	$lang = $1 if($URL =~ /(ru|ua|en)/);
+	return $lang || 'ru';
+}
