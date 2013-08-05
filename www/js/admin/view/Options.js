@@ -50,7 +50,7 @@ Ext.define('Loto.view.Options', {
           },
           {
   	         xtype: 'textfield',
-        	 name: 'inviteLimits',
+        	 name: 'invitesLimit',
              fieldLabel: 'Ограничение на количество приглашений в час'
           }
         ]

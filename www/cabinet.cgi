@@ -252,6 +252,7 @@ sub getUsersLeft
 sub getLang
 {
     my $lang = $cgiSession->param('lang');
+    $userService->loadProfile($user);
     $lang = $user->getProfile()->{'lang'} if($user);	
 	$lang = $1 if($URL =~ /(ru|ua|en)/);
 	return $lang || 'ru';
