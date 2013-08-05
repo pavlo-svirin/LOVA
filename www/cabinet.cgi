@@ -150,11 +150,6 @@ sub ajaxStage
     {
     	saveProfile();
     }
-    elsif($URL =~ /\/countdown\//)
-    {
-    	my $result->{'counter'} = getUsersLeft();
-    	print $json->encode($result);
-    }
     elsif($URL =~ /\/invite\//)
     {
     	sendInvite();
