@@ -414,7 +414,7 @@ sub getProfileValueFlag
 sub loadProfile()
 {
 	my ($self, $user) = @_;
-
+    return unless($user);
 	# Create empty profile
     $user->getProfile();
 	my $sth = $::sql->handle->prepare("SELECT `name`, `value` FROM `user_profile` WHERE `user_id` = ?");
