@@ -127,7 +127,6 @@ sub sendToSubscribedUsers
     my @users = $self->{'userService'}->findSubscribed();
     foreach my $user (@users)
     {
-    	Sirius::Common::debug("Subcribed: " . $user->getEmail());
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
         my $email = $userName . "<" . $user->getEmail() . ">";
         $self->sendHtmlEmail($email, $subject, $body);

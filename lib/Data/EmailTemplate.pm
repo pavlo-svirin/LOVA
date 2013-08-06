@@ -48,12 +48,9 @@ sub proccessTemplateVars
     	{
     		my $var = "\Q[% \E$key\Q %]\E";
     		my $val = $vars->{$key};
-    		
-    		Sirius::Common::debug($key, $var);
     		$value =~ s/$var/$val/g;
     	}
     }
-    Sirius::Common::debug($value);
 	return $value;
 }
 
