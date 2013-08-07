@@ -76,7 +76,6 @@ $vars->{'error'} = "";
 if($user)
 {
 	$vars->{'data'}->{'users'}->{'active'} = $userService->countActive();
-	$vars->{'data'}->{'users'}->{'all'} = sprintf("%06d", $userService->countAllExceptLatest());
 	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
     $vars->{'data'}->{'referals'} = $userService->countReferals($user);
 	$userService->loadAccount($user);
@@ -91,7 +90,6 @@ if($user)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
     }
-    $vars->{'data'}->{'usersLeft'} = getUsersLeft();
    
     # Force user to fill profile 
     if((!$user->getLogin() || !$user->getFirstName() || !$user->getEmail()) && not ($URL =~ /\/profile(\/|$)/))
@@ -232,16 +230,6 @@ sub sendInvite
         $result->{'success'} = JSON::true;
     }
     print $json->encode($result);	
-}
-
-sub getUsersLeft
-{
-    my $left = $optionsService->get('likeRequired') - $userService->countActive();
-    if(!$left || ($left < 0))
-    {
-        $left = 0;
-    }
-    return $left;
 }
 
 sub getLang

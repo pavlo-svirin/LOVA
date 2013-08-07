@@ -16,9 +16,6 @@
     <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/lib/jcountdown/jcountdown.css" />
-    <script src="/lib/jcountdown/jquery.jcountdown.js"></script>
-       
     <link href="/css/main.css" rel="stylesheet">
     <script src="/js/main.js"></script>
     <script src="/js/cab.js"></script>
@@ -53,48 +50,7 @@
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
-        <tr><td align="center">
-          <table width="100%"><tr>
-            <td width="25%"></td>
-            <td align="center">
-                <script>
-                    $(function() {
-                        $("#countdown").jCountdown({
-                            width: 0,
-                            textGroupSpace: 15,
-                            textSpace: 0,
-                            reflection: true,
-                            reflectionOpacity: 15,
-                            reflectionBlur: 2,
-                            dayTextNumber: 8
-                        });
-                        $("#countdown").jCountdown('update', '[% data.usersLeft %]');
-                        $("#countdown").jCountdown('start');
-                    });
-                </script>
-                [% content.COUNTDOWN_HEADER %]
-                <div id="countdown"></div>
-                [% content.COUNTDOWN_FOOTER %]
-            </td>
-            <td width="25%" valign="top" align="center">
-              <div style="margin-top: 30px">[% content.SMALL_COUNTDOWN_HEADER %]</div>
-              <div class="jCountdownContainer" style="width: 204px; height: 35px">
-              <div class="jCountdownScale" style="transform: scale(0.513853904); -webkit-transform: scale(0.513853904); -ms-transform: scale(0.513853904); -moz-transform: scale(0.513853904); -o-transform: scale(0.513853904); left: -94px; top: -14px;">
-                <div class="jCountdown crystal white">
-                    <div class="group">
-                        [% FOREACH num IN data.users.all.chunk(1) %]
-                        <div class="container item1" style="margin-right: 0px;">
-                            <div class="cover"></div>
-                            <div class="text" style="opacity: 1; background-position: 0px -[% num * 60 %]px;"></div>
-                        </div>
-                        [% END %]
-                    </div>                
-                </div>
-              </div>
-              </div>
-            </td>
-          </tr></table>
-        </td></tr>                         
+        <tr><td align="center"></td></tr>                         
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td class="row-separator"></td></tr>
