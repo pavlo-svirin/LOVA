@@ -209,10 +209,19 @@ sub sendInvite
 {
     my $result->{'success'} = JSON::false;
     my $name = $CGI->param('first_name');
-    my $email = $CGI->param('email');   
+    my $email = $CGI->param('email');
+    my $numAtSign = () = $email =~ /\@/gi;
     if (!$name || !$email)
     {
         $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_REQUIRED_FIELDS');
+    }
+    elsif(length($name) > 255)
+    {
+    	$result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_NAME_TO_LONG');
+    }
+    elsif($numAtSign != 1)
+    {
+        $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_ONE_EMAIL_ALLOWED');
     }
     elsif ($userService->findByEmail($email))
     {
