@@ -1,0 +1,66 @@
+<table width="100%" class="lottery">
+  <tr>
+    <td width="25%">
+        <table width="100%">
+            <tr><td>Оплаченные билеты:</td><td>3</td></tr>
+            <tr><td>Заполненные билеты:</td><td>0</td></tr>
+            <tr><td>К оплате:</td><td>[% data.session.totalSum %]$0.00</td></tr>            
+            <tr><td colspan="2" align="center"><button class="btn btn-success" type="button">Оплатить</button></td></tr>
+            <tr><td colspan="2" align="center"><button class="btn" type="button">Пополнить счет</button></td></tr>
+        </table>
+    </td>
+    <td class="numbers">[% SET num = 0 %]
+      [% WHILE num < data.options.lotery.maxNumber %][% SET num=num+1 %]<a href='javascript:toggleLotteryNumber("[% num %]")' id="lottery_num_[% num %]">[% num %]</a>[% END %]
+    </td>
+    <td width="25%">
+      Количество игр: <a href="javascript:decGame()">&lt;</a><input type="text" name="games_count" class="games_count input-sm" value="1[% data.session.games %]"><a href="javascript:incGame()">&gt;</a>
+      <br><button type="button" class="btn btn-success" onclick="addTicket()">Добавить билет</button>
+      <br><br>Количество билетов: <a href="javascript:decGame()">&lt;</a><input type="text" name="games_count" class="games_count input-sm" value="1[% data.session.games %]"><a href="javascript:incGame()">&gt;</a>
+      <br><button type="button" class="btn btn-info" onclick="addTicket()">Заполнить на удачу</button>
+    </td>
+  </tr>
+  <tr><td colspan="3" class="separator"></td></tr>
+  <tr>
+    <td></td>
+    <td align="center">
+        <input type="hidden" name="selected_lottery_numbers">
+        Выбрано 1<span id="count_selected_numbers">[% data.session.selectedNumbers %]</span> из 6[% data.global.maxNumbers %] чисел
+        <br><button type="button" class="btn" name="auto_select" onClick="autoSelectNumbers()">Выбрать числа автоматически</button>
+    </td>
+    <td></td>
+  </tr>
+  <tr><td colspan="3" class="separator"></td></tr>
+  <tr><td colspan="3" class="separator"></td></tr>
+  <tr>
+    <td class="last_game_stat">В прошлом розыгрыше:
+       [% FOREACH num IN data.last.statistics.keys.nsort.reverse %]
+       <br>[% num %]: [% IF data.last.statistics.$num %][% data.last.statistics.$num %][% ELSE %]не угадал никто[% END %]
+       [% END %]
+       <table width="100%">
+       <tr><td>6 цифр</td><td>не угадал никто</td></tr>
+       <tr><td>5 цифр</td><td>2 билета</td></tr>
+       <tr><td>4 цифры</td><td>не угадал никто</td></tr>
+       <tr><td>3 цифры</td><td>6 билетов</td></tr>
+       <tr><td>2 цифры</td><td>не угадал никто</td></tr>
+       <tr><td>1 цифру</td><td>не угадал никто</td></tr>
+       </table>
+    </td>
+    <td align="center" class="last_game">Розыгрыш #2[% data.last.gameNum %] от 2013-08-07 20:00[% data.last.gameDate %]
+      <br>Приз составил: $1.05[% data.last.winSum %]
+      <br>Удачные числа: [% data.last.luckyNumbers %]1, 3, 10, 15, 21, 37
+      <br><br>
+      <br>Ваш лучший результат: лучше чем у 3 пользователей
+      <br>Ваш последний результат: лучше чем у 1 пользователя
+    </td>
+    <td class="next_game">
+      Следующие розыгрышы (GMT+02:00):
+      <br>#3: 2013-08-08 15:00
+      <br>#4: 2013-08-15 15:00
+      [% FOREACH nextGame IN data.session.nextGames %]
+      <br>[% nextGame %]
+      [% END %]
+      <br><br><a class="btn" href="/news/">Перейти на сайт</a>
+    </td>
+  </tr>
+</table>
+        
