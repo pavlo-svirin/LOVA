@@ -85,6 +85,9 @@ if($user)
     $vars->{'data'}->{'user'} = $user;
     $vars->{'data'}->{'profile'}->{'like'} = $user->getProfile()->{'like'};
     $vars->{'data'}->{'profile'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
+
+    # Lottery options 
+    $vars->{'data'}->{'options'}->{'lotery'}->{'maxNumber'} = 27;
     
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {

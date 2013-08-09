@@ -57,6 +57,40 @@ Ext.define('Loto.view.Options', {
       },
       {
           xtype:'fieldset',
+          title: 'Лоттерея',
+          collapsible: false,
+          autoHeight: true,
+          width: 600,
+          defaults: {
+          	minValue: 0,
+          	maxValue: 100,
+          	allowBlank: false
+          },
+          defaultType: 'numberfield',
+          items: [
+            {
+              fieldLabel: 'Количество чисел',
+              name: 'maxNumbers',
+            },
+            {
+              fieldLabel: 'Максимальное число',
+              name: 'maxNumber',
+            },
+            {
+              fieldLabel: 'Стоимость 1 игры (ПЕ)',
+              name: 'gamePrice',
+              allowDecimals: true,
+              decimalPrecision: 1,
+              step: 0.1,
+            },
+            {
+              fieldLabel: 'Максимальное количество игр',
+              name: 'maxGames',
+            }
+          ]
+      },      
+      {
+          xtype:'fieldset',
           title: 'Лайки',
           collapsible: false,
           autoHeight: true,
