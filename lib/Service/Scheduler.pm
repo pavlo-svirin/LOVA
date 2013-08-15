@@ -25,11 +25,17 @@ sub runAccountSchedule
     if($nextScheduleTime < time)
     {
     	print "Time to make money!";
+    	Sirius::Common::debug("[Scheduler]: currently is " . time);
+    	Sirius::Common::debug("[Scheduler]: scheduled time is " . $nextScheduleTime);
         $userService->runAccount($optionsService->get('rateFond'), $optionsService->get('rateReferal'));
     }
     $nextScheduleTime = $self->calcNextAccountTime();
-    $optionsService->set('nextAccountTime', $nextScheduleTime);
-    $optionsService->save();
+    if($nextScheduleTime != $optionsService->get('nextAccountTime'))
+    {
+        Sirius::Common::debug("[Scheduler]: Next scheduled time is " . $nextScheduleTime);
+        $optionsService->set('nextAccountTime', $nextScheduleTime);
+        $optionsService->save();
+    }
 }
 
 sub calcNextAccountTime
@@ -46,7 +52,8 @@ sub calcNextAccountTime
     push (@scheduledDays, 5) if($optionsService->get('scheduleFriday'));
     push (@scheduledDays, 6) if($optionsService->get('scheduleSaturday'));
     push (@scheduledDays, 7) if($optionsService->get('scheduleSunday'));
-
+    
+    Sirius::Common::debug("[Scheduler]: Scheduler options: " . @scheduledDays . ", time: " . $optionsService->get('scheduleTime'));
 	my $runHour = 12;
     my $runMin = 0;
     if ($optionsService->get('scheduleTime') =~ /^(\d+)\:(\d+)$/)
