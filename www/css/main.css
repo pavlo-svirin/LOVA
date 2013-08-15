@@ -90,9 +90,13 @@ table.lottery .numbers
   padding: 5px 30px;
 }
 
-table.lottery .numbers a
+table.lottery .numbers span
 {
-  display: inline-block;
+  margin: 5px 10px;
+  text-align: center;
+  width: 33px;
+
+/*  display: inline-block;
   border: 1px #5F9E4E solid;
   text-align: center;
   padding: 0;
@@ -105,15 +109,15 @@ table.lottery .numbers a
   border-radius: 4px;
   background-color: #00c322;
   color: white;
-  font-weight: bold;
+  font-weight: bold; */
 }
 
 table.lottery .numbers a.selected
 {
-  background-color: #133aac;
+/*  background-color: #133aac;
   border: 1px #133aac solid;
   color: #00c322;
-  font-weight: bold;
+  font-weight: bold;*/
 }
 
 td.total_win

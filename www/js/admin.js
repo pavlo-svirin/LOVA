@@ -7,7 +7,8 @@ Ext.application({
       'Users',
       'Emails',
       'EmailTemplates',
-      'HtmlContent'
+      'HtmlContent',
+      'Tickets'
     ],
     launch: function()
     {
@@ -57,7 +58,8 @@ Ext.application({
 	                      { xtype: 'htmlContentList', flex: 1 },
 	                      { xtype: 'htmlContent' }
 	                    ]
-    	            }
+    	            },
+    	            { xtype: 'tickets' }
     	            
                 ]
             }]

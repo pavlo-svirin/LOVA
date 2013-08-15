@@ -134,5 +134,14 @@ sub count {
 	return $ref->{'count'};
 }
 
+# Return current time in ISO format
+sub now {
+	my $self = shift;
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+	$year += 1900;
+	$mon++;
+	return "$year-$mon-$mday $hour:$min:$sec";
+}
+
 
 1;

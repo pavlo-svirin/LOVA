@@ -45,6 +45,38 @@ sub find
     return wantarray ? @objects : $objects[0];
 }
 
+sub findSql
+{
+    my ($self, $params) = @_;
+    my $table = $self->getTable();
+    my $model = $self->getModel();
+    my $where = $params->{'where'};
+    my $order = $params->{'order'};
+    my $start = $params->{'start'};
+    my $limit = $params->{'limit'};
+    my @values;
+    my $query = "SELECT * FROM `$table` WHERE 1 = 1";
+    $query .= " " . $where if($where);
+    $query .= " " . $order if($order);
+    if(defined $start && $limit)
+    {
+    	push(@values, $start, $limit);
+        $query .= " LIMIT ?, ?" 
+    }
+
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute(@values);
+        
+    my @objects;
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+      push(@objects, ${model}->new(%$ref));
+    }
+    
+    return wantarray ? @objects : $objects[0];
+}
+
+
 sub findById
 {
     my ($self, $id) = @_;
@@ -90,8 +122,7 @@ sub add
     my ($self, $object) = @_;
     my $table = $self->getTable();
 
-    my %objFields = $object->getFields();
-    my @fields = keys %objFields;
+    my @fields = $object->getSqlAddFields();
     my (@values, @fieldsList, @tokens);
     foreach my $field (@fields)
     {
@@ -111,9 +142,9 @@ sub update
 	my ($self, $object) = @_;
     my $table = $self->getTable();
 
-    my %objFields = $object->getFields();
+    my @fields = $object->getSqlUpdateFields();
     my (@values, @fieldsList);
-    foreach my $field (keys %objFields)
+    foreach my $field (keys @fields)
     {
     	push (@fieldsList, "`$field` = ? ");
         push (@values, $object->get($field));

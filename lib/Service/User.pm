@@ -112,7 +112,6 @@ sub findExtJs
     $query .= " ORDER BY $order $direction ";
     $query .= " LIMIT ?, ?";
 
-    Sirius::Common::debug($query);    
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute( $start, $limit);
     return () if($rv == 0E0);
@@ -548,6 +547,18 @@ sub parseFilters
     	}
     }
     return @filters;
+}
+
+sub getCurrentUser
+{
+    my $self = shift;
+	my %cookies = fetch CGI::Cookie;
+	my $sid = ($cookies{'sid'}) ? $cookies{'sid'}->value : undef;
+	return undef unless($sid);
+	my $cgiSession = new CGI::Session("driver:MySQL;", $sid, {Handle=>$::sql->handle});
+	my $userId = $cgiSession->param('userId');
+	return undef unless($userId);
+	return $self->findById($userId);
 }
 
 1;

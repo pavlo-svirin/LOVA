@@ -28,32 +28,32 @@
       ga('create', 'UA-41618016-1', 'lova.su');
       ga('send', 'pageview');
     </script>        
-        
+    <script>
+        var config = {
+          maxNumber  : [% data.options.lottery.maxNumber %],
+          maxNumbers : [% data.options.lottery.maxNumbers %],
+          maxGames   : [% data.options.lottery.maxGames %],
+          maxTickets : [% data.options.lottery.maxTickets %],
+          gamePrice  : [% data.options.lottery.gamePrice %]
+        };
+        var session = {
+//          totalSum   : [% data.session.totalSum %],
+//          tickets    : [% data.session.tickets.size %]
+        };
+    </script>            
 </head>
 <body style="background:url(/img/tile3.jpg)">
     <table class="container">
-        <tr><td class="logo"><img alt="LoVa" src="/img/logo.gif"></td></tr>
-        <tr><td align="right" valign="top"><a href="mailto:lova@pemes.net">Поддержка</a> | <a href="/cab/profile/">[% content.PROFILE %]</a> | <a href="/cab/logout/">[% content.LOGOUT %]</a></td></tr>
         <tr><td>
-          <span class="network-icons">
-            <a rel="nofollow" class="fb" title="[% content.SHARE_HINT_FACEBOOK %]" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare();return false;' style="margin-left: 0px"></a>
-            <a rel="nofollow" class="vk" title="[% content.SHARE_HINT_VK %]" target="_blank" href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);return false;"></a>            
-            <a rel="nofollow" class="mm" title="[% content.SHARE_HINT_MY_MAIL %]" target="_blank" href="http://connect.mail.ru/share" onClick='mmShare(); return false;'></a>
-          </span>
-          [% IF !data.profile.like %]
-            <div class="alert alert-error arrow" style="float: right; width: 670px" id="alert">
-              <button type="button" class="close" data-dismiss="alert">&times;</button>
-              [% content.ALERT_LIKE %]
-            </div>
-          [% END %]
+            <table width="100%"><tr><td class="logo"><img alt="LoVa" src="/img/logo.gif"></td>
+                       <td align="right" valign="center"><a href="mailto:lova@pemes.net">Поддержка</a> | <a href="#">Сайт</a> | <a href="/cab/profile/">[% content.PROFILE %]</a> | <a href="/cab/logout/">[% content.LOGOUT %]</a></td></tr>
+            </table>           
         </td></tr>
+        <tr><td>[% IF !data.profile.validateEmail %]<div id="validateEmail" class="alert alert-error">[% content.ALERT_EMAIL %]</div>[% END %]</td></tr>
         <tr><td class="total_win">Выиграно $0.00</td></tr>
         <tr><td align="center">[% INCLUDE "../tmpl/lottery.tmpl" %]</td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td>
-            [% IF !data.profile.validateEmail %]
-            <div id="validateEmail" class="alert alert-error">[% content.ALERT_EMAIL %]</div>
-            [% END %]
             <table width="100%">
                 <tr>
                     <td width="21%" class="statHeader registered">Основной счет</td>
@@ -74,13 +74,31 @@
                     <td class="stat"><h3>[% data.referals || "0" %]</h2></td>
                     <td width="5%" rowspan="1"></td>                    
                     <td class="stat" rowspan="1"><h2>$0.00</h2></td>
-                </tr>                    
+                </tr>
+                <tr><td class="row-separator"></td></tr>
+                <tr>
+                    <td align="center"><button class="btn" type="button">Пополнить счет</button></td>                    
+                    <td width="5%" rowspan="1"></td>
+                    <td align="center">
+                      <span class="network-icons">
+                        <a rel="nofollow" class="fb" title="[% content.SHARE_HINT_FACEBOOK %]" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=lova.su" onClick='fbShare();return false;' style="margin-left: 0px"></a>
+                        <a rel="nofollow" class="vk" title="[% content.SHARE_HINT_VK %]" target="_blank" href="http://vk.com/share.php?url=http%3A%2F%2Flova.su" onmouseup="this._btn=event.button;this.blur();" onclick="return VK.Share.click(0, this);return false;"></a>            
+                        <a rel="nofollow" class="mm" title="[% content.SHARE_HINT_MY_MAIL %]" target="_blank" href="http://connect.mail.ru/share" onClick='mmShare(); return false;'></a>
+                      </span>
+                    </td>
+                    <td width="5%" rowspan="1"></td>                    
+                    <td  align="center" colspan="2">
+                        <button class="btn btn-info">Пригласите друга</button>
+                    </td>
+                    <td width="5%" rowspan="1"></td>                    
+                    <td align="center"><button class="btn btn-success">Выплата</button></td>
+                </tr>
+                <tr><td class="row-separator"></td></tr>
+                <tr><td></td><td></td><td></td>
+                    <td colspan="4" align="center">У вас есть 5 подарочных билетов<br>Рейтинг привлекающих: #567890</td>
+                    <td></td>
+                </tr>
             </table>
-            <br><br>
-            Вы # 567890 в рейтинге привлекающих
-            <br>У вас есть 5 подарочных билетов
-            <br><button class="btn btn-info">Пригласите друга</button>
-            <br><button class="btn btn-success">Выплата</button>
         </td></tr>        
 		</table>
 		

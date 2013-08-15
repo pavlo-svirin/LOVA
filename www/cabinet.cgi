@@ -41,8 +41,8 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 my $htmlContentDao = new DAO::HtmlContent();
 
 # Services
-my $userService = new Service::User();
-my $optionsService = new Service::Options();
+our $userService = new Service::User();
+our $optionsService = new Service::Options();
 $optionsService->load();
 
 if($URL =~ /(\w{32})/)
@@ -64,9 +64,10 @@ my $userId = $cgiSession->param('userId');
 my $user = $userService->findById($userId);
 
 my $lang = &getLang();
-my $emailService = new Service::Email(userService => $userService);
-my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
+our $emailService = new Service::Email(userService => $userService, lang => $lang);
+our $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
 
+my $gameController = new Controller::Game();
 
 #=======================Template Variables================
  
@@ -87,7 +88,11 @@ if($user)
     $vars->{'data'}->{'profile'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
 
     # Lottery options 
-    $vars->{'data'}->{'options'}->{'lotery'}->{'maxNumber'} = 27;
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxNumber'} = $optionsService->get('maxNumber');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxNumbers'} = $optionsService->get('maxNumbers');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxGames'} = $optionsService->get('maxGames');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxTickets'} = $optionsService->get('maxTickets');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'gamePrice'} = $optionsService->get('gamePrice');
     
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
@@ -112,8 +117,30 @@ if($URL =~ /logout/)
     $cgiSession->clear('userId');   
     $redirect = "/";
 }
-
-if($URL =~ /\/ajax(\/|$)/)
+if($URL =~ /\/ticket(\/|$)/)
+{
+	my $params = $CGI->Vars();
+	my $response = $gameController->process($URL, $params);
+	if($response->{'status'} eq "redirect")
+	{
+        print $CGI->redirect(-uri => $response->{'data'}, -cookie => $cookie);
+	}
+    elsif($response->{'status'} eq "ajax")
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+        print $json->encode($response->{'data'});       
+    }
+    elsif($response->{'status'} eq "html")
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+        print $response->{'data'};
+    }
+    else
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+    }
+}
+elsif($URL =~ /\/ajax(\/|$)/)
 {
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
     ajaxStage()

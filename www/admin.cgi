@@ -47,6 +47,7 @@ my $emailService = new Service::Email(userService => $userService);
 
 my $emailTemplateDao = new DAO::EmailTemplates();
 my $htmlContentDao = new DAO::HtmlContent();
+my $ticketDao = new DAO::Ticket();
 
 #=======================Template Variables================
 
@@ -294,6 +295,28 @@ sub ajaxStage
         my $content = $htmlContentDao->findById($id);
         $htmlContentDao->delete($content);
         my $response->{'success'} = JSON::true;
+        print $json->encode($response);
+    }
+    elsif (($URL =~ /\/tickets\//) && ($URL =~ /\/load\//))
+    {
+        my $response->{'success'} = JSON::true;
+        my ($where, $order);
+        $where .= " AND `created` >= " . $sql->quote($CGI->param('from') . " 00:00:00") if($CGI->param('from')); 
+        $where .= " AND `created` <= " . $sql->quote($CGI->param('to') . " 23:59:59") if($CGI->param('to'));
+        $where .= " AND `paid` IS NOT NULL" if($CGI->param('paid') || $CGI->param('active'));
+        $where .= " AND `games_left` > 0" if($CGI->param('active'));
+    	my @objects = $ticketDao->findSql({
+    		where => $where,
+    		order => $order,
+    		start => $CGI->param('start'),
+    		limit => $CGI->param('limit') 
+    	});
+        foreach my $obj (@objects)
+        {
+        	my $jsonObj = $obj->getData();
+        	$jsonObj->{'total'} = $obj->getGames() * $obj->getGamePrice();
+            push(@{$response->{data}}, $jsonObj);
+        }
         print $json->encode($response);
     }    
 }

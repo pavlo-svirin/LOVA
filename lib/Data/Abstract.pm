@@ -1,4 +1,4 @@
-package Data::BaseObject;
+package Data::Abstract;
 use strict;
 
 # Базовый объект в базе данных
@@ -20,6 +20,36 @@ sub new
 sub getFields
 {
 	return ();
+}
+
+sub getSqlAddFields
+{
+    my $self = shift;
+    my %allFields = $self->getFields();
+    my @fields;
+    foreach my $field (keys %allFields)
+    {
+        if($allFields{$field}->{'add'})
+        {
+            push(@fields, $allFields{$field}->{'sql'});
+        }
+    }
+    return @fields;
+}
+
+sub getSqlUpdateFields
+{
+	my $self = shift;
+	my %allFields = $self->getFields();
+	my @fields;
+    foreach my $field (keys %allFields)
+    {
+    	if($allFields{$field}->{'update'})
+    	{
+    		push(@fields, $allFields{$field}->{'sql'});
+    	}
+    }
+    return @fields;
 }
 
 sub getData
@@ -53,11 +83,11 @@ sub AUTOLOAD
         {
         	if($1 eq 'get')
         	{
-                return $self->get($fields{$fieldName});
+                return $self->get($fields{$fieldName}->{'sql'});
         	}
         	else
         	{
-        		$self->set($fields{$fieldName}, $_[1]);
+        		$self->set($fields{$fieldName}->{'sql'}, $_[1]);
         	}
         }
             

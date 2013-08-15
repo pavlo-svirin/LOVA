@@ -77,15 +77,19 @@ Ext.define('Loto.view.Options', {
               name: 'maxNumber',
             },
             {
-              fieldLabel: 'Стоимость 1 игры (ПЕ)',
+              fieldLabel: 'Стоимость 1 игры',
               name: 'gamePrice',
               allowDecimals: true,
-              decimalPrecision: 1,
-              step: 0.1,
+              decimalPrecision: 2,
+              step: 0.01,
             },
             {
               fieldLabel: 'Максимальное количество игр',
               name: 'maxGames',
+            },
+            {
+              fieldLabel: 'Максимальное количество билетов',
+              name: 'maxTickets',
             }
           ]
       },      
