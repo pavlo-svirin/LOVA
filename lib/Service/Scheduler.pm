@@ -27,6 +27,9 @@ sub runAccountSchedule
     	print "Time to make money!";
     	Sirius::Common::debug("[Scheduler]: currently is " . time);
     	Sirius::Common::debug("[Scheduler]: scheduled time is " . $nextScheduleTime);
+        $nextScheduleTime = $self->calcNextAccountTime();
+        $optionsService->set('nextAccountTime', $nextScheduleTime);
+        $optionsService->save();
         $userService->runAccount($optionsService->get('rateFond'), $optionsService->get('rateReferal'));
     }
     $nextScheduleTime = $self->calcNextAccountTime();
