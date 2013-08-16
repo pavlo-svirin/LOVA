@@ -84,7 +84,6 @@ if($user)
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'} = $user;
-    $vars->{'data'}->{'profile'}->{'like'} = $user->getProfile()->{'like'};
     $vars->{'data'}->{'profile'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
 
     # Lottery options 

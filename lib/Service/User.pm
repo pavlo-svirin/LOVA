@@ -516,20 +516,6 @@ sub deleteAccount()
     $sth->execute($user->getId());
 }
 
-sub runAccount()
-{
-    my ($self, $rateFond, $rateReferal) = @_;
-    my $fondReward = ($self->countActive() * $rateFond) || 0;
-    foreach my $user ($self->findActive())
-    {
-    	$self->loadAccount($user);
-        my $referalReward = ($self->countReferals($user) * $rateReferal) || 0;
-        $user->getAccount()->{'fond'} = $user->getAccount()->{'fond'} + $fondReward;
-        $user->getAccount()->{'referal'} = $user->getAccount()->{'referal'} + $referalReward;
-        $self->saveAccount($user);     	
-    }
-}
-
 sub parseFilters
 {
     my ($self, $params) = @_;

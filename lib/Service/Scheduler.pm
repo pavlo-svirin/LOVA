@@ -25,11 +25,20 @@ sub runAccountSchedule
     if($nextScheduleTime < time)
     {
     	print "Time to make money!";
-        $userService->runAccount($optionsService->get('rateFond'), $optionsService->get('rateReferal'));
+        $nextScheduleTime = $self->calcNextAccountTime();
+        $optionsService->set('nextAccountTime', $nextScheduleTime);
+        $optionsService->save();
+        # run game
     }
-    $nextScheduleTime = $self->calcNextAccountTime();
-    $optionsService->set('nextAccountTime', $nextScheduleTime);
-    $optionsService->save();
+    else
+    {
+        $nextScheduleTime = $self->calcNextAccountTime();
+        if($nextScheduleTime != $optionsService->get('nextAccountTime'))
+        {
+            $optionsService->set('nextAccountTime', $nextScheduleTime);
+            $optionsService->save();
+        }
+    }
 }
 
 sub calcNextAccountTime
