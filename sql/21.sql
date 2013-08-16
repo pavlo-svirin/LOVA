@@ -27,7 +27,7 @@ CREATE TABLE `games` (
   `date` datetime NOT NULL,
   `lucky_numbers` varchar(300) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `sum` numeric(8,2) unsigned NOT NULL,
-  `max_number` int(10) unsigned NOT NULL,
-  `count_numbers` int(10) unsigned NOT NULL,
+  `users` int(10) unsigned NOT NULL,
+  `tickets` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;

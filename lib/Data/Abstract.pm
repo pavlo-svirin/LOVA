@@ -4,6 +4,8 @@ use strict;
 # Базовый объект в базе данных
 our $AUTOLOAD;
 
+my $log = Log::Log4perl->get_logger("Data::Abstract");
+
 sub new
 {
     my $proto = shift;                 # извлекаем имя класса или указатель на объект
@@ -89,6 +91,10 @@ sub AUTOLOAD
         	{
         		$self->set($fields{$fieldName}->{'sql'}, $_[1]);
         	}
+        }
+        else
+        {
+        	$log->warn("No such field: ", $fieldName);
         }
             
     }

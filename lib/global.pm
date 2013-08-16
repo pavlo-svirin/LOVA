@@ -12,6 +12,9 @@ use Template;
 
 use JSON -convert_blessed_universally;
 
+use Log::Log4perl;
+Log::Log4perl->init("../conf/log4perl.conf");
+
 use Sirius::Common;
 use Sirius::MySQL;
 
@@ -26,12 +29,14 @@ use DAO::Abstract;
 use DAO::EmailTemplates;
 use DAO::HtmlContent;
 use DAO::Ticket;
+use DAO::Game;
 
 use Data::Abstract;
 use Data::User;
 use Data::EmailTemplate;
 use Data::HtmlContent;
 use Data::Ticket;
+use Data::Game;
 
 use Controller::Game;
 
