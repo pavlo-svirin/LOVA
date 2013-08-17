@@ -12,15 +12,6 @@ CREATE TABLE `tickets` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
 
-DROP TABLE IF EXISTS `games_history`;
-CREATE TABLE `games_history` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `game_id` int(10) unsigned NOT NULL,
-  `ticket_id` int(10) unsigned NOT NULL,
-  `guessed` int(8) unsigned not null,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM;
-
 DROP TABLE IF EXISTS `games`;
 CREATE TABLE `games` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -31,3 +22,20 @@ CREATE TABLE `games` (
   `tickets` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS `game_tickets`;
+CREATE TABLE `game_tickets` (
+  `game_id` int(10) unsigned NOT NULL,
+  `ticket_id` int(10) unsigned NOT NULL,
+  `guessed` int(10) unsigned not null
+) ENGINE=MyISAM;
+CREATE INDEX game_id_idx ON `game_tickets` (`game_id`);
+
+DROP TABLE IF EXISTS `game_stats`;
+CREATE TABLE `game_stats` (
+  `game_id` int(10) unsigned NOT NULL,
+  `guessed` int(8) unsigned NOT NULL,
+  `tickets` int(10) unsigned not null,
+  `users` int(10) unsigned not null  
+) ENGINE=MyISAM;
+CREATE INDEX game_id_idx ON `game_stats` (`game_id`);

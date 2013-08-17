@@ -76,6 +76,23 @@ Ext.define('Loto.view.Options', {
             {
               fieldLabel: 'Максимальное количество билетов',
               name: 'maxTickets',
+            },
+            {
+          	  xtype: 'checkbox',
+          	  fieldLabel: 'Случайные числа',
+          	  name: 'randomNumbers'
+            },
+            {
+          	  xtype: 'textfield',
+          	  fieldLabel: 'Выигрышные числа для следующего розыгрыша',
+          	  name: 'luckyNumbers'
+            },
+            {
+                fieldLabel: 'Общий приз',
+                name: 'totalWin',
+                allowDecimals: true,
+                decimalPrecision: 2,
+                step: 0.01,
             }
           ]
       },
@@ -135,6 +152,76 @@ Ext.define('Loto.view.Options', {
             }
           ]
       },
+      {
+          xtype:'fieldset',
+          title: 'Бюджет',
+          autoHeight: true,
+          width: 600,
+          layout: 'column',
+          defaults: {
+          	layout: 'form',
+          	width: 500,
+          	minValue: 0,
+          	maxValue: 100,
+          	tipText: function(thumb)
+          	{
+          		return String(thumb.value) + '%';
+          	},
+          },
+          defaultType: 'sliderfield',
+          items: [
+            {
+              fieldLabel: 'Приз',
+              name: 'budgetPrize',
+            },
+            {
+              xtype: 'label',
+              name: 'budgetPrize',
+              width: 50,
+              margin: '0 0 0 15'
+            },
+            {
+                fieldLabel: 'Фонд',
+                name: 'budgetFond'
+             },
+             {
+                xtype: 'label',
+                name: 'budgetFond',
+                width: 50,
+                margin: '0 0 0 15'
+            },
+            {
+                fieldLabel: 'Подарочные билеты',
+                name: 'budgetGiftTickets'
+             },
+             {
+                xtype: 'label',
+                name: 'budgetGiftTickets',
+                width: 50,
+                margin: '0 0 0 15'
+            },
+            {
+              fieldLabel: 'Затраты',
+              name: 'budgetCosts'
+            },
+            {
+              xtype: 'label',
+              name: 'budgetCosts',
+              width: 50,
+              margin: '0 0 0 15'
+            },
+            {
+              fieldLabel: 'Прибыль',
+              name: 'budgetProfit'
+            },
+            {
+              xtype: 'label',
+              name: 'budgetProfit',
+              width: 50,
+              margin: '0 0 0 15'
+            }
+          ]
+        },      
       {
           xtype:'fieldset',
           title: 'Лайки',

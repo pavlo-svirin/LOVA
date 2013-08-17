@@ -48,6 +48,7 @@ my $emailService = new Service::Email(userService => $userService);
 my $emailTemplateDao = new DAO::EmailTemplates();
 my $htmlContentDao = new DAO::HtmlContent();
 my $ticketDao = new DAO::Ticket();
+my $gameDao = new DAO::Game();
 
 #=======================Template Variables================
 
@@ -300,11 +301,24 @@ sub ajaxStage
     elsif (($URL =~ /\/tickets\//) && ($URL =~ /\/load\//))
     {
         my $response->{'success'} = JSON::true;
-        my @objects = $ticketDao->findExtJs($CGI->Vars);
+        my $params = $CGI->Vars();
+        my @objects = $ticketDao->findExtJs($params);
         foreach my $obj (@objects)
         {
         	my $jsonObj = $obj->getData();
         	$jsonObj->{'total'} = $obj->getGames() * $obj->getGamePrice();
+            push(@{$response->{data}}, $jsonObj);
+        }
+        print $json->encode($response);
+    }    
+    elsif (($URL =~ /\/games\//) && ($URL =~ /\/load\//))
+    {
+        my $response->{'success'} = JSON::true;
+        my $params = $CGI->Vars();
+        my @objects = $gameDao->findExtJs($params);
+        foreach my $obj (@objects)
+        {
+            my $jsonObj = $obj->getData();
             push(@{$response->{data}}, $jsonObj);
         }
         print $json->encode($response);

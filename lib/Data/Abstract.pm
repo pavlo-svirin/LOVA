@@ -1,5 +1,6 @@
 package Data::Abstract;
 use strict;
+require Log::Log4perl;
 
 # Базовый объект в базе данных
 our $AUTOLOAD;

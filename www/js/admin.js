@@ -8,7 +8,8 @@ Ext.application({
       'Emails',
       'EmailTemplates',
       'HtmlContent',
-      'Tickets'
+      'Tickets',
+      'Games'
     ],
     launch: function()
     {
@@ -59,7 +60,8 @@ Ext.application({
 	                      { xtype: 'htmlContent' }
 	                    ]
     	            },
-    	            { xtype: 'tickets' }
+    	            { xtype: 'tickets' },
+    	            { xtype: 'games' }
     	            
                 ]
             }]

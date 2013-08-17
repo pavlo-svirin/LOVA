@@ -1,8 +1,9 @@
 package Service::Game;
 use strict;
 
-use DAO::Ticket;
-use DAO::Game;
+require DAO::Ticket;
+require DAO::Game;
+require Log::Log4perl;
 
 my $log = Log::Log4perl->get_logger("Service::Game");
 my $ticketDao = DAO::Ticket->new();
@@ -65,6 +66,7 @@ sub runGame
     $game->setUsers(scalar (keys %users));
     $log->info("Users in Game: ", $game->getUsers());
     
+    my %ticketsByGuessedNumbers;
     my $gamePrice = 0;
     foreach my $ticket (@tickets)
     {
@@ -76,10 +78,8 @@ sub runGame
         # calculate how many numbers were guesed for each tickets
         my $guessed = $self->calcGuessed($ticket, @luckyNumbers);
         
-        # write a table ticket number, guessed numbers, user id, game id
-        # $self->saveGameHistory($game, $ticket, $guessed);
-        
         $gamePrice += $ticket->getGamePrice(); 
+        push(@{$ticketsByGuessedNumbers{$guessed}}, $ticket);        
     }
     
     $game->setSum($gamePrice);
@@ -87,6 +87,8 @@ sub runGame
 
     $gameDao->save($game);
     $log->info("Game #", $game->getId(), " from ", $game->getDate(), " was run.");
+    
+    $self->writeGameStat($game, %ticketsByGuessedNumbers);
 }
 
 # Filter out numbers < 1 and > maxNumber
@@ -143,5 +145,27 @@ sub getLuckyNumbers
     
     return @numbers;
 }
+
+sub writeGameStat
+{
+    my ($self, $game, %ticketsByGuessedNumbers) = @_;	
+    foreach my $num (sort {$a <=> $b} keys %ticketsByGuessedNumbers)
+    {
+    	my %users = map { $_->getUserId() => 1 } $ticketsByGuessedNumbers{$num};
+    	my $usersCount = scalar (keys %users);
+        my $ticketsCount = scalar ($ticketsByGuessedNumbers{$num});
+        $log->info($num, " number: ", $usersCount, " users, ", $ticketsCount, " tickets");
+        
+        my $sth = $::sql->handle->prepare("INSERT INTO `game_stats` (`game_id`, `guessed`, `users`, `tickets`) VALUES (?, ?, ?, ?)");
+        $sth->execute($game->getId(), $num, $usersCount, $ticketsCount);
+        
+        foreach my $ticket ($ticketsByGuessedNumbers{$num})
+        {
+        	my $sth = $::sql->handle->prepare("INSERT INTO `game_tickets` (`game_id`, `ticket_id`, `guessed`) VALUES (?, ?, ?)");
+            $sth->execute($game->getId(), $ticket->getId(), $num);
+        }   	
+    }
+}
+
 
 1;

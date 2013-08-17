@@ -74,3 +74,77 @@
 2013/08/16 22:47:32 [83] Service.Game 63 - Users in Game: 0
 2013/08/16 22:47:32 [83] Service.Game 83 - Game Price: 0
 2013/08/16 22:47:32 [118] Service.Game 86 - Game #2 from 2013-8-16 22:47:32 was run.
+2013/08/17 14:03:42 [63] Service.Game 51 - Running Game.
+2013/08/17 14:03:42 [64] Service.Game 58 - Lucky numbers: 5 7 8 10 14 16 23 28
+2013/08/17 14:03:42 [70] Service.Game 62 - Tickets in Game: 0
+2013/08/17 14:03:42 [70] Service.Game 66 - Users in Game: 0
+2013/08/17 14:03:42 [71] Service.Game 86 - Game Price: 0
+2013/08/17 14:03:42 [76] Service.Game 89 - Game #3 from 2013-8-17 14:3:42 was run.
+2013/08/17 15:36:09 [51] Service.Game 52 - Running Game.
+2013/08/17 15:36:09 [51] Service.Game 59 - Lucky numbers: 5 9 12 16 20 24 27 30
+2013/08/17 15:36:09 [52] Service.Game 63 - Tickets in Game: 0
+2013/08/17 15:36:09 [52] Service.Game 67 - Users in Game: 0
+2013/08/17 15:36:09 [53] Service.Game 86 - Game Price: 0
+2013/08/17 15:36:09 [61] Service.Game 89 - Game #1 from 2013-8-17 15:36:9 was run.
+2013/08/17 15:38:59 [74] Service.Game 52 - Running Game.
+2013/08/17 15:38:59 [74] Service.Game 59 - Lucky numbers: 1 4 7 9 20 23 25 31
+2013/08/17 15:38:59 [80] Service.Game 63 - Tickets in Game: 0
+2013/08/17 15:38:59 [80] Service.Game 67 - Users in Game: 0
+2013/08/17 15:38:59 [80] Service.Game 86 - Game Price: 0
+2013/08/17 15:38:59 [85] Service.Game 89 - Game #2 from 2013-8-17 15:38:59 was run.
+2013/08/17 15:41:55 [105] Service.Game 52 - Running Game.
+2013/08/17 15:41:55 [105] Service.Game 59 - Lucky numbers: 8 10 11 12 13 14 22 30
+2013/08/17 15:41:55 [108] Service.Game 63 - Tickets in Game: 0
+2013/08/17 15:41:55 [108] Service.Game 67 - Users in Game: 0
+2013/08/17 15:41:55 [109] Service.Game 91 - Game Price: 0
+2013/08/17 15:41:55 [115] Service.Game 94 - Game #3 from 2013-8-17 15:41:55 was run.
+2013/08/17 16:06:52 [61] Service.Game 52 - Running Game.
+2013/08/17 16:06:52 [62] Service.Game 59 - Lucky numbers: 1 5 6 7 12 15 22 26
+2013/08/17 16:06:52 [62] Service.Game 63 - Tickets in Game: 0
+2013/08/17 16:06:52 [63] Service.Game 67 - Users in Game: 0
+2013/08/17 16:06:52 [63] Service.Game 86 - Game Price: 0
+2013/08/17 16:06:52 [64] Service.Game 89 - Game #4 from 2013-8-17 16:6:52 was run.
+2013/08/17 16:07:38 [54] Service.Game 52 - Running Game.
+2013/08/17 16:07:38 [54] Service.Game 59 - Lucky numbers: 5 7 9 11 13 16 19 24
+2013/08/17 16:07:38 [55] Service.Game 63 - Tickets in Game: 0
+2013/08/17 16:07:38 [55] Service.Game 67 - Users in Game: 0
+2013/08/17 16:07:38 [56] Service.Game 86 - Game Price: 0
+2013/08/17 16:07:38 [56] Service.Game 89 - Game #5 from 2013-8-17 16:7:38 was run.
+2013/08/17 16:07:38 [57] Service.Game 157 - 1 number: 0 users,  tickets
+2013/08/17 16:08:37 [54] Service.Game 52 - Running Game.
+2013/08/17 16:08:37 [54] Service.Game 59 - Lucky numbers: 2 6 13 16 19 20 25 29
+2013/08/17 16:08:37 [55] Service.Game 63 - Tickets in Game: 0
+2013/08/17 16:08:37 [60] Service.Game 67 - Users in Game: 0
+2013/08/17 16:08:37 [60] Service.Game 86 - Game Price: 0
+2013/08/17 16:08:37 [61] Service.Game 89 - Game #6 from 2013-8-17 16:8:37 was run.
+2013/08/17 16:08:37 [61] Service.Game 157 - 1 number: 0 users,  tickets
+2013/08/17 16:09:08 [45] Service.Game 52 - Running Game.
+2013/08/17 16:09:08 [45] Service.Game 59 - Lucky numbers: 3 10 13 14 16 21 22 30
+2013/08/17 16:09:08 [53] Service.Game 63 - Tickets in Game: 0
+2013/08/17 16:09:08 [53] Service.Game 67 - Users in Game: 0
+2013/08/17 16:09:08 [53] Service.Game 86 - Game Price: 0
+2013/08/17 16:09:08 [54] Service.Game 89 - Game #7 from 2013-8-17 16:9:8 was run.
+2013/08/17 16:09:25 [55] Service.Game 52 - Running Game.
+2013/08/17 16:09:25 [56] Service.Game 59 - Lucky numbers: 1 7 8 18 21 22 25 27
+2013/08/17 16:09:25 [56] Service.Game 63 - Tickets in Game: 0
+2013/08/17 16:09:25 [59] Service.Game 67 - Users in Game: 0
+2013/08/17 16:09:25 [59] Service.Game 86 - Game Price: 0
+2013/08/17 16:09:25 [61] Service.Game 89 - Game #8 from 2013-8-17 16:9:25 was run.
+2013/08/17 16:09:25 [61] Service.Game 157 - 1 number: 0 users, 0 tickets
+2013/08/17 16:11:53 [48] Service.Game 52 - Running Game.
+2013/08/17 16:11:53 [49] Service.Game 59 - Lucky numbers: 1 3 9 13 16 17 22 25
+2013/08/17 16:11:53 [49] Service.Game 63 - Tickets in Game: 0
+2013/08/17 16:11:53 [50] Service.Game 67 - Users in Game: 0
+2013/08/17 16:11:53 [50] Service.Game 86 - Game Price: 0
+2013/08/17 16:11:53 [57] Service.Game 89 - Game #9 from 2013-8-17 16:11:53 was run.
+2013/08/17 16:38:01 [72] Service.Game 52 - Running Game.
+2013/08/17 16:38:01 [72] Service.Game 59 - Lucky numbers: 3 8 9 11 16 17 24 30
+2013/08/17 16:38:01 [78] Service.Game 63 - Tickets in Game: 0
+2013/08/17 16:38:01 [78] Service.Game 67 - Users in Game: 0
+2013/08/17 16:38:01 [78] Service.Game 86 - Game Price: 0
+2013/08/17 16:39:31 [68] Service.Game 52 - Running Game.
+2013/08/17 16:39:31 [68] Service.Game 59 - Lucky numbers: 11 13 17 21 24 26 27 31
+2013/08/17 16:39:31 [75] Service.Game 63 - Tickets in Game: 0
+2013/08/17 16:39:31 [75] Service.Game 67 - Users in Game: 0
+2013/08/17 16:39:31 [76] Service.Game 86 - Game Price: 0
+2013/08/17 16:39:31 [76] Service.Game 89 - Game #10 from 2013-8-17 16:39:31 was run.

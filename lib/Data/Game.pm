@@ -18,4 +18,20 @@ sub getFields
 	)
 };
 
+# Save array as sorted join list
+sub setLuckyNumbers
+{
+    my ($self, @numbers) = @_;
+    my $list = join(",", sort {$a <=> $b} @numbers);
+    $self->set('lucky_numbers', $list);
+}
+
+# return join list as array
+sub getLuckyNumbers
+{
+    my $self = shift;
+    my $list = $self->get('lucky_numbers');
+    return sort {$a <=> $b} split(",", $list);      
+}
+
 1;
