@@ -15,7 +15,7 @@ use global;
 our $sql     = Sirius::MySQL->new(host=>$MYSQL{'host'}, db=>$MYSQL{'base'}, user=>$MYSQL{'user'}, password=>$MYSQL{'pass'}, debug=>1);
 my $dbh      = $sql->connect;
 my $CGI      = new CGI;
-my $template = Template->new({RELATIVE=>1});
+our $template = Template->new({RELATIVE=>1});
 my $json     = JSON->new->allow_nonref;
 
 # Используемые переменные
@@ -39,6 +39,7 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 
 # DAO
 my $htmlContentDao = new DAO::HtmlContent();
+my $ticketDao = new DAO::Ticket();
 
 # Services
 our $userService = new Service::User();
@@ -79,9 +80,12 @@ if($user)
 	$vars->{'data'}->{'users'}->{'active'} = $userService->countActive();
 	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
     $vars->{'data'}->{'referals'} = $userService->countReferals($user);
+    
 	$userService->loadAccount($user);
+    $vars->{'data'}->{'account'}->{'personal'} = sprintf("%.02f", $user->getAccount()->{'personal'});
 	$vars->{'data'}->{'account'}->{'fond'} = sprintf("%.02f", $user->getAccount()->{'fond'});
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
+    
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'} = $user;
     $vars->{'data'}->{'profile'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
@@ -92,6 +96,17 @@ if($user)
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxGames'} = $optionsService->get('maxGames');
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxTickets'} = $optionsService->get('maxTickets');
     $vars->{'data'}->{'options'}->{'lottery'}->{'gamePrice'} = $optionsService->get('gamePrice');
+    
+    my @activeTickets = $ticketDao->findActive();
+    $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'active'} = \@activeTickets;
+    my @notPaidTickets = $ticketDao->findNotPaid();
+    $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
+    my $totalSum = 0;
+    foreach my $ticket (@notPaidTickets)
+    {
+    	$totalSum += $ticket->getGamePrice() * $ticket->getGamesLeft();
+    }
+    $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $totalSum;
     
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
@@ -116,7 +131,7 @@ if($URL =~ /logout/)
     $cgiSession->clear('userId');   
     $redirect = "/";
 }
-if($URL =~ /\/ticket(\/|$)/)
+if(($URL =~ /\/ticket(\/|$)/) || ($URL =~ /\/game(\/|$)/))
 {
 	my $params = $CGI->Vars();
 	my $response = $gameController->process($URL, $params);

@@ -148,3 +148,165 @@
 2013/08/17 16:39:31 [75] Service.Game 67 - Users in Game: 0
 2013/08/17 16:39:31 [76] Service.Game 86 - Game Price: 0
 2013/08/17 16:39:31 [76] Service.Game 89 - Game #10 from 2013-8-17 16:39:31 was run.
+2013/08/17 20:02:47 [77] Service.Game 52 - Running Game.
+2013/08/17 20:02:47 [77] Service.Game 59 - Lucky numbers: 4 5 8 11 18 20 28 31
+2013/08/17 20:02:47 [79] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:02:47 [79] Service.Game 67 - Users in Game: 0
+2013/08/17 20:02:47 [80] Service.Game 86 - Game Price: 0
+2013/08/17 20:02:47 [81] Service.Game 94 - Game #11 from 2013-8-17 20:2:47 was run.
+2013/08/17 20:03:32 [50] Service.Game 52 - Running Game.
+2013/08/17 20:03:32 [51] Service.Game 59 - Lucky numbers: 8 10 14 24 25 26 27 30
+2013/08/17 20:03:32 [54] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:03:32 [54] Service.Game 67 - Users in Game: 0
+2013/08/17 20:03:32 [55] Service.Game 86 - Game Price: 0
+2013/08/17 20:03:32 [55] Service.Game 99 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 93.
+2013/08/17 20:06:07 [53] Service.Game 52 - Running Game.
+2013/08/17 20:06:07 [53] Service.Game 59 - Lucky numbers: 2 11 12 15 22 25 27 28
+2013/08/17 20:06:07 [54] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:06:07 [54] Service.Game 67 - Users in Game: 0
+2013/08/17 20:06:07 [55] Service.Game 86 - Game Price: 0
+2013/08/17 20:06:07 [57] Service.Game 100 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 94.
+2013/08/17 20:08:21 [62] Service.Game 52 - Running Game.
+2013/08/17 20:08:21 [62] Service.Game 59 - Lucky numbers: 2 3 4 5 10 11 14 26
+2013/08/17 20:08:21 [63] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:08:21 [63] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:08:21 [64] Service.Game 67 - Users in Game: 0
+2013/08/17 20:08:21 [64] Service.Game 86 - Game Price: 0
+2013/08/17 20:08:21 [64] Service.Game 89 - 1
+2013/08/17 20:08:21 [65] DAO.Abstract 138 - 
+2013/08/17 20:08:21 [65] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:08:21 [66] Service.Game 101 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 95.
+2013/08/17 20:09:35 [56] Service.Game 52 - Running Game.
+2013/08/17 20:09:35 [56] Service.Game 59 - Lucky numbers: 1 6 10 14 25 27 28 29
+2013/08/17 20:09:35 [57] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:09:35 [57] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:09:35 [58] Service.Game 67 - Users in Game: 0
+2013/08/17 20:09:35 [58] Service.Game 86 - Game Price: 0
+2013/08/17 20:09:35 [58] Service.Game 89 - 1
+2013/08/17 20:09:35 [59] DAO.Abstract 138 - 
+2013/08/17 20:09:35 [59] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:09:35 [60] Service.Game 101 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 95.
+2013/08/17 20:10:02 [85] Service.Game 52 - Running Game.
+2013/08/17 20:10:02 [85] Service.Game 59 - Lucky numbers: 5 7 8 10 15 18 22 27
+2013/08/17 20:10:02 [86] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:10:02 [95] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:10:02 [95] Service.Game 67 - Users in Game: 0
+2013/08/17 20:10:02 [95] Service.Game 86 - Game Price: 0
+2013/08/17 20:10:02 [96] Service.Game 89 - 1
+2013/08/17 20:10:03 [99] Service.Game 92 - 
+2013/08/17 20:10:03 [100] DAO.Abstract 138 - 
+2013/08/17 20:10:03 [100] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:10:03 [102] Service.Game 102 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 96.
+2013/08/17 20:10:54 [60] Service.Game 52 - Running Game.
+2013/08/17 20:10:54 [60] Service.Game 59 - Lucky numbers: 3 12 17 20 21 28 30 31
+2013/08/17 20:10:54 [61] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:10:54 [61] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:10:54 [61] Service.Game 67 - Users in Game: 0
+2013/08/17 20:10:54 [62] Service.Game 86 - Game Price: 0
+2013/08/17 20:10:54 [62] Service.Game 89 - 1
+2013/08/17 20:10:54 [68] Service.Game 94 - 
+2013/08/17 20:10:54 [69] DAO.Abstract 138 - 
+2013/08/17 20:10:54 [69] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:10:54 [70] Service.Game 104 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 98.
+2013/08/17 20:11:15 [53] Service.Game 52 - Running Game.
+2013/08/17 20:11:15 [53] Service.Game 59 - Lucky numbers: 2 3 4 9 16 17 19 21
+2013/08/17 20:11:15 [54] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:11:15 [54] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:11:15 [55] Service.Game 67 - Users in Game: 0
+2013/08/17 20:11:15 [55] Service.Game 86 - Game Price: 0
+2013/08/17 20:11:15 [55] Service.Game 89 - 1
+2013/08/17 20:11:15 [56] Service.Game 94 - 
+2013/08/17 20:11:15 [56] DAO.Abstract 138 - 
+2013/08/17 20:11:15 [56] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:11:15 [57] Service.Game 104 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 98.
+2013/08/17 20:14:45 [93] Service.Game 52 - Running Game.
+2013/08/17 20:14:45 [94] Service.Game 59 - Lucky numbers: 2 3 7 12 13 22 27 30
+2013/08/17 20:14:45 [94] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:14:45 [100] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:14:45 [101] Service.Game 67 - Users in Game: 0
+2013/08/17 20:14:45 [101] Service.Game 86 - Game Price: 0
+2013/08/17 20:14:45 [102] Service.Game 89 - 1
+2013/08/17 20:14:45 [102] Service.Game 94 - 1
+2013/08/17 20:14:45 [102] DAO.Abstract 138 - 1
+2013/08/17 20:14:45 [103] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:14:45 [109] Service.Game 104 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 98.
+2013/08/17 20:17:24 [56] Service.Game 52 - Running Game.
+2013/08/17 20:17:24 [57] Service.Game 59 - Lucky numbers: 1 4 5 6 14 20 24 30
+2013/08/17 20:17:24 [57] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:17:24 [58] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:17:24 [58] Service.Game 67 - Users in Game: 0
+2013/08/17 20:17:24 [58] Service.Game 86 - Game Price: 0
+2013/08/17 20:17:24 [59] Service.Game 89 - 1
+2013/08/17 20:17:24 [63] Service.Game 94 - 
+2013/08/17 20:17:24 [63] DAO.Abstract 138 - 
+2013/08/17 20:17:24 [63] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:17:24 [68] Service.Game 105 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 99.
+2013/08/17 20:20:10 [55] Service.Game 52 - Running Game.
+2013/08/17 20:20:10 [55] Service.Game 59 - Lucky numbers: 3 4 6 10 14 26 27 30
+2013/08/17 20:20:10 [56] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:20:10 [62] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:20:10 [62] Service.Game 67 - Users in Game: 0
+2013/08/17 20:20:10 [63] Service.Game 86 - Game Price: 0
+2013/08/17 20:20:10 [63] Service.Game 89 - 1
+2013/08/17 20:20:10 [63] Service.Game 94 - 
+2013/08/17 20:20:10 [82] Service.Game 105 - Game run was unsuccessful. Error was: DBD::mysql::db do failed: Duplicate entry 'transaction' for key 'name' at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 97.
+2013/08/17 20:32:08 [80] Service.Game 52 - Running Game.
+2013/08/17 20:32:08 [80] Service.Game 59 - Lucky numbers: 1 5 8 17 25 26 27 29
+2013/08/17 20:32:08 [81] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:32:08 [85] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:32:08 [85] Service.Game 67 - Users in Game: 0
+2013/08/17 20:32:08 [86] Service.Game 86 - Game Price: 0
+2013/08/17 20:32:08 [86] Service.Game 89 - 1
+2013/08/17 20:32:08 [89] Service.Game 94 - 
+2013/08/17 20:32:08 [116] DAO.Abstract 138 - 
+2013/08/17 20:32:08 [116] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:32:08 [117] Service.Game 105 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 99.
+2013/08/17 20:33:03 [55] Service.Game 52 - Running Game.
+2013/08/17 20:33:03 [55] Service.Game 59 - Lucky numbers: 2 6 8 10 12 17 23 26
+2013/08/17 20:33:03 [56] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:33:03 [56] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:33:03 [57] Service.Game 67 - Users in Game: 0
+2013/08/17 20:33:03 [57] Service.Game 86 - Game Price: 0
+2013/08/17 20:33:03 [58] Service.Game 90 - 
+2013/08/17 20:33:03 [59] DAO.Abstract 138 - 
+2013/08/17 20:33:03 [59] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:33:03 [60] Service.Game 96 - Game #2 from 2013-8-17 20:33:3 was run.
+2013/08/17 20:33:19 [48] Service.Game 52 - Running Game.
+2013/08/17 20:33:19 [49] Service.Game 59 - Lucky numbers: 4 6 11 18 19 23 25 29
+2013/08/17 20:33:19 [53] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:33:19 [54] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:33:19 [63] Service.Game 67 - Users in Game: 0
+2013/08/17 20:33:19 [63] Service.Game 86 - Game Price: 0
+2013/08/17 20:33:19 [64] Service.Game 90 - 
+2013/08/17 20:33:19 [66] DAO.Abstract 138 - 
+2013/08/17 20:33:19 [66] DAO.Abstract 140 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:33:19 [67] Service.Game 101 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 95.
+2013/08/17 20:35:01 [55] Service.Game 52 - Running Game.
+2013/08/17 20:35:01 [56] Service.Game 59 - Lucky numbers: 1 2 10 13 15 19 23 28
+2013/08/17 20:35:01 [56] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:35:01 [57] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:35:01 [57] Service.Game 67 - Users in Game: 0
+2013/08/17 20:35:01 [57] Service.Game 86 - Game Price: 0
+2013/08/17 20:35:01 [58] Service.Game 90 - 
+2013/08/17 20:35:01 [59] DAO.Abstract 139 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:35:01 [64] Service.Game 101 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 95.
+2013/08/17 20:35:13 [48] Service.Game 52 - Running Game.
+2013/08/17 20:35:13 [49] Service.Game 59 - Lucky numbers: 2 4 10 11 14 18 20 30
+2013/08/17 20:35:13 [49] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/17 20:35:13 [53] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:35:13 [53] Service.Game 67 - Users in Game: 0
+2013/08/17 20:35:13 [53] Service.Game 86 - Game Price: 0
+2013/08/17 20:35:13 [54] DAO.Abstract 139 - Add: INSERT INTO `games` ( `lucky_numbers`,`date`,`users`,`sum`,`tickets` ) VALUES ( ?,?,?,?,? )
+2013/08/17 20:35:13 [55] Service.Game 100 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 94.
+2013/08/17 20:36:29 [59] Service.Game 52 - Running Game.
+2013/08/17 20:36:29 [60] Service.Game 59 - Lucky numbers: 3 11 24 25 26 27 28 31
+2013/08/17 20:36:29 [60] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:36:29 [60] Service.Game 67 - Users in Game: 0
+2013/08/17 20:36:29 [61] Service.Game 86 - Game Price: 0
+2013/08/17 20:36:29 [68] Service.Game 100 - Game run was unsuccessful. Error was: Can't locate object method "writeGameStat1" via package "Service::Game" at /mnt/hgfs/Development/Perl/pemes/lova/code/lib//Service/Game.pm line 94.
+2013/08/17 20:36:52 [51] Service.Game 52 - Running Game.
+2013/08/17 20:36:52 [51] Service.Game 59 - Lucky numbers: 1 4 5 6 11 23 28 30
+2013/08/17 20:36:52 [53] Service.Game 63 - Tickets in Game: 0
+2013/08/17 20:36:52 [53] Service.Game 67 - Users in Game: 0
+2013/08/17 20:36:52 [54] Service.Game 86 - Game Price: 0
+2013/08/17 20:36:52 [58] Service.Game 95 - Game #7 from 2013-8-17 20:36:52 was run.

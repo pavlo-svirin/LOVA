@@ -85,10 +85,21 @@ sub runGame
     $game->setSum($gamePrice);
     $log->info("Game Price: ", $game->getSum());
 
-    $gameDao->save($game);
-    $log->info("Game #", $game->getId(), " from ", $game->getDate(), " was run.");
-    
-    $self->writeGameStat($game, %ticketsByGuessedNumbers);
+    # Run transaction
+    $::sql->handle->begin_work();
+    eval
+    {
+    	$::sql->handle->do("UPDATE `options` set `value`='" . time . "' where `name`='transaction'");
+        $gameDao->save($game);
+        $self->writeGameStat($game, %ticketsByGuessedNumbers);
+        $log->info("Game #", $game->getId(), " from ", $game->getDate(), " was run.");
+        $::sql->handle->commit();
+    };
+    if($@)
+    {
+    	$log->error("Game run was unsuccessful. Error was: ", $@);
+    	eval{ $::sql->handle->rollback(); };
+    }
 }
 
 # Filter out numbers < 1 and > maxNumber

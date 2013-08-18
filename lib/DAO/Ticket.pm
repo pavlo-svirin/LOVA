@@ -14,6 +14,14 @@ sub findActive
     });
 }
 
+sub findNotPaid
+{
+    my $self = shift;
+    return $self->findSql({
+        where => " AND `paid` IS NULL AND `games_left` > 0"
+    });
+}
+
 sub findExtJs
 {
     my ($self, $params) = @_;
@@ -30,5 +38,6 @@ sub findExtJs
         limit => $params->{'limit'} 
     });
 }
+
 
 1;

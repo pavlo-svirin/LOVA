@@ -51,7 +51,30 @@ jQuery(function($) {
         event.preventDefault();
     });
 
-    
+    $('#payDiv').on('change', 'input[type=checkbox]', function(event) {
+    	debugger;
+    	var acc = $(this).attr("name");
+    	var selected = $('input[name=selectedAccounts]').val().split(",");
+    	var i = $.inArray(acc, selected);
+		if(i >= 0) { 				
+			selected.splice(i, 1); 
+		}
+    	if($(this).attr('checked')) {
+    		selected.push(acc);         
+    	}
+    	$('input[name=selectedAccounts]').val(selected.join(","));
+    	
+    	var sum = 0;
+    	for(var j = 0; j < selected.length; j++) {
+    		if(session[selected[j]]) {
+        		sum += session[selected[j]];
+    		}
+    	}
+    	if(sum > session.totalSum) {
+    		sum = session.totalSum;
+    	}
+    	$('#selectedSum').html("$" + sum);
+    });
 });
 
 function sendFirstEmail() {
@@ -168,7 +191,6 @@ function incGame() {
 		val = config.maxGames;
 	}
 	$("input[name=games_count]").val(val);
-//  updateSum();
 }
 
 function decGame() {
@@ -181,7 +203,6 @@ function decGame() {
 		val = config.maxGames;   
 	}
 	$("input[name=games_count]").val(val);
-//  updateSum();
 }
 
 function incTickets() {
@@ -194,7 +215,6 @@ function incTickets() {
 		val = config.maxTickets;
 	}
 	$("input[name=tickets_count]").val(val);
-//  updateSum();
 }
 
 function decTickets() {
@@ -207,7 +227,6 @@ function decTickets() {
 		val = config.maxTickets;   
 	}
 	$("input[name=tickets_count]").val(val);
-//  updateSum();
 }
 
 function addTicket() {
@@ -216,28 +235,5 @@ function addTicket() {
 		alert("Вы выбрали не все числа. Осталось " + (config.maxNumbers - selected));
 	} else if(selected == config.maxNumbers) {
 		$("form[name=lottery]").attr("action", "/cab/ticket/add/").submit();
-/*        $.ajax({
-            type: "post",
-            url: "/cab/ticket/add/ajax/",
-            dataType: 'json',
-            data: {
-            	selected_lottery_numbers: $("input[name=selected_lottery_numbers]").val(),
-            	games_count: $("input[name=games_count]").val()
-            },
-            error: function(data, status) {
-				alert("Произошла ошибка, попробуйте позже.");
-				// send log
-            },
-            success: function(data, status) {
-            	// $form.find("button[name='invite']") 
-            	//	.removeClass("disabled")
-            	//	.removeAttr("disabled");
-            	debugger;
-    			if(data.success) {
-    			} else {
-    				
-    			}
-            }
-        });*/
 	}
 }

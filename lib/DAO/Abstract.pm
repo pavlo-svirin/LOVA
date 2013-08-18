@@ -1,5 +1,8 @@
 package DAO::Abstract;
 use strict;
+require Log::Log4perl;
+
+my $log = Log::Log4perl->get_logger("DAO::Abstract");
 
 sub new
 {
@@ -33,6 +36,7 @@ sub find
     {
     	$query .= " ORDER BY `$order`";
     }
+    $log->trace("Find: ", $query);
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute(@values);
         
@@ -63,7 +67,8 @@ sub findSql
     	push(@values, $start, $limit);
         $query .= " LIMIT ?, ?" 
     }
-
+    
+    $log->trace("FindSql: ", $query);
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute(@values);
         
@@ -99,7 +104,9 @@ sub delete
 {
     my ($self, $object) = @_;
     my $table = $self->getTable();
-    my $sth = $::sql->handle->prepare("DELETE FROM `$table` WHERE `id` = ?");
+    my $query = "DELETE FROM `$table` WHERE `id` = ?";
+    $log->trace("Delete: ", $query);
+    my $sth = $::sql->handle->prepare($query);
     $sth->execute($object->getId());
 }
 
@@ -130,8 +137,8 @@ sub add
         push (@fieldsList, "`$field`");
         push (@tokens, "?");
     }
-    
     my $query = "INSERT INTO `$table` ( " . join(",", @fieldsList) . " ) VALUES ( " . join(",", @tokens) . " )";
+    $log->trace("Add: ", $query);
     my $sth = $::sql->handle->prepare($query);
     $sth->execute(@values);
     $object->setId($::sql->handle->{'mysql_insertid'});
@@ -150,8 +157,8 @@ sub update
         push (@values, $object->get($field));
     }
 	
-    # TODO-VZ: add debug message
     my $query = "UPDATE `$table` SET " . join(",", @fieldsList) . "WHERE `id` = ?";
+    $log->trace("Update: ", $query);
     my $sth = $::sql->handle->prepare($query);
     $sth->execute(@values, $object->getId());
 }

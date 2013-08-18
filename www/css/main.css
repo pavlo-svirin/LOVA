@@ -128,7 +128,6 @@ td.total_win
   font-weight: bold;
 }
 
-.next_game
-{
-  font-size: 100%;
-}
+.next_game { font-size: 100%; }
+
+#payDiv .span1 { font-weight: bold; }

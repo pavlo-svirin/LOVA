@@ -38,6 +38,11 @@ sub process
     {
         $self->deleteTicket($params, $user);
     }
+    elsif($url =~ /\/pay\//)
+    {
+        $response->{'status'} = 'html';
+        $response->{'data'} = $self->payGameWindow($params, $user); 
+    }
     return $response;
 }
 
@@ -54,6 +59,14 @@ sub addTicket
 
 sub deleteTicket
 {
+}
+
+sub payGameWindow
+{
+    my($self, $params, $user) = @_;
+    my ($html, $vars);
+    $::template->process("../tmpl/part/pay.tmpl", $vars, \$html);
+    return $html;	
 }
 
 1;

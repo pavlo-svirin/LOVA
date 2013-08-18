@@ -37,8 +37,11 @@
           gamePrice  : [% data.options.lottery.gamePrice %]
         };
         var session = {
-//          totalSum   : [% data.session.totalSum %],
-//          tickets    : [% data.session.tickets.size %]
+            accPersonal : [% data.account.personal || 0 %], 
+            accFond     : [% data.account.fond || 0 %],
+            accReferal  : [% data.account.referal || 0 %],
+            accWin      : [% data.account.win || 0 %],
+            totalSum    : [% data.lottery.session.totalSum || 0 %]
         };
     </script>            
 </head>
@@ -66,14 +69,14 @@
                     <td width="21%" class="statHeader registered">Выигрыш</td>
                 </tr>
                 <tr>
-                    <td class="stat" rowspan="1"><h2>$0.00</h2></td>
+                    <td class="stat" rowspan="1"><h2>$[% data.account.personal || "0.00" %]</h2></td>
                     <td width="5%" rowspan="1"></td>                    
                     <td class="stat" rowspan="1"><h2>$[% data.account.fond || "0.00" %]</h2></td>
                     <td width="5%" rowspan="1"></td>                    
                     <td class="stat"><h3>$[% data.account.referal || "0.00" %]</h2></td>
                     <td class="stat"><h3>[% data.referals || "0" %]</h2></td>
                     <td width="5%" rowspan="1"></td>                    
-                    <td class="stat" rowspan="1"><h2>$0.00</h2></td>
+                    <td class="stat" rowspan="1"><h2>$[% data.account.win || "0.00" %]</h2></td>
                 </tr>
                 <tr><td class="row-separator"></td></tr>
                 <tr>
@@ -107,7 +110,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="restoreLabel">[% content.INVITE_LABEL %]</h3>
-      </div>
+      < /div>
       <div class="modal-body">
           [% IF !data.user.getLastName() %]
           <div class="alert alert-error">[% content.INVITE_ALERT_PROFILE %]</div>

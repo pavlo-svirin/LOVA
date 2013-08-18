@@ -3,10 +3,10 @@
   <tr>
     <td width="25%">
         <table width="100%">
-            <tr><td>Оплаченные билеты:</td><td>3</td></tr>
-            <tr><td>Заполненные билеты:</td><td>0</td></tr>
+            <tr><td>Оплаченные билеты:</td><td>[% data.lottery.session.tickets.active.size || 0 %]</td></tr>
+            <tr><td>Заполненные билеты:</td><td>[% data.lottery.session.tickets.new.size || 0 %]</td></tr>
             <tr><td>К оплате:</td><td>$[% data.lottery.session.totalSum || "0.00" %]</td></tr>            
-            <tr><td colspan="2" align="center"><button class="btn btn-success" [% IF ! data.lottery.session.totalSum %]disabled="disabled"[% END %] type="button">Оплатить</button></td></tr>
+            <tr><td colspan="2" align="center"><button class="btn btn-success" [% IF ! data.lottery.session.totalSum %]disabled="disabled"[% END %] href="#payDiv" data-toggle="modal" type="button">Оплатить</button></td></tr>
         </table>
     </td>
     <td class="numbers">[% SET num = 0 %]
@@ -53,7 +53,7 @@
       <br>Ваш лучший результат: лучше чем у 3 пользователей
     </td>
     <td class="next_game">
-      Следующие розыгрышы <span  class="" style="font-size:75%;color:#062170;vertical-align: super;">+02:00</span>
+      Следующие розыгрышы <span  class="" style="font-size:75%;color:#062170;vertical-align: super;">UTC</span>
       <br>#3: 2013-08-08 15:00
       <br>#4: 2013-08-15 15:00
       [% FOREACH nextGame IN data.session.nextGames %]
@@ -62,4 +62,57 @@
     </td>
   </tr>
 </table>
-</form>        
+</form> 
+
+<div id="payDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="payLabel" aria-hidden="true">
+  <form id="payForm" data-async class="form-horizontal" method="POST" action="/cab/game/pay/">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="payLabel">Оплатить</h3>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+        <div class="span1"></div>
+        <div class="span1 muted"><strong>Баланс</strong></div>
+        <div class="span3 muted"><strong>Источник</strong></div>
+    </div>    
+    <div class="row">
+        <div class="span1"><input type="checkbox" name="accFond" value=""></div>
+        <div class="span1 text-left text-success">$[% data.account.fond || "0.00" %]</div>
+        <div class="span3 text-left">баланс фонда</div>
+    </div>    
+    <div class="row">
+        <div class="span1"><input type="checkbox" name="accReferal" value=""></div>
+        <div class="span1 text-left text-success">$[% data.account.referal %]</div>
+        <div class="span3 text-left">баланс за привлечение</div>
+    </div>    
+    <div class="row">
+        <div class="span1"><input type="checkbox" name="accWin" value=""></div>
+        <div class="span1 text-left text-success">$[% data.account.win || "0.00" %]</div>
+        <div class="span3 text-left">призовой баланс</div>
+    </div>
+    <div class="row">
+        <div class="span1"><input type="checkbox" name="accPersonal" value=""></div>
+        <div class="span1 text-left text-success">$[% data.account.personal || "0.00" %]</div>
+        <div class="span3 text-left">вводный баланс</div>
+    </div>
+    <div class="row"><div class="row-separator"></div></div>    
+    <div class="row">
+        <div class="span1"></div>
+        <div class="span1 text-left text-info" id="selectedSum">$0.00</div>
+        <div class="span3 text-left">выбранная Вами сумма</div>
+    </div>    
+    <input type="hidden" name="selectedAccounts">
+    <div class="row">
+        <div class="span1"></div>
+        <div class="span1 text-left text-warning">$[% data.lottery.session.totalSum || "0.00" %]</div>
+        <div class="span3 text-left">Ваш заказ [% data.lottery.session.tickets.new.size || 0 %] билета</div>
+    </div>    
+  </div>
+  <div class="modal-footer">
+    <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    <button name="pay" type="submit" class="btn btn-primary">Оплатить</button>
+  </div>
+  </form>
+</div>
+       
