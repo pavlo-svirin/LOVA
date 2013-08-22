@@ -24,6 +24,7 @@ use Service::User;
 use Service::Email;
 use Service::HtmlContent;
 use Service::Game;
+use Service::Ticket;
 
 use DAO::Abstract;
 use DAO::EmailTemplates;

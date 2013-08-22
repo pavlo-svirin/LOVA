@@ -22,29 +22,6 @@ sub new
     return $self;
 }
 
-sub addTicket
-{
-    my($self, $params) = @_;
-    my $games = $params->{'games'};
-    my @numbers = _validateNumbers($::optionsService->get('maxNumber'), @{$params->{'numbers'}});
-    my $userId = $params->{'userId'};
-    my $gamePrice = $params->{'gamePrice'} || $::optionsService->get('gamePrice');  
-    if($games && @numbers && $userId && $gamePrice
-        && $games > 0
-        && ($games <= $::optionsService->get('maxGames'))
-        && (scalar(@numbers) == $::optionsService->get('maxNumbers')))
-    {
-    	my $ticket = Data::Ticket->new();
-    	$ticket->setNumbers(@numbers);
-    	$ticket->setGames($games);
-        $ticket->setGamesLeft($games);
-    	$ticket->setUserId($userId);
-    	$ticket->setCreated($::sql->now());
-        $ticket->setGamePrice($gamePrice);
-        $ticketDao->save($ticket);    
-    }	
-}
-
 sub runGame
 {
 	my $self = shift;
@@ -102,32 +79,6 @@ sub runGame
     }
 }
 
-# Filter out numbers < 1 and > maxNumber
-# Filter out duplicates
-sub _validateNumbers
-{
-    my $maxNumber = shift;
-    my @numbers;
-    foreach my $num (@_)
-    {
-    	if(($num > 0) && ($num <= $maxNumber) && !_inArray($num, @numbers))
-    	{
-    		push(@numbers, $num);
-    	}
-    }
-    return @numbers;
-}
-
-sub _inArray
-{
-	my $num = shift;
-	foreach my $elem (@_)
-	{
-		return 1 if($num == $elem);
-	}
-	return 0;
-}
-
 sub getLuckyNumbers
 {
     my $self = shift;
@@ -157,6 +108,33 @@ sub getLuckyNumbers
     return @numbers;
 }
 
+
+# Filter out numbers < 1 and > maxNumber
+# Filter out duplicates
+sub _validateNumbers
+{
+    my $maxNumber = shift;
+    my @numbers;
+    foreach my $num (@_)
+    {
+        if(($num > 0) && ($num <= $maxNumber) && !_inArray($num, @numbers))
+        {
+            push(@numbers, $num);
+        }
+    }
+    return @numbers;
+}
+
+sub _inArray
+{
+    my $num = shift;
+    foreach my $elem (@_)
+    {
+        return 1 if($num == $elem);
+    }
+    return 0;
+}
+
 sub writeGameStat
 {
     my ($self, $game, %ticketsByGuessedNumbers) = @_;	
@@ -176,17 +154,6 @@ sub writeGameStat
             $sth->execute($game->getId(), $ticket->getId(), $num);
         }   	
     }
-}
-
-sub calcTicketsSum
-{
-	my ($self, @tickets) = @_;
-	my $sum = 0;
-    foreach my $ticket (@tickets)
-    {
-        $sum += $ticket->getGamePrice() * $ticket->getGamesLeft();
-    }
-	return $sum;
 }
 
 1;

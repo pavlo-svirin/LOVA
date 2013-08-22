@@ -6,7 +6,7 @@ use Log::Log4perl;
 require DAO::Ticket;
 
 
-my $log = Log::Log4perl->get_logger("Service::Game");
+my $log = Log::Log4perl->get_logger("Controller::Game");
 my $ticketDao = new DAO::Ticket();
 
 sub new
@@ -19,15 +19,7 @@ sub new
         $self->{$_} = $params{$_};
     }
     bless($self, $class);              # гибкий вызов функции bless
-    $self->init();    
     return $self;
-}
-
-sub init
-{
-	my $self = shift;
-    $self->{'gameService'} = new Service::Game();
-    $self->{'userService'} = new Service::User();
 }
 
 sub process 
@@ -35,7 +27,7 @@ sub process
     my($self, $url, $params) = @_;
     my $response = { 'type' => 'redirect', 'data' => '/cab/' };
     
-    my $user = $self->{'userService'}->getCurrentUser();
+    my $user = $::userService->getCurrentUser();
     return unless($user);
     
     if($url =~ /\/add\//)
@@ -62,7 +54,7 @@ sub addTicket
 	my $games = $params->{'games_count'};
 	if(@numbers && $games)
 	{
-		$self->{'gameService'}->addTicket({userId => $user->getId(), games => $games, numbers => \@numbers});
+		$::ticketService->addTicket({userId => $user->getId(), games => $games, numbers => \@numbers});
 	}
 }
 
@@ -81,94 +73,25 @@ sub payGame
     	return $response;
     }
     
-    my @tickets = $ticketDao->findNotPaid($user->getId());
-    if(scalar @tickets == 0)
-    {
-        $response->{'message'} = "Билеты для оплаты не найдены."; 
-        return $response;
-    }
-    
-    my $sum = $::gameService->calcTicketsSum(@tickets);
-    
     my @accounts = map { lc }
                    map { $_ =~ s/acc//; $_ }
                    grep { /^[a-z]+$/i }
                    grep { /acc/ }
                    split(",", $params->{'selectedAccounts'});
-    
-    # find is user has sum on selected accounts
-    $::userService->loadAccount($user);
 
-    $log->info("User <", $user->getId(), "> is trying to buy ",
-        scalar @tickets, " tickets for total sum: \$", $sum,
-        " from accounts: ", join(", ", @accounts), ". His debit: ", join(" ", %{$user->getAccount()}));
-
-    my $debit = 0;
-    foreach my $account (@accounts)
+    if (! @accounts )
     {
-        $debit += $user->getAccount()->{$account};
-    }
-    $log->debug("User debit: ", $debit);
-    if($debit < $sum)
-    {
-       $response->{'message'} = "На выбранных счетах недостаточная сумма для оплаты."; 
-       return $response;
-    }
-
-    # save accounts stats to verify during transaction
-    my %saved;
-    foreach my $account (keys %{$user->getAccount()})
-    {
-    	$saved{$account} = $user->getAccount()->{$account};
-    }
-        
-    # start transaction
-    $::sql->handle->begin_work();
-    eval
-    {
-        # if any of user accounts differs from beginning - throw error
-        $::userService->loadAccount($user);
-        foreach my $account (keys %{$user->getAccount()})
-        {
-            if($user->getAccount()->{$account} != $saved{$account})
-            {
-                die "Account $account has different value: " . $user->getAccount()->{$account};
-            }
-        } 
-    	
-	    foreach my $account (@accounts)
-	    {
-	    	last if($sum <= 0);
-	    	my $credit = $user->getAccount()->{$account};
-	    	if($credit < $sum)
-	    	{
-	    		$sum -= $credit;
-	            $user->getAccount()->{$account} = 0;
-	    	}
-	    	else
-	    	{
-                $user->getAccount()->{$account} = $credit - $sum;
-	    	}
-	    }
-	    $::userService->saveAccount($user);
-	    
-	    # save tickets stats
-	    foreach my $ticket(@tickets) 
-	    {
-	    	$ticket->setPaid($::sql->now());
-	    	$ticketDao->save($ticket);
-	    }
-	    
-    	$::sql->handle->commit();
-    };
-    if($@)
-    {
-        $log->error("Payment was unsuccessful: ", $@);
-        eval{ $::sql->handle->rollback(); };
-        $response->{'message'} = "Произошла ошибка, обновите страницу и попробуйте ещё раз.";
+        $response->{'message'} = "Выберите счет для оплаты."; 
         return $response;
     }
-    $log->info("Payment was done successfuly.");
+
+    eval { $::ticketService->pay(@accounts); };
+    if($@)
+    {
+        $response->{'message'} = $@;
+        return $response;
+    }
+    
     $response->{'success'} = JSON::true;
     $response->{'message'} = "Оплата произведена успешно.";
     return $response;

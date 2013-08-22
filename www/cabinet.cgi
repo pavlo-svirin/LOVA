@@ -67,7 +67,7 @@ my $user = $userService->findById($userId);
 my $lang = &getLang();
 our $emailService = new Service::Email(userService => $userService, lang => $lang);
 our $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
-our $gameService = new Service::Game();
+our $ticketService = new Service::Ticket();
 
 my $gameController = new Controller::Game();
 
@@ -102,7 +102,7 @@ if($user)
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'active'} = \@activeTickets;
     my @notPaidTickets = $ticketDao->findNotPaid();
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
-    $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $gameService->calcTicketsSum(@notPaidTickets);
+    $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $ticketService->calcTicketsSum(@notPaidTickets);
     
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {

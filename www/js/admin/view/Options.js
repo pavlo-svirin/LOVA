@@ -93,6 +93,11 @@ Ext.define('Loto.view.Options', {
                 allowDecimals: true,
                 decimalPrecision: 2,
                 step: 0.01,
+            },
+            {
+            	  xtype: 'textfield',
+            	  fieldLabel: 'Буферное время (мин)',
+            	  name: 'bufferTime'
             }
           ]
       },
