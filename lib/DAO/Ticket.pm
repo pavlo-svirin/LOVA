@@ -8,18 +8,18 @@ sub getModel { return "Data::Ticket"; }
 
 sub findActive
 {
-	my $self = shift;
-    return $self->findSql({
-        where => " AND `paid` IS NOT NULL AND `games_left` > 0"
-    });
+	my ($self, $userId) = @_;
+	my $where = " AND `paid` IS NOT NULL AND `games_left` > 0";
+	$where .= " AND `user_id` = " . $::sql->quote($userId) if($userId);
+    return $self->findSql({ where => $where });
 }
 
 sub findNotPaid
 {
-    my $self = shift;
-    return $self->findSql({
-        where => " AND `paid` IS NULL AND `games_left` > 0"
-    });
+    my ($self, $userId) = @_;
+    my $where = " AND `paid` IS NULL AND `games_left` > 0";
+    $where .= " AND `user_id` = " . $::sql->quote($userId) if($userId);
+    return $self->findSql({ where => $where });
 }
 
 sub findExtJs

@@ -50,9 +50,63 @@ jQuery(function($) {
  
         event.preventDefault();
     });
-
+    
+    $('#payForm').on('submit', function(event) {
+        var $form = $(this);
+        
+    	$form.find("button[name='pay']") 
+    		.addClass("disabled")
+    		.attr("disabled", "disabled");        
+ 
+		$form.find("div.alert")
+			.addClass("hide")
+			.removeClass("alert-error")
+			.removeClass("alert-success");
+    	
+        $.ajax({
+            type: $form.attr('method'),
+            url: $form.attr('action') + "/ajax/",
+            data: $form.serialize(),
+            dataType: 'json',
+            error: function(data, status) {
+            	$form.find("button[name='pay']") 
+            		.removeClass("disabled")
+            		.removeAttr("disabled");
+            	
+				$form.find("div.alert")
+					.removeClass("hide")
+					.addClass("alert-error")
+					.html("Произошла ошибка, попробуйте позже.");
+            },
+            success: function(data, status) {
+    			if(data.success)
+    			{
+    				$form.find("div.alert")
+						.removeClass("hide")
+						.removeClass("alert-error")
+						.addClass("alert-success")
+						.html(data.message);
+    				top.location = "/cab/";
+    			}
+    			else
+    			{
+                	$form.find("button[name='pay']") 
+                		.removeClass("disabled")
+            			.removeAttr("disabled");
+    				
+    				$form.find("div.alert")
+						.removeClass("hide")
+						.removeClass("alert-success")
+						.addClass("alert-error")
+						.html(data.message);
+    			}
+            }
+        });
+ 
+        event.preventDefault();
+    });
+    
     $('#payDiv').on('change', 'input[type=checkbox]', function(event) {
-    	debugger;
     	var acc = $(this).attr("name");
     	var selected = $('input[name=selectedAccounts]').val().split(",");
     	var i = $.inArray(acc, selected);
@@ -74,6 +128,10 @@ jQuery(function($) {
     		sum = session.totalSum;
     	}
     	$('#selectedSum').html("$" + sum);
+		$('#payForm').find("div.alert")
+			.addClass("hide")
+			.removeClass("alert-error")
+			.removeClass("alert-success");    	
     });
 });
 

@@ -310,3 +310,57 @@
 2013/08/17 20:36:52 [53] Service.Game 67 - Users in Game: 0
 2013/08/17 20:36:52 [54] Service.Game 86 - Game Price: 0
 2013/08/17 20:36:52 [58] Service.Game 95 - Game #7 from 2013-8-17 20:36:52 was run.
+2013/08/20 21:27:56 [344] Service.Game 96 - User <34> pays 2 tickets for total sum: $0.05 from accounts: accwin
+2013/08/20 21:28:49 [416] Service.Game 99 - User <34> pays 2 tickets for total sum: $0.05 from accounts: 1
+2013/08/20 21:30:00 [356] Service.Game 99 - User <34> pays 2 tickets for total sum: $0.05 from accounts: 1
+2013/08/20 21:30:50 [340] Service.Game 99 - User <34> pays 2 tickets for total sum: $0.05 from accounts: 1
+2013/08/20 21:31:16 [345] Service.Game 99 - User <34> pays 2 tickets for total sum: $0.05 from accounts: win
+2013/08/20 21:33:24 [368] Service.Game 99 - User <34> pays 2 tickets for total sum: $0.05 from accounts: win, fond
+2013/08/20 21:39:35 [351] Service.Game 101 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win, fond His debit: HASH(0xa3d5b0c)
+2013/08/20 21:39:42 [354] Service.Game 101 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win His debit: HASH(0xac17a84)
+2013/08/20 21:40:38 [321] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win His debit: fond0.50referal0.02personal2.00
+2013/08/20 21:40:38 [321] Service.Game 110 - User debit: 0
+2013/08/20 21:41:04 [360] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win, referal His debit: fond0.50referal0.02personal2.00
+2013/08/20 21:41:04 [360] Service.Game 110 - User debit: 0.02
+2013/08/20 21:41:51 [383] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win, referal, fond. His debit: fond 0.50 referal 0.02 personal 2.00
+2013/08/20 21:41:51 [384] Service.Game 110 - User debit: 0.52
+2013/08/20 21:42:00 [322] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win, referal. His debit: fond 0.50 referal 0.02 personal 2.00
+2013/08/20 21:42:00 [322] Service.Game 110 - User debit: 0.02
+2013/08/20 21:42:13 [308] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: fond. His debit: fond 0.50 referal 0.02 personal 2.00
+2013/08/20 21:42:13 [308] Service.Game 110 - User debit: 0.5
+2013/08/20 22:01:01 [277] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win. His debit: fond 0.50 referal 0.02 personal 2.00
+2013/08/20 22:01:01 [277] Service.Game 110 - User debit: 0
+2013/08/20 22:01:49 [275] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win, fond. His debit: fond 0.50 referal 0.02 personal 2.00
+2013/08/20 22:01:49 [276] Service.Game 110 - User debit: 0.5
+2013/08/20 22:02:28 [324] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win, fond. His debit: fond 0.45 referal 0.02 personal 2.00
+2013/08/20 22:02:28 [324] Service.Game 110 - User debit: 0.45
+2013/08/20 22:02:56 [344] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win, fond. His debit: fond 0.40 referal 0.02 personal 2.00
+2013/08/20 22:02:56 [345] Service.Game 110 - User debit: 0.4
+2013/08/20 22:04:45 [365] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: referal, fond. His debit: fond 0.35 referal 0.02 personal 2.00
+2013/08/20 22:04:46 [370] Service.Game 110 - User debit: 0.37
+2013/08/20 22:05:24 [373] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: referal. His debit: fond 0.32 referal 0.00 personal 2.00
+2013/08/20 22:05:24 [374] Service.Game 110 - User debit: 0
+2013/08/20 22:06:01 [337] Service.Game 103 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: win, referal. His debit: fond 0.32 referal 0.00 personal 2.00
+2013/08/20 22:06:01 [338] Service.Game 110 - User debit: 0
+2013/08/21 22:34:10 [364] Service.Game 104 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: fond, personal. His debit: fond 0.32 referal 0.00 personal 2.00
+2013/08/21 22:34:10 [364] Service.Game 111 - User debit: 2.32
+2013/08/21 22:34:10 [413] Service.Game 166 - Pay was unsuccessful: DBD::mysql::st execute failed: Unknown column '0' in 'field list' at /mnt/hgfs/Development/Perl/pemes/LoVa/code/www/../lib//DAO/Abstract.pm line 163.
+2013/08/21 22:36:14 [352] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/21 22:36:14 [353] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NULL AND `games_left` > 0
+2013/08/21 22:36:14 [365] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NULL AND `games_left` > 0 AND `user_id` = '34'
+2013/08/21 22:36:14 [365] Service.Game 104 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: fond, personal. His debit: fond 0.32 referal 0.00 personal 2.00
+2013/08/21 22:36:14 [366] Service.Game 111 - User debit: 2.32
+2013/08/21 22:36:14 [370] DAO.Abstract 161 - Update: UPDATE `tickets` SET `0` = ? ,`1` = ? WHERE `id` = ?
+2013/08/21 22:36:14 [371] Service.Game 166 - Payment was unsuccessful: DBD::mysql::st execute failed: Unknown column '0' in 'field list' at /mnt/hgfs/Development/Perl/pemes/LoVa/code/www/../lib//DAO/Abstract.pm line 163.
+2013/08/21 22:38:12 [219] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/21 22:38:12 [219] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NULL AND `games_left` > 0
+2013/08/21 22:38:12 [222] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NULL AND `games_left` > 0 AND `user_id` = '34'
+2013/08/21 22:38:12 [223] Service.Game 104 - User <34> is trying to buy 2 tickets for total sum: $0.05 from accounts: fond, personal. His debit: fond 0.32 referal 0.00 personal 2.00
+2013/08/21 22:38:12 [223] Service.Game 111 - User debit: 2.32
+2013/08/21 22:38:12 [224] DAO.Abstract 161 - Update: UPDATE `tickets` SET `games_left` = ? ,`paid` = ? WHERE `id` = ?
+2013/08/21 22:38:12 [225] DAO.Abstract 161 - Update: UPDATE `tickets` SET `games_left` = ? ,`paid` = ? WHERE `id` = ?
+2013/08/21 22:38:12 [230] Service.Game 171 - Payment was done successfuly.
+2013/08/21 22:38:16 [394] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NOT NULL AND `games_left` > 0
+2013/08/21 22:38:16 [395] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `paid` IS NULL AND `games_left` > 0
+2013/08/21 22:38:16 [396] DAO.Abstract 39 - Find: SELECT * FROM `html_content` WHERE 1 = 1 AND `lang` = ? AND `page` = ?
+2013/08/21 22:39:11 [219] DAO.Abstract 71 - FindSql: SELECT * FROM `tickets` WHERE 1 = 1  AND `created` >= '2013-08-01 00:00:00' AND `created` <= '2013-08-31 23:59:59' AND `paid` IS NOT NULL AND `games_left` > 0 LIMIT ?, ?

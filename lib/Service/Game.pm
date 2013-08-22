@@ -178,5 +178,15 @@ sub writeGameStat
     }
 }
 
+sub calcTicketsSum
+{
+	my ($self, @tickets) = @_;
+	my $sum = 0;
+    foreach my $ticket (@tickets)
+    {
+        $sum += $ticket->getGamePrice() * $ticket->getGamesLeft();
+    }
+	return $sum;
+}
 
 1;

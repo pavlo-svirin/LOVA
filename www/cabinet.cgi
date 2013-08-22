@@ -67,6 +67,7 @@ my $user = $userService->findById($userId);
 my $lang = &getLang();
 our $emailService = new Service::Email(userService => $userService, lang => $lang);
 our $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
+our $gameService = new Service::Game();
 
 my $gameController = new Controller::Game();
 
@@ -101,12 +102,7 @@ if($user)
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'active'} = \@activeTickets;
     my @notPaidTickets = $ticketDao->findNotPaid();
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
-    my $totalSum = 0;
-    foreach my $ticket (@notPaidTickets)
-    {
-    	$totalSum += $ticket->getGamePrice() * $ticket->getGamesLeft();
-    }
-    $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $totalSum;
+    $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $gameService->calcTicketsSum(@notPaidTickets);
     
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
@@ -135,16 +131,16 @@ if(($URL =~ /\/ticket(\/|$)/) || ($URL =~ /\/game(\/|$)/))
 {
 	my $params = $CGI->Vars();
 	my $response = $gameController->process($URL, $params);
-	if($response->{'status'} eq "redirect")
+	if($response->{'type'} eq "redirect")
 	{
         print $CGI->redirect(-uri => $response->{'data'}, -cookie => $cookie);
 	}
-    elsif($response->{'status'} eq "ajax")
+    elsif($response->{'type'} eq "ajax")
     {
         print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
         print $json->encode($response->{'data'});       
     }
-    elsif($response->{'status'} eq "html")
+    elsif($response->{'type'} eq "html")
     {
         print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
         print $response->{'data'};

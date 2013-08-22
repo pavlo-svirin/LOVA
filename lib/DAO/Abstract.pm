@@ -151,7 +151,7 @@ sub update
 
     my @fields = $object->getSqlUpdateFields();
     my (@values, @fieldsList);
-    foreach my $field (keys @fields)
+    foreach my $field (@fields)
     {
     	push (@fieldsList, "`$field` = ? ");
         push (@values, $object->get($field));
