@@ -14,6 +14,14 @@ sub findActive
     return $self->findSql({ where => $where });
 }
 
+sub findForCurrentGame
+{
+    my ($self, $edge) = @_;
+    my $where = " AND `paid` IS NOT NULL AND `games_left` > 0";
+    $where .= " AND unix_timestamp(`paid`) < " . $::sql->quote($edge);
+    return $self->findSql({ where => $where });
+}
+
 sub findNotPaid
 {
     my ($self, $userId) = @_;

@@ -13,8 +13,9 @@ use Template;
 use JSON -convert_blessed_universally;
 
 use Log::Log4perl;
+$Log::Log4perl::DateFormat::GMTIME = 1;
 Log::Log4perl->init("../conf/log4perl.conf");
-
+  
 use Sirius::Common;
 use Sirius::MySQL;
 

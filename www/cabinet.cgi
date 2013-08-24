@@ -68,6 +68,7 @@ my $lang = &getLang();
 our $emailService = new Service::Email(userService => $userService, lang => $lang);
 our $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
 our $ticketService = new Service::Ticket();
+our $gameService = new Service::Game();
 
 my $gameController = new Controller::Game();
 
@@ -97,6 +98,8 @@ if($user)
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxGames'} = $optionsService->get('maxGames');
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxTickets'} = $optionsService->get('maxTickets');
     $vars->{'data'}->{'options'}->{'lottery'}->{'gamePrice'} = $optionsService->get('gamePrice');
+    my @games = $gameService->findNextGames(2);
+    $vars->{'data'}->{'options'}->{'lottery'}->{'nextGames'} = \@games; 
     
     my @activeTickets = $ticketDao->findActive();
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'active'} = \@activeTickets;

@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `games`;
 CREATE TABLE `games` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `date` datetime NOT NULL,
+  `schedule` datetime NOT NULL,
   `lucky_numbers` varchar(300) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `sum` numeric(8,2) unsigned NOT NULL,
   `users` int(10) unsigned NOT NULL,

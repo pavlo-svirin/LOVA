@@ -27,6 +27,11 @@ Ext.define('Loto.view.Games', {
         	startDay: 1,
         	labelWidth: 20,
         	width: 120
+        },
+        { 
+        	xtype: 'button',
+        	action: 'game',
+        	text: 'Провести розыгрыш'
         }
 	],
     columns: [

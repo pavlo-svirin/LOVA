@@ -187,4 +187,24 @@ sub pay
     $log->info("Payment was done successfuly.");
 }
 
+sub calcGuessed
+{
+    my ($self, $ticket, @luckyNumbers) = @_;
+    my @ticketNumbers = $ticket->getNumbers();
+    my $guessed = 0;
+    foreach my $ticketNum (@ticketNumbers)
+    {
+        foreach my $winNum (@luckyNumbers)
+        {
+            if($ticketNum == $winNum)
+            {
+                $guessed++;
+                last;
+            }
+        }
+    }
+    return $guessed;
+}
+
+
 1;

@@ -14,6 +14,9 @@ Ext.define('Loto.controller.Games', {
             },
             'games button[action=refresh]': {
                 click: this._refresh
+            },
+            'games button[action=game]': {
+                click: this._game
             }
         });
     },
@@ -43,4 +46,38 @@ Ext.define('Loto.controller.Games', {
 		}
     },
     
+    _game: function(source)
+    {
+    	var msg = "Вы уверены что хотите произвести розыгрыш сейчас?"; 
+    	var lucky = source.up('tabpanel').down('options').down('textfield[name=luckyNumbers]').getValue();
+    	if(!lucky) {
+    		msg = msg + "<br>Выигрышные числа не выбраны!";
+    	}
+      	Ext.Msg.confirm('Розыгрыш',
+      	    msg,
+  			function (btn){
+      			if(btn == 'yes') {
+      				Ext.Ajax.request({
+      					url: "/admin/games/run/ajax/",
+            		    method: 'POST',
+      					params: {
+          					luckyNumbers: lucky
+      					},
+                		success: function (result, request) {
+            				debugger;
+                			result = Ext.decode(result.responseText);
+                			if(result.success) {
+                				Ext.data.StoreManager.lookup('Games').load();
+                			} else {
+                		      	Ext.Msg.alert('Ошибка', result.message);
+                			}
+                		},
+                		failure: function (result, request) {
+                			debugger;
+                		}
+                	});            	   
+      			}
+            }
+      	);    	
+    }
 });

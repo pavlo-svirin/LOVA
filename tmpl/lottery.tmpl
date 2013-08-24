@@ -54,9 +54,7 @@
     </td>
     <td class="next_game">
       Следующие розыгрышы <span  class="" style="font-size:75%;color:#062170;vertical-align: super;">UTC</span>
-      <br>#3: 2013-08-08 15:00
-      <br>#4: 2013-08-15 15:00
-      [% FOREACH nextGame IN data.session.nextGames %]
+      [% FOREACH nextGame IN data.options.lottery.nextGames %]
       <br>[% nextGame %]
       [% END %]
     </td>
