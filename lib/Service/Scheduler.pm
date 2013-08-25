@@ -25,19 +25,19 @@ sub runAccountSchedule
     if($nextScheduleTime < time)
     {
     	print "Time to make money!";
-    	Sirius::Common::debug("[Scheduler]: currently is " . time);
-    	Sirius::Common::debug("[Scheduler]: scheduled time is " . $nextScheduleTime);
         $nextScheduleTime = $self->calcNextAccountTime();
         $optionsService->set('nextAccountTime', $nextScheduleTime);
         $optionsService->save();
-        $userService->runAccount($optionsService->get('rateFond'), $optionsService->get('rateReferal'));
+        # run game
     }
-    $nextScheduleTime = $self->calcNextAccountTime();
-    if($nextScheduleTime != $optionsService->get('nextAccountTime'))
+    else
     {
-        Sirius::Common::debug("[Scheduler]: Next scheduled time is " . $nextScheduleTime);
-        $optionsService->set('nextAccountTime', $nextScheduleTime);
-        $optionsService->save();
+        $nextScheduleTime = $self->calcNextAccountTime();
+        if($nextScheduleTime != $optionsService->get('nextAccountTime'))
+        {
+            $optionsService->set('nextAccountTime', $nextScheduleTime);
+            $optionsService->save();
+        }
     }
 }
 

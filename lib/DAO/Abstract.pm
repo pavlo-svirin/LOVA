@@ -1,5 +1,8 @@
 package DAO::Abstract;
 use strict;
+require Log::Log4perl;
+
+my $log = Log::Log4perl->get_logger("DAO::Abstract");
 
 sub new
 {
@@ -33,6 +36,7 @@ sub find
     {
     	$query .= " ORDER BY `$order`";
     }
+    $log->trace("Find: ", $query);
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute(@values);
         
@@ -44,6 +48,39 @@ sub find
     
     return wantarray ? @objects : $objects[0];
 }
+
+sub findSql
+{
+    my ($self, $params) = @_;
+    my $table = $self->getTable();
+    my $model = $self->getModel();
+    my $where = $params->{'where'};
+    my $order = $params->{'order'};
+    my $start = $params->{'start'};
+    my $limit = $params->{'limit'};
+    my @values;
+    my $query = "SELECT * FROM `$table` WHERE 1 = 1";
+    $query .= " " . $where if($where);
+    $query .= " " . $order if($order);
+    if(defined $start && $limit)
+    {
+    	push(@values, $start, $limit);
+        $query .= " LIMIT ?, ?" 
+    }
+    
+    $log->trace("FindSql: ", $query);
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute(@values);
+        
+    my @objects;
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+      push(@objects, ${model}->new(%$ref));
+    }
+    
+    return wantarray ? @objects : $objects[0];
+}
+
 
 sub findById
 {
@@ -67,7 +104,9 @@ sub delete
 {
     my ($self, $object) = @_;
     my $table = $self->getTable();
-    my $sth = $::sql->handle->prepare("DELETE FROM `$table` WHERE `id` = ?");
+    my $query = "DELETE FROM `$table` WHERE `id` = ?";
+    $log->trace("Delete: ", $query);
+    my $sth = $::sql->handle->prepare($query);
     $sth->execute($object->getId());
 }
 
@@ -90,8 +129,7 @@ sub add
     my ($self, $object) = @_;
     my $table = $self->getTable();
 
-    my %objFields = $object->getFields();
-    my @fields = keys %objFields;
+    my @fields = $object->getSqlAddFields();
     my (@values, @fieldsList, @tokens);
     foreach my $field (@fields)
     {
@@ -99,8 +137,8 @@ sub add
         push (@fieldsList, "`$field`");
         push (@tokens, "?");
     }
-    
     my $query = "INSERT INTO `$table` ( " . join(",", @fieldsList) . " ) VALUES ( " . join(",", @tokens) . " )";
+    $log->trace("Add: ", $query);
     my $sth = $::sql->handle->prepare($query);
     $sth->execute(@values);
     $object->setId($::sql->handle->{'mysql_insertid'});
@@ -111,16 +149,16 @@ sub update
 	my ($self, $object) = @_;
     my $table = $self->getTable();
 
-    my %objFields = $object->getFields();
+    my @fields = $object->getSqlUpdateFields();
     my (@values, @fieldsList);
-    foreach my $field (keys %objFields)
+    foreach my $field (@fields)
     {
     	push (@fieldsList, "`$field` = ? ");
         push (@values, $object->get($field));
     }
 	
-    # TODO-VZ: add debug message
     my $query = "UPDATE `$table` SET " . join(",", @fieldsList) . "WHERE `id` = ?";
+    $log->trace("Update: ", $query);
     my $sth = $::sql->handle->prepare($query);
     $sth->execute(@values, $object->getId());
 }

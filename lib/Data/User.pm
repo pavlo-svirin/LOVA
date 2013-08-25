@@ -2,7 +2,7 @@ package Data::User;
 
 use strict;
 use lib "..";
-use parent 'Data::BaseObject';
+use parent 'Data::Abstract';
 
 use DateTime;
 
@@ -12,15 +12,15 @@ sub getFields
 {
 	return
 	(
-	    'id' => 'id',
-	    'firstName' => 'first_name',
-	    'lastName' => 'last_name',
-	    'login' => 'login',
-	    'email' => 'email',
-	    'password' => 'password',
-        'referal' => 'referal',
-        'created' => 'created',
-        'lastSeen' => 'last_seen'
+	    'id' => { sql => 'id', key => '1' },
+	    'firstName' => { sql => 'first_name', updatable => '1' },
+	    'lastName' => { sql => 'last_name', updatable => '1' },
+	    'login' => { sql => 'login', updatable => '1' },
+	    'email' => { sql => 'email', updatable => '1' },
+	    'password' => { sql => 'password', updatable => '1' },
+        'referal' => { sql => 'referal', updatable => '1' },
+        'created' => { sql => 'created', updatable => '1' },
+        'lastSeen' => { sql => 'last_seen', updatable => '1' }
 	)
 };
 

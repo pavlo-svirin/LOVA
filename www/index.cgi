@@ -127,18 +127,6 @@ sub ajaxStage
     	my $like = $optionsService->get('like') + 1;
     	$optionsService->set('like', $like);
     	$optionsService->save();
-    	
-        my $userId = $cgiSession->param('userId');
-        my $user = $userService->findById($userId);
-        if($user)
-        {
-            $userService->loadProfile($user);
-            unless ($user->getProfile()->{'like'})
-            {
-            	$user->getProfile()->{'like'} = time;
-            	$userService->saveProfile($user);
-            }
-        }
     }
 }
 

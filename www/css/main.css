@@ -69,6 +69,65 @@ form {margin: 0}
     padding-left: 50px;
 }
 
-.small_counter {
-    
+table.lottery td { vertical-align: top; }
+
+table.lottery .games_count
+{
+  width: 30px;
+  padding: 0;
+  margin: 0 5px;
+  text-align: center;
 }
+
+table.lottery .separator
+{
+  height: 10px;
+}
+
+table.lottery .numbers
+{
+  text-align: center;
+  padding: 5px 30px;
+}
+
+table.lottery .numbers span
+{
+  margin: 5px 10px;
+  text-align: center;
+  width: 33px;
+
+/*  display: inline-block;
+  border: 1px #5F9E4E solid;
+  text-align: center;
+  padding: 0;
+  width: 33px;
+  margin: 5px 10px;
+  text-decoration: none;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #00c322;
+  color: white;
+  font-weight: bold; */
+}
+
+table.lottery .numbers a.selected
+{
+/*  background-color: #133aac;
+  border: 1px #133aac solid;
+  color: #00c322;
+  font-weight: bold;*/
+}
+
+td.total_win
+{
+  font-size: 150%;
+  text-align: center;
+  color: #062170;
+  font-weight: bold;
+}
+
+.next_game { font-size: 100%; }
+
+#payDiv .span1 { font-weight: bold; }

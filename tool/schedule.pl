@@ -3,19 +3,17 @@ use lib "/mnt/hgfs/Development/Perl/pemes/lova/code/lib/";
 use options;
 use global;
 use Sirius::Common qw(debug);
-use Service::Scheduler;
 
 our $sql = Sirius::MySQL->new(host=>$MYSQL{'host'}, db=>$MYSQL{'base'}, user=>$MYSQL{'user'}, password=>$MYSQL{'pass'}, debug=>1);
 my $dbh = $sql->connect;
 
-my $optionsService = new Service::Options();
-my $userService = new Service::User();
-my $schedulerService = new Service::Scheduler(
-    userService => $userService,
-    optionsService => $optionsService
-);
-
+our $optionsService = new Service::Options();
+our $userService = new Service::User();
+our $schedulerService = new Service::Scheduler();
+our $gameService = new Service::Game();
 $optionsService->load();
-$schedulerService->runAccountSchedule();
+
+# $schedulerService->runAccountSchedule();
+$gameService->runGame();
 
 $sql->disconnect();

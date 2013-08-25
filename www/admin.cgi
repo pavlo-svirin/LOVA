@@ -40,13 +40,18 @@ $cgiSession->expire('+3M');
 my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession->id());
 
 # Сервисы
-my $userService = new Service::User();
-my $optionsService = new Service::Options();
-my $schedulerService = new Service::Scheduler(optionsService => $optionsService);
-my $emailService = new Service::Email(userService => $userService);
+our $userService = new Service::User();
+our $optionsService = new Service::Options();
+our $schedulerService = new Service::Scheduler(optionsService => $optionsService);
+our $emailService = new Service::Email(userService => $userService);
+our $gameService = new Service::Game();
+our $ticketService = new Service::Ticket();
 
 my $emailTemplateDao = new DAO::EmailTemplates();
 my $htmlContentDao = new DAO::HtmlContent();
+my $ticketDao = new DAO::Ticket();
+my $gameDao = new DAO::Game();
+
 
 #=======================Template Variables================
 
@@ -57,8 +62,6 @@ if ($URL =~ /\/options\/save(\/|$)/)
     {
         $optionsService->set($_, $CGI->param($_));
     }
-    my $nextAccountRun = $schedulerService->calcNextAccountTime();
-    $optionsService->set('nextAccountTime', $nextAccountRun);
     $optionsService->save();
     $optionsService->setAdminPassword();
     $redirect = '/admin/';
@@ -294,6 +297,43 @@ sub ajaxStage
         my $content = $htmlContentDao->findById($id);
         $htmlContentDao->delete($content);
         my $response->{'success'} = JSON::true;
+        print $json->encode($response);
+    }
+    elsif (($URL =~ /\/tickets\//) && ($URL =~ /\/load\//))
+    {
+        my $response->{'success'} = JSON::true;
+        my $params = $CGI->Vars();
+        my @objects = $ticketDao->findExtJs($params);
+        foreach my $obj (@objects)
+        {
+        	my $jsonObj = $obj->getData();
+        	$jsonObj->{'total'} = $obj->getGames() * $obj->getGamePrice();
+            push(@{$response->{data}}, $jsonObj);
+        }
+        print $json->encode($response);
+    }    
+    elsif (($URL =~ /\/games\//) && ($URL =~ /\/load\//))
+    {
+        my $response->{'success'} = JSON::true;
+        my $params = $CGI->Vars();
+        my @objects = $gameDao->findExtJs($params);
+        foreach my $obj (@objects)
+        {
+            my $jsonObj = $obj->getData();
+            push(@{$response->{data}}, $jsonObj);
+        }
+        print $json->encode($response);
+    }    
+    elsif (($URL =~ /\/games\//) && ($URL =~ /\/run\//))
+    {
+        my $response->{'success'} = JSON::true;
+        my @numbers = split(',', $CGI->param('luckyNumbers'));
+        eval { $gameService->runGame(@numbers); };
+	    if($@)
+	    {
+	    	$response->{'success'} = JSON::false;
+	        $response->{'message'} = $@;
+	    }
         print $json->encode($response);
     }    
 }

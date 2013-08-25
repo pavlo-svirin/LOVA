@@ -15,7 +15,7 @@ use global;
 our $sql     = Sirius::MySQL->new(host=>$MYSQL{'host'}, db=>$MYSQL{'base'}, user=>$MYSQL{'user'}, password=>$MYSQL{'pass'}, debug=>1);
 my $dbh      = $sql->connect;
 my $CGI      = new CGI;
-my $template = Template->new({RELATIVE=>1});
+our $template = Template->new({RELATIVE=>1});
 my $json     = JSON->new->allow_nonref;
 
 # Используемые переменные
@@ -39,10 +39,13 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 
 # DAO
 my $htmlContentDao = new DAO::HtmlContent();
+my $ticketDao = new DAO::Ticket();
+my $gameDao = new DAO::Game(); 
+my $gameStatDao = new DAO::GameStat(); 
 
 # Services
-my $userService = new Service::User();
-my $optionsService = new Service::Options();
+our $userService = new Service::User();
+our $optionsService = new Service::Options();
 $optionsService->load();
 
 if($URL =~ /(\w{32})/)
@@ -64,9 +67,12 @@ my $userId = $cgiSession->param('userId');
 my $user = $userService->findById($userId);
 
 my $lang = &getLang();
-my $emailService = new Service::Email(userService => $userService);
-my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
+our $emailService = new Service::Email(userService => $userService, lang => $lang);
+our $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
+our $ticketService = new Service::Ticket();
+our $gameService = new Service::Game();
 
+my $gameController = new Controller::Game();
 
 #=======================Template Variables================
  
@@ -76,22 +82,61 @@ $vars->{'error'} = "";
 if($user)
 {
 	$vars->{'data'}->{'users'}->{'active'} = $userService->countActive();
-	$vars->{'data'}->{'users'}->{'all'} = sprintf("%06d", $userService->countAllExceptLatest());
 	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
     $vars->{'data'}->{'referals'} = $userService->countReferals($user);
+    
 	$userService->loadAccount($user);
+    $vars->{'data'}->{'account'}->{'personal'} = sprintf("%.02f", $user->getAccount()->{'personal'});
 	$vars->{'data'}->{'account'}->{'fond'} = sprintf("%.02f", $user->getAccount()->{'fond'});
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
+    
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'} = $user;
-    $vars->{'data'}->{'profile'}->{'like'} = $user->getProfile()->{'like'};
     $vars->{'data'}->{'profile'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
+
+    # Lottery options 
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxNumber'} = $optionsService->get('maxNumber');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxNumbers'} = $optionsService->get('maxNumbers');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxGames'} = $optionsService->get('maxGames');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxTickets'} = $optionsService->get('maxTickets');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'gamePrice'} = $optionsService->get('gamePrice');
+    my @games = $gameService->findNextGames(2);
+    $vars->{'data'}->{'options'}->{'lottery'}->{'nextGames'} = \@games; 
     
+    my @activeTickets = $ticketDao->findActive();
+    $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'active'} = \@activeTickets;
+    my @notPaidTickets = $ticketDao->findNotPaid();
+    $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
+    $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $ticketService->calcTicketsSum(@notPaidTickets);
+
+    my $lastGame =  $gameDao->findLast();
+    $vars->{'data'}->{'lottery'}->{'last'}->{'game'} = $lastGame;
+    my $lastGameStat = $gameStatDao->findByGameId($lastGame->getId());
+    my $lastGameResult;
+    my $lastGameTotalTickets = $lastGameStat->getTickets();
+    if ($lastGameTotalTickets)
+    {
+        my $maxGuessed = $lastGameStat->getMaxGuessed();
+	    for (my $i = 1; $i <= $optionsService->get('maxNumbers'); $i++)
+	    {
+	        my $tickets = $lastGameStat->getTickets($i);
+	        $lastGameResult->{$i} = 0;
+	        if ($i == $maxGuessed)
+	        {
+                $lastGameResult->{$i} = $tickets . " " . $htmlContentService->getContent('LOTTERY_STAT_TICKETS', $tickets); 
+	        }
+	        elsif ($tickets)
+	        {
+                $lastGameResult->{$i} = int (100 * $tickets / $lastGameTotalTickets) . " %"; 
+	        }
+	    }
+    }
+    
+    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'} = $lastGameResult;
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
     }
-    $vars->{'data'}->{'usersLeft'} = getUsersLeft();
    
     # Force user to fill profile 
     if((!$user->getLogin() || !$user->getFirstName() || !$user->getEmail()) && not ($URL =~ /\/profile(\/|$)/))
@@ -111,8 +156,30 @@ if($URL =~ /logout/)
     $cgiSession->clear('userId');   
     $redirect = "/";
 }
-
-if($URL =~ /\/ajax(\/|$)/)
+if(($URL =~ /\/ticket(\/|$)/) || ($URL =~ /\/game(\/|$)/))
+{
+	my $params = $CGI->Vars();
+	my $response = $gameController->process($URL, $params);
+	if($response->{'type'} eq "redirect")
+	{
+        print $CGI->redirect(-uri => $response->{'data'}, -cookie => $cookie);
+	}
+    elsif($response->{'type'} eq "ajax")
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+        print $json->encode($response->{'data'});       
+    }
+    elsif($response->{'type'} eq "html")
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+        print $response->{'data'};
+    }
+    else
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+    }
+}
+elsif($URL =~ /\/ajax(\/|$)/)
 {
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
     ajaxStage()
@@ -149,11 +216,6 @@ sub ajaxStage
     if($URL =~ /\/save\//)
     {
     	saveProfile();
-    }
-    elsif($URL =~ /\/countdown\//)
-    {
-    	my $result->{'counter'} = getUsersLeft();
-    	print $json->encode($result);
     }
     elsif($URL =~ /\/invite\//)
     {
@@ -246,16 +308,6 @@ sub sendInvite
         $result->{'success'} = JSON::true;
     }
     print $json->encode($result);	
-}
-
-sub getUsersLeft
-{
-    my $left = $optionsService->get('likeRequired') - $userService->countActive();
-    if(!$left || ($left < 0))
-    {
-        $left = 0;
-    }
-    return $left;
 }
 
 sub getLang

@@ -134,5 +134,18 @@ sub count {
 	return $ref->{'count'};
 }
 
+# Return current UTC time in ISO format
+sub now {
+	my $self = shift;
+	$self->utcTimestampToDate(time);
+}
+
+sub utcTimestampToDate {
+    my ($self, $timestamp) = @_;
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime($timestamp);
+    $year += 1900;
+    $mon++;
+    return "$year-$mon-$mday $hour:$min:$sec";
+}
 
 1;

@@ -35,26 +35,198 @@ Ext.define('Loto.view.Options', {
 	        	name: 'htpasswdPath'
 		  },
           {
-        	name: 'rateFond',
-            fieldLabel: 'Сумма начисленний за каждого участника системы',
-            allowDecimals: true,
-            decimalPrecision: 6,
-            step: 0.001
-          },
-          {
-          	name: 'rateReferal',
-              fieldLabel: 'Сумма начисленний за каждого реферала',
-              allowDecimals: true,
-              decimalPrecision: 6,
-              step: 0.001
-          },
-          {
   	         xtype: 'textfield',
         	 name: 'invitesLimit',
              fieldLabel: 'Ограничение на количество приглашений в час'
           }
         ]
       },
+      {
+          xtype:'fieldset',
+          title: 'Лоттерея',
+          collapsible: false,
+          autoHeight: true,
+          width: 600,
+          defaults: {
+          	minValue: 0,
+          	maxValue: 100,
+          	allowBlank: false
+          },
+          defaultType: 'numberfield',
+          items: [
+            {
+              fieldLabel: 'Количество чисел',
+              name: 'maxNumbers',
+            },
+            {
+              fieldLabel: 'Максимальное число',
+              name: 'maxNumber',
+            },
+            {
+              fieldLabel: 'Стоимость 1 игры',
+              name: 'gamePrice',
+              allowDecimals: true,
+              decimalPrecision: 2,
+              step: 0.01,
+            },
+            {
+              fieldLabel: 'Максимальное количество игр',
+              name: 'maxGames',
+            },
+            {
+              fieldLabel: 'Максимальное количество билетов',
+              name: 'maxTickets',
+            },
+            {
+          	  xtype: 'checkbox',
+          	  fieldLabel: 'Случайные числа',
+          	  name: 'randomNumbers'
+            },
+            {
+          	  xtype: 'textfield',
+          	  fieldLabel: 'Выигрышные числа для следующего розыгрыша',
+          	  name: 'luckyNumbers'
+            },
+            {
+                fieldLabel: 'Общий приз',
+                name: 'totalWin',
+                allowDecimals: true,
+                decimalPrecision: 2,
+                step: 0.01,
+            },
+            {
+            	  xtype: 'textfield',
+            	  fieldLabel: 'Буферное время (мин)',
+            	  name: 'bufferTime'
+            }
+          ]
+      },
+      {
+          xtype:'fieldset',
+          title: 'Расписание розыгрышей',
+          collapsible: false,
+          autoHeight: true,
+          width: 600,
+          layout: 'column',
+          defaults: {
+          	labelWidth: 90,
+          	allowBlank: true,
+          	layout: 'form',
+          	width: 150
+          },
+          items: [
+            {
+              xtype: 'checkbox',
+              fieldLabel: 'понедельник',
+              name: 'scheduleMonday'
+            },
+            {
+              xtype: 'checkbox',
+              fieldLabel: 'вторник',
+              name: 'scheduleTuesday'
+            },
+            {
+              xtype: 'checkbox',
+              fieldLabel: 'среда',
+              name: 'scheduleWednesday'
+            },
+            {
+              xtype: 'checkbox',
+              fieldLabel: 'четверг',
+              name: 'scheduleThursday'
+            },
+            {
+              xtype: 'checkbox',
+              fieldLabel: 'пятница',
+              name: 'scheduleFriday'
+            },
+            {
+              xtype: 'checkbox',
+              fieldLabel: 'суббота',
+              name: 'scheduleSaturday'
+            },
+            {
+              xtype: 'checkbox',
+              fieldLabel: 'воскресенье',
+              name: 'scheduleSunday'
+            },
+            {
+              xtype: 'textfield',
+              fieldLabel: 'время',
+              name: 'scheduleTime'
+            }
+          ]
+      },
+      {
+          xtype:'fieldset',
+          title: 'Бюджет',
+          autoHeight: true,
+          width: 600,
+          layout: 'column',
+          defaults: {
+          	layout: 'form',
+          	width: 500,
+          	minValue: 0,
+          	maxValue: 100,
+          	tipText: function(thumb)
+          	{
+          		return String(thumb.value) + '%';
+          	},
+          },
+          defaultType: 'sliderfield',
+          items: [
+            {
+              fieldLabel: 'Приз',
+              name: 'budgetPrize',
+            },
+            {
+              xtype: 'label',
+              name: 'budgetPrize',
+              width: 50,
+              margin: '0 0 0 15'
+            },
+            {
+                fieldLabel: 'Фонд',
+                name: 'budgetFond'
+             },
+             {
+                xtype: 'label',
+                name: 'budgetFond',
+                width: 50,
+                margin: '0 0 0 15'
+            },
+            {
+                fieldLabel: 'Подарочные билеты',
+                name: 'budgetGiftTickets'
+             },
+             {
+                xtype: 'label',
+                name: 'budgetGiftTickets',
+                width: 50,
+                margin: '0 0 0 15'
+            },
+            {
+              fieldLabel: 'Затраты',
+              name: 'budgetCosts'
+            },
+            {
+              xtype: 'label',
+              name: 'budgetCosts',
+              width: 50,
+              margin: '0 0 0 15'
+            },
+            {
+              fieldLabel: 'Прибыль',
+              name: 'budgetProfit'
+            },
+            {
+              xtype: 'label',
+              name: 'budgetProfit',
+              width: 50,
+              margin: '0 0 0 15'
+            }
+          ]
+        },      
       {
           xtype:'fieldset',
           title: 'Лайки',
@@ -71,88 +243,8 @@ Ext.define('Loto.view.Options', {
       	        fieldLabel: 'Лайков',
       	        name: 'like',
       	        readOnly: true
-      	      },
-              {
-        	        xtype: 'numberfield',
-        	        fieldLabel: 'Пользователей надо',
-        	        name: 'likeRequired'
-    	      }
+      	      }
           ]
-      },
-      {
-        xtype:'fieldset',
-        title: 'Расписание начислений',
-        collapsible: false,
-        autoHeight: true,
-        width: 600,
-        layout: 'column',
-        defaults: {
-        	labelWidth: 90,
-        	allowBlank: true,
-        	layout: 'form',
-        	width: 150
-        },
-        items: [
-          {
-            xtype: 'checkbox',
-            fieldLabel: 'понедельник',
-            name: 'scheduleMonday'
-          },
-          {
-            xtype: 'checkbox',
-            fieldLabel: 'вторник',
-            name: 'scheduleTuesday'
-          },
-          {
-            xtype: 'checkbox',
-            fieldLabel: 'среда',
-            name: 'scheduleWednesday'
-          },
-          {
-            xtype: 'checkbox',
-            fieldLabel: 'четверг',
-            name: 'scheduleThursday'
-          },
-          {
-            xtype: 'checkbox',
-            fieldLabel: 'пятница',
-            name: 'scheduleFriday'
-          },
-          {
-            xtype: 'checkbox',
-            fieldLabel: 'суббота',
-            name: 'scheduleSaturday'
-          },
-          {
-            xtype: 'checkbox',
-            fieldLabel: 'воскресенье',
-            name: 'scheduleSunday'
-          },
-          {
-            xtype: 'textfield',
-            fieldLabel: 'время',
-            name: 'scheduleTime'
-          }
-        ]
-      },
-      {
-    	  xtype:'fieldset',
-    	  title: 'Содержание',
-    	  collapsible: false,
-    	  autoHeight: true,
-    	  width: 600,
-    	  defaults: {
-          	labelWidth: 90,
-          	allowBlank: false
-    	  },
-    	  items: [
-	          {
-	              xtype: 'textarea',
-	              fieldLabel: 'Контент',
-	              name: 'contentRu',
-	              height: 100
-	          }
-    	  ]
       }
     ],
     buttons: [{

@@ -1,0 +1,119 @@
+<form name="lottery" method="POST" action="/cab/ticket/">
+<table width="100%" class="lottery">
+  <tr>
+    <td width="25%">
+        <table width="100%">
+            <tr><td>Оплаченные билеты:</td><td>[% data.lottery.session.tickets.active.size || 0 %]</td></tr>
+            <tr><td>Заполненные билеты:</td><td>[% data.lottery.session.tickets.new.size || 0 %]</td></tr>
+            <tr><td>К оплате:</td><td>$[% data.lottery.session.totalSum || "0.00" %]</td></tr>            
+            <tr><td colspan="2" align="center"><button class="btn btn-success" [% IF ! data.lottery.session.totalSum %]disabled="disabled"[% END %] href="#payDiv" data-toggle="modal" type="button">Оплатить</button></td></tr>
+        </table>
+    </td>
+    <td class="numbers">[% SET num = 0 %]
+      [% WHILE num < data.options.lottery.maxNumber %][% SET num=num+1 %]<a href='javascript:toggleLotteryNumber("[% num %]")' id="lottery_num_[% num %]"><span class="badge">[% num %]</span></a>[% END %]
+    </td>
+    <td width="25%" align="center">
+      Количество игр: <a href="javascript:decGame()">&lt;</a><input type="text" name="games_count" class="games_count input-sm" value="1"><a href="javascript:incGame()">&gt;</a>
+      <br><button type="button" id="addTicketBtn" class="btn btn-success disabled" disabled="disabled" onclick="addTicket()">Добавить билет</button>
+      <br><br>Количество билетов: <a href="javascript:decTickets()">&lt;</a><input type="text" name="tickets_count" class="games_count input-sm" value="1"><a href="javascript:incTickets()">&gt;</a>
+      <br><button type="button" class="btn btn-info" onclick="addTicket()">Заполнить на удачу</button>
+    </td>
+  </tr>
+  <tr><td colspan="3" class="separator"></td></tr>
+  <tr>
+    <td></td>
+    <td align="center">
+        <input type="hidden" name="selected_lottery_numbers">
+        Выбрано <span id="count_selected_numbers">[% data.session.selectedNumbers || 0 %]</span> из [% data.options.lottery.maxNumbers %] чисел
+        <br><button type="button" class="btn" name="auto_select" onClick="autoSelectNumbers()">Выбрать числа автоматически</button>
+    </td>
+    <td></td>
+  </tr>
+  <tr><td colspan="3" class="separator"></td></tr>
+  <tr><td colspan="3" class="separator"></td></tr>
+  <tr>
+    <td class="last_game_stat">В прошлом розыгрыше:
+      <table width="100%">
+        [% FOREACH num IN data.lottery.last.stat.keys.nsort.reverse %]
+        <tr>
+        <td>[% num %] цифр</td>
+        <td>[% IF data.lottery.last.stat.$num %]
+                [% data.lottery.last.stat.$num %]
+            [% ELSE %]
+                не угадал никто
+            [% END %]
+        </td>
+        </tr>
+        [% END %]
+      </table>
+    </td>
+    <td align="center" class="last_game">Розыгрыш #[% data.lottery.last.game.getId() %] от [% data.lottery.last.game.getSchedule() %]
+      <br>Приз составил: [% data.lottery.last.win %]
+      <br>Удачные числа: [% data.lottery.last.game.getLuckyNumbers().join(', ') %]
+      <br><br>
+      <br>Ваш последний результат: лучше чем у 1 пользователя
+      <br>Ваш лучший результат: лучше чем у 3 пользователей
+    </td>
+    <td class="next_game">
+      Следующие розыгрышы <span  class="" style="font-size:75%;color:#062170;vertical-align: super;">UTC</span>
+      [% FOREACH nextGame IN data.options.lottery.nextGames %]
+      <br>[% nextGame %]
+      [% END %]
+    </td>
+  </tr>
+</table>
+</form> 
+
+<div id="payDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="payLabel" aria-hidden="true">
+  <form id="payForm" data-async class="form-horizontal" method="POST" action="/cab/game/pay/">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="payLabel">Оплатить</h3>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-error hide"></div>
+    <div class="row">
+        <div class="span1"></div>
+        <div class="span1 muted"><strong>Баланс</strong></div>
+        <div class="span3 muted"><strong>Источник</strong></div>
+    </div>    
+    <div class="row">
+        <div class="span1"><input type="checkbox" name="accFond" value=""></div>
+        <div class="span1 text-left text-success">$[% data.account.fond || "0.00" %]</div>
+        <div class="span3 text-left">баланс фонда</div>
+    </div>    
+    <div class="row">
+        <div class="span1"><input type="checkbox" name="accReferal" value=""></div>
+        <div class="span1 text-left text-success">$[% data.account.referal %]</div>
+        <div class="span3 text-left">баланс за привлечение</div>
+    </div>    
+    <div class="row">
+        <div class="span1"><input type="checkbox" name="accWin" value=""></div>
+        <div class="span1 text-left text-success">$[% data.account.win || "0.00" %]</div>
+        <div class="span3 text-left">призовой баланс</div>
+    </div>
+    <div class="row">
+        <div class="span1"><input type="checkbox" name="accPersonal" value=""></div>
+        <div class="span1 text-left text-success">$[% data.account.personal || "0.00" %]</div>
+        <div class="span3 text-left">вводный баланс</div>
+    </div>
+    <div class="row"><div class="row-separator"></div></div>    
+    <div class="row">
+        <div class="span1"></div>
+        <div class="span1 text-left text-info" id="selectedSum">$0.00</div>
+        <div class="span3 text-left">выбранная Вами сумма</div>
+    </div>    
+    <input type="hidden" name="selectedAccounts">
+    <div class="row">
+        <div class="span1"></div>
+        <div class="span1 text-left text-warning">$[% data.lottery.session.totalSum || "0.00" %]</div>
+        <div class="span3 text-left">Ваш заказ [% data.lottery.session.tickets.new.size || 0 %] билета</div>
+    </div>    
+  </div>
+  <div class="modal-footer">
+    <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+    <button name="pay" type="submit" class="btn btn-primary">Оплатить</button>
+  </div>
+  </form>
+</div>
+       

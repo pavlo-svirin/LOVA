@@ -112,7 +112,6 @@ sub findExtJs
     $query .= " ORDER BY $order $direction ";
     $query .= " LIMIT ?, ?";
 
-    Sirius::Common::debug($query);    
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute( $start, $limit);
     return () if($rv == 0E0);
@@ -414,7 +413,7 @@ sub getProfileValueFlag
 sub loadProfile()
 {
 	my ($self, $user) = @_;
-
+    return unless($user);
 	# Create empty profile
     $user->getProfile();
 	my $sth = $::sql->handle->prepare("SELECT `name`, `value` FROM `user_profile` WHERE `user_id` = ?");
@@ -517,20 +516,6 @@ sub deleteAccount()
     $sth->execute($user->getId());
 }
 
-sub runAccount()
-{
-    my ($self, $rateFond, $rateReferal) = @_;
-    my $fondReward = ($self->countActive() * $rateFond) || 0;
-    foreach my $user ($self->findActive())
-    {
-    	$self->loadAccount($user);
-        my $referalReward = ($self->countReferals($user) * $rateReferal) || 0;
-        $user->getAccount()->{'fond'} = $user->getAccount()->{'fond'} + $fondReward;
-        $user->getAccount()->{'referal'} = $user->getAccount()->{'referal'} + $referalReward;
-        $self->saveAccount($user);     	
-    }
-}
-
 sub parseFilters
 {
     my ($self, $params) = @_;
@@ -548,6 +533,18 @@ sub parseFilters
     	}
     }
     return @filters;
+}
+
+sub getCurrentUser
+{
+    my $self = shift;
+	my %cookies = fetch CGI::Cookie;
+	my $sid = ($cookies{'sid'}) ? $cookies{'sid'}->value : undef;
+	return undef unless($sid);
+	my $cgiSession = new CGI::Session("driver:MySQL;", $sid, {Handle=>$::sql->handle});
+	my $userId = $cgiSession->param('userId');
+	return undef unless($userId);
+	return $self->findById($userId);
 }
 
 1;
