@@ -1,5 +1,6 @@
 package Service::HtmlContent;
 use strict;
+use Switch;
 
 sub new
 {
@@ -34,7 +35,8 @@ sub getContentForPage
 
 sub getContent
 {
-    my ( $self, $code ) = @_;
+    my ( $self, $code, $count ) = @_;
+    $code .= _getCodeSufixByCount($count);
     my $content = $self->{'dao'}->find({
         page => $self->{'page'},
         lang => $self->{'lang'},
@@ -46,5 +48,17 @@ sub getContent
     }
 }
 
+sub _getCodeSufixByCount
+{
+	my $count = shift;
+	
+	$count = $count % 100;
+    return "_5" if (($count >= 11) && ($count <= 19));
+
+ 	$count = $count % 10;
+   	return "_1" if ($count == 1);
+    return "_2" if (($count == 2) || ($count == 2) || ($count == 4));
+    return "_5";
+}
 
 1;

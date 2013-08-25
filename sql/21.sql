@@ -45,3 +45,9 @@ CREATE TABLE `game_stats` (
   `users` int(10) unsigned not null  
 ) ENGINE=InnoDB;
 CREATE INDEX game_id_idx ON `game_stats` (`game_id`);
+
+INSERT INTO `html_content` (lang, page, code, type, content) VALUES
+('ru', 'CABINET', 'LOTTERY_STAT_TICKETS', 'STRING', 'билет'),
+('ru', 'CABINET', 'LOTTERY_STAT_TICKETS_1', 'STRING', 'билет'),
+('ru', 'CABINET', 'LOTTERY_STAT_TICKETS_2', 'STRING', 'билета'),
+('ru', 'CABINET', 'LOTTERY_STAT_TICKETS_5', 'STRING', 'билетов');

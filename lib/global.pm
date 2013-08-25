@@ -32,6 +32,7 @@ use DAO::EmailTemplates;
 use DAO::HtmlContent;
 use DAO::Ticket;
 use DAO::Game;
+use DAO::GameStat;
 
 use Data::Abstract;
 use Data::User;
@@ -39,6 +40,7 @@ use Data::EmailTemplate;
 use Data::HtmlContent;
 use Data::Ticket;
 use Data::Game;
+use Data::GameStat;
 
 use Controller::Game;
 

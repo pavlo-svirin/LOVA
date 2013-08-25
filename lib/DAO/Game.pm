@@ -22,5 +22,14 @@ sub findExtJs
     });
 }
 
+sub findLast
+{
+	my $self = shift;
+    return $self->findSql({
+    	order => "ORDER BY `date` DESC",
+    	start => 0,
+    	limit => 1
+    })	
+}
 
 1;

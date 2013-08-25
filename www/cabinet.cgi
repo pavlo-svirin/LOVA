@@ -40,6 +40,8 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 # DAO
 my $htmlContentDao = new DAO::HtmlContent();
 my $ticketDao = new DAO::Ticket();
+my $gameDao = new DAO::Game(); 
+my $gameStatDao = new DAO::GameStat(); 
 
 # Services
 our $userService = new Service::User();
@@ -106,7 +108,31 @@ if($user)
     my @notPaidTickets = $ticketDao->findNotPaid();
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
     $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $ticketService->calcTicketsSum(@notPaidTickets);
+
+    my $lastGame =  $gameDao->findLast();
+    $vars->{'data'}->{'lottery'}->{'last'}->{'game'} = $lastGame;
+    my $lastGameStat = $gameStatDao->findByGameId($lastGame->getId());
+    my $lastGameResult;
+    my $lastGameTotalTickets = $lastGameStat->getTickets();
+    if ($lastGameTotalTickets)
+    {
+        my $maxGuessed = $lastGameStat->getMaxGuessed();
+	    for (my $i = 1; $i <= $optionsService->get('maxNumbers'); $i++)
+	    {
+	        my $tickets = $lastGameStat->getTickets($i);
+	        $lastGameResult->{$i} = 0;
+	        if ($i == $maxGuessed)
+	        {
+                $lastGameResult->{$i} = $tickets . " " . $htmlContentService->getContent('LOTTERY_STAT_TICKETS', $tickets); 
+	        }
+	        elsif ($tickets)
+	        {
+                $lastGameResult->{$i} = int (100 * $tickets / $lastGameTotalTickets) . " %"; 
+	        }
+	    }
+    }
     
+    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'} = $lastGameResult;
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';
