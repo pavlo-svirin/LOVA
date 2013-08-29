@@ -6,6 +6,7 @@ Ext.define('Loto.model.Game', {
     {name: 'lucky_numbers', type: 'string'},
     {name: 'tickets', type: 'int'},
     {name: 'users', type: 'int'},
-    {name: 'sum'}
+    {name: 'sum'},
+    {name: 'approved', type: 'date', dateFormat: 'Y-m-d H:i:s'},
   ]
 });

@@ -1,6 +1,5 @@
 Ext.define('Loto.view.Games', {
 	extend: 'Ext.grid.Panel',
-	title: 'Лотерея - игры',
 	alias: 'widget.games',
     store: 'Games',
     stateful: true,
@@ -40,7 +39,8 @@ Ext.define('Loto.view.Games', {
         { text: 'Числа', dataIndex: 'lucky_numbers', flex: 1 },
         { text: 'Билетов', dataIndex: 'tickets' },
         { text: 'Пользователей', dataIndex: 'users' },
-        { text: 'Сумма', dataIndex: 'sum' }
+        { text: 'Сумма', dataIndex: 'sum' },
+        { text: 'Подтверждена', dataIndex: 'approved', renderer: Ext.util.Format.dateRenderer('Y-m-d H:i')  }
     ],
     dockedItems: [{
         xtype: 'pagingtoolbar',

@@ -14,8 +14,8 @@ sub getFields
         'luckyNumbers' => { sql => 'lucky_numbers', add => '1' },
         'sum' => { sql => 'sum', add => '1' },
         'users' => { sql => 'users', add => '1' },
-        'tickets' => { sql => 'tickets', add => '1' }
-	
+        'tickets' => { sql => 'tickets', add => '1' },
+        'approved' => { sql => 'approved', update => '1' }
 	)
 };
 

@@ -26,6 +26,7 @@ CREATE TABLE `games` (
   `sum` numeric(8,2) unsigned NOT NULL,
   `users` int(10) unsigned NOT NULL,
   `tickets` int(10) unsigned NOT NULL,
+  `approved` datetime,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

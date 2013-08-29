@@ -61,7 +61,18 @@ Ext.application({
 	                    ]
     	            },
     	            { xtype: 'tickets' },
-    	            { xtype: 'games' }
+    	            { 
+                    	title: 'Лотерея - игры',
+                    	layout: {
+                    	    type  : 'vbox',
+                    	    align : 'stretch',
+                    	    pack  : 'start'
+                    	},                    	
+                		items: [
+	                      { xtype: 'games', flex: 1 },
+	                      { xtype: 'gameDetails' }
+	                    ]
+    	            },
     	            
                 ]
             }]

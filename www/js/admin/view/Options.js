@@ -206,6 +206,16 @@ Ext.define('Loto.view.Options', {
                 margin: '0 0 0 15'
             },
             {
+                fieldLabel: 'Балы',
+                name: 'budgetBonus'
+            },
+            {
+                xtype: 'label',
+                name: 'budgetBonus',
+                width: 50,
+                margin: '0 0 0 15'
+            },
+            {
               fieldLabel: 'Затраты',
               name: 'budgetCosts'
             },
@@ -226,7 +236,7 @@ Ext.define('Loto.view.Options', {
               margin: '0 0 0 15'
             }
           ]
-        },      
+      },      
       {
           xtype:'fieldset',
           title: 'Лайки',

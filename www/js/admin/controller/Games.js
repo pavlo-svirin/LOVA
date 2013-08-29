@@ -1,13 +1,14 @@
 Ext.define('Loto.controller.Games', {
     extend: 'Ext.app.Controller',
-    views: [ 'Games' ],
+    views: [ 'Games', 'GameDetails' ],
     models: [ 'Game' ],
     stores: [ 'Games' ],
  
     init: function() {
         this.control({
             'games': {
-                render: this._init
+                render: this._init,
+            	selectionchange: this._select
             },
             'games datefield': {
                 change: this._refresh
@@ -17,7 +18,17 @@ Ext.define('Loto.controller.Games', {
             },
             'games button[action=game]': {
                 click: this._game
+            },
+            'gameDetails button[action=close]': {
+                click: this._close
+            },
+            'gameDetails button[action=approve]': {
+                click: this._submit
+            },
+            'gameDetails sliderfield': {
+                change: this._ballanceSliders
             }
+            
         });
     },
     
@@ -45,6 +56,41 @@ Ext.define('Loto.controller.Games', {
             });
 		}
     },
+
+    _select: function(selection, rows)
+    {
+        var game = selection.selected.first();
+        if(game) {
+            var details = selection.view.up("tabpanel").down("gameDetails");
+            details.show();
+            details.getForm().loadRecord(game);
+
+            if(game.get('approved')) {
+            	details.down('button[action=approve]').disable();
+            	// load sliders from budget
+            } else {
+            	details.down('button[action=approve]').enable();
+            	
+	            var options = selection.view.up("tabpanel").down("options");
+	            var sliders = options.query('sliderfield');
+	            for (var i = 0; i < sliders.length; i++) {
+	            	var name = sliders[i].getName();
+	            	var val = sliders[i].thumbs[0].value;
+	            	var slider = details.down('sliderfield[name=' + name +']');
+	               	slider.setValue(val);
+	            	slider.syncThumbs();            	
+	            }
+            }
+        }
+    },
+
+    _close: function(btn)
+    {
+    	btn.up("tabpanel").down("games").getSelectionModel().deselectAll();
+        var details = btn.up("tabpanel").down("gameDetails");
+        details.getForm().reset();
+        details.hide();
+    },
     
     _game: function(source)
     {
@@ -64,7 +110,6 @@ Ext.define('Loto.controller.Games', {
           					luckyNumbers: lucky
       					},
                 		success: function (result, request) {
-            				debugger;
                 			result = Ext.decode(result.responseText);
                 			if(result.success) {
                 				Ext.data.StoreManager.lookup('Games').load();
@@ -79,5 +124,65 @@ Ext.define('Loto.controller.Games', {
       			}
             }
       	);    	
-    }
+    },
+    
+    _submit: function(source)
+    {
+    	var msg = "Вы уверены что хотите подтвердить розыгрыш?"; 
+      	Ext.Msg.confirm('Розыгрыш',
+      	    msg,
+  			function (btn){
+	  			if(btn == 'yes') {
+	  				Ext.Ajax.request({
+	  					url: "/admin/games/submit/ajax/",
+	        		    method: 'POST',
+	  					params: {
+	  					},
+	            		success: function (result, request) {
+	            			result = Ext.decode(result.responseText);
+	            			if(result.success) {
+	            				Ext.data.StoreManager.lookup('Games').load();
+	            			} else {
+	            		      	Ext.Msg.alert('Ошибка', result.message);
+	            			}
+	            		},
+	            		failure: function (response, request) {
+            		      	Ext.Msg.alert('Ошибка', response.responseText);
+	            		}
+	            	});            	   
+	  			}
+	        }
+	  	);    	
+    },
+    
+    _ballanceSliders: function(slider)
+    {
+        var sliders = slider.up("fieldset").query("sliderfield");
+        sliders = Ext.Array.remove(sliders, slider);
+        var currentSlider = slider.thumbs[0].value;
+        var otherSliders = this._sumSliders(sliders);
+        if ((otherSliders + currentSlider) > 100) {
+        	slider.setValue(100 - otherSliders)
+        	slider.syncThumbs();
+        }
+        var labels = slider.up("fieldset").query("label[name='" + slider.name + "']");
+        if (labels && labels.length > 0) {
+        	var percents = String(slider.thumbs[0].value) + '%';
+            var details = slider.up("tabpanel").down("gameDetails");
+            var game = details.getRecord();
+            var value = game.get('sum') * slider.thumbs[0].value * 0.01;
+        	labels[0].update('$' + value.toFixed(2) + ' (' + percents + ')');
+        }
+    },
+      
+    _sumSliders: function(sliders)
+    {
+        var total = 0;
+        for(var i = 0; i < sliders.length; i++) {
+        	if(!isNaN(sliders[i].thumbs[0].value)) {
+        		total += sliders[i].thumbs[0].value;
+        	}
+        }
+        return total;
+    }        
 });
