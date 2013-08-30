@@ -19,7 +19,7 @@ my $dbh      = $sql->connect;
 my $CGI      = new CGI;
 my $template = Template->new({RELATIVE=>1});
 my $json     = JSON->new->allow_nonref;
-
+my $log      = Log::Log4perl->get_logger("admin.cgi");
 
 # Используемые переменные
 # vars - переменные шаблона TT
@@ -47,11 +47,15 @@ our $emailService = new Service::Email(userService => $userService);
 our $gameService = new Service::Game();
 our $ticketService = new Service::Ticket();
 
+# DAO
 my $emailTemplateDao = new DAO::EmailTemplates();
 my $htmlContentDao = new DAO::HtmlContent();
 my $ticketDao = new DAO::Ticket();
 my $gameDao = new DAO::Game();
 
+# Controllers
+our $controllers = {};
+my $gamesController = new Controller::Games();
 
 #=======================Template Variables================
 
@@ -69,8 +73,33 @@ if ($URL =~ /\/options\/save(\/|$)/)
 
 $optionsService->load();
 
-#--------Headers---------
-if($URL =~ /\/ajax(\/|$)/)
+my $controller = Controller::Abstract::_getByUrl($URL);
+$log->debug("URL:", $URL);
+$log->debug("Controller:", $controller);
+if ($controller)
+{
+    my $params = $CGI->Vars();
+    my $response = $controller->process($URL, $params);
+    if($response->{'type'} eq "redirect")
+    {
+        print $CGI->redirect(-uri => $response->{'data'}, -cookie => $cookie);
+    }
+    elsif($response->{'type'} eq "ajax")
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+        print $json->encode($response->{'data'});       
+    }
+    elsif($response->{'type'} eq "html")
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+        print $response->{'data'};
+    }
+    else
+    {
+        print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
+    }
+}
+elsif($URL =~ /\/ajax(\/|$)/)
 {
     print $CGI->header(-expires=>'now', -charset=>'UTF-8', -pragma=>'no-cache', -cookie=>$cookie);
     ajaxStage();
@@ -322,18 +351,6 @@ sub ajaxStage
             my $jsonObj = $obj->getData();
             push(@{$response->{data}}, $jsonObj);
         }
-        print $json->encode($response);
-    }    
-    elsif (($URL =~ /\/games\//) && ($URL =~ /\/run\//))
-    {
-        my $response->{'success'} = JSON::true;
-        my @numbers = split(',', $CGI->param('luckyNumbers'));
-        eval { $gameService->runGame(@numbers); };
-	    if($@)
-	    {
-	    	$response->{'success'} = JSON::false;
-	        $response->{'message'} = $@;
-	    }
         print $json->encode($response);
     }    
 }

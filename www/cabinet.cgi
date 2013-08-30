@@ -67,12 +67,14 @@ my $userId = $cgiSession->param('userId');
 my $user = $userService->findById($userId);
 
 my $lang = &getLang();
+
 our $emailService = new Service::Email(userService => $userService, lang => $lang);
 our $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'CABINET');
 our $ticketService = new Service::Ticket();
 our $gameService = new Service::Game();
 
-my $gameController = new Controller::Game();
+# Controllers
+my $ticketsController = new Controller::Tickets();
 
 #=======================Template Variables================
  
@@ -156,10 +158,11 @@ if($URL =~ /logout/)
     $cgiSession->clear('userId');   
     $redirect = "/";
 }
-if(($URL =~ /\/ticket(\/|$)/) || ($URL =~ /\/game(\/|$)/))
+my $controller = Controller::Abstract::_getByUrl($URL);
+if($controller)
 {
 	my $params = $CGI->Vars();
-	my $response = $gameController->process($URL, $params);
+	my $response = $controller->process($URL, $params);
 	if($response->{'type'} eq "redirect")
 	{
         print $CGI->redirect(-uri => $response->{'data'}, -cookie => $cookie);

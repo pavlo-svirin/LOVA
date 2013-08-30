@@ -42,6 +42,8 @@ use Data::Ticket;
 use Data::Game;
 use Data::GameStat;
 
-use Controller::Game;
+use Controller::Abstract;
+use Controller::Tickets;
+use Controller::Games;
 
 1;

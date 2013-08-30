@@ -1,25 +1,25 @@
-package Controller::Game;
+package Controller::Tickets;
 use strict;
+use lib "..";
+use parent 'Controller::Abstract';
+
 use JSON;
 use Log::Log4perl;
 
 require DAO::Ticket;
 
-
-my $log = Log::Log4perl->get_logger("Controller::Game");
+my $log = Log::Log4perl->get_logger("Controller::Tickets");
 my $ticketDao = new DAO::Ticket();
 
-sub new
+sub getLinks
 {
-    my $proto = shift;                 # извлекаем имя класса или указатель на объект
-    my $class = ref($proto) || $proto; # если указатель, то взять из него имя класса
-    my $self  = {};
-    my %params = @_;                   # приём данных из new(param=>value)
-    foreach (keys %params){
-        $self->{$_} = $params{$_};
+    return {
+        'tickets' => {
+            'add' => {},
+            'delete' => {},
+            'pay' => {}       
+        },
     }
-    bless($self, $class);              # гибкий вызов функции bless
-    return $self;
 }
 
 sub process 
@@ -41,8 +41,7 @@ sub process
     elsif($url =~ /\/pay\//)
     {
     	$response->{'type'} = 'ajax';
-    	
-        $response->{'data'} = $self->payGame($params, $user); 
+        $response->{'data'} = $self->pay($params, $user); 
     }
     return $response;
 }
@@ -62,7 +61,7 @@ sub deleteTicket
 {
 }
 
-sub payGame
+sub pay
 {
     my($self, $params, $user) = @_;
     my $response = { success => JSON::false, message => "Ошбика обработки." };

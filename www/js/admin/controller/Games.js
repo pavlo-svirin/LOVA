@@ -104,7 +104,7 @@ Ext.define('Loto.controller.Games', {
   			function (btn){
       			if(btn == 'yes') {
       				Ext.Ajax.request({
-      					url: "/admin/games/run/ajax/",
+      					url: "/admin/game/run/ajax/",
             		    method: 'POST',
       					params: {
           					luckyNumbers: lucky
@@ -134,7 +134,7 @@ Ext.define('Loto.controller.Games', {
   			function (btn){
 	  			if(btn == 'yes') {
 	  				Ext.Ajax.request({
-	  					url: "/admin/games/submit/ajax/",
+	  					url: "/admin/game/approve/ajax/",
 	        		    method: 'POST',
 	  					params: {
 	  					},

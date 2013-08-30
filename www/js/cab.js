@@ -292,6 +292,6 @@ function addTicket() {
 	if(selected < config.maxNumbers) {
 		alert("Вы выбрали не все числа. Осталось " + (config.maxNumbers - selected));
 	} else if(selected == config.maxNumbers) {
-		$("form[name=lottery]").attr("action", "/cab/ticket/add/").submit();
+		$("form[name=lottery]").attr("action", "/cab/tickets/add/").submit();
 	}
 }
