@@ -94,6 +94,20 @@ sub findAll
     return $self->find();    
 }
 
+sub findExtJs
+{
+    my ($self, $params) = @_;
+    my ($where, $order);
+    # TODO-VZ: add extjs filter processing
+    $order .= " ORDER BY " . $::sql->quote_field($params->{'sort'}) if($params->{'sort'});
+    $order .= " DESC" if($params->{'dir'} eq 'DESC');
+    return $self->findSql({
+        where => $where,
+        order => $order,
+        start => $params->{'start'},
+        limit => $params->{'limit'} 
+    });
+}
 
 
 # ============ COUNT METHODS ===================

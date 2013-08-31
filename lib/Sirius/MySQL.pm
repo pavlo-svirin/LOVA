@@ -66,6 +66,13 @@ sub quote {
 	my $value = shift;
 	return $self->handle->quote($value);
 }
+
+sub quote_field {
+    my $self = shift;
+    my $value = shift;
+    return $self->handle->quote_identifier($value);
+}
+
 # Alias for "quote"
 sub q {
 	my $self = shift;

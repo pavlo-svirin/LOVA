@@ -36,15 +36,15 @@ Ext.define('Loto.view.Games', {
     columns: [
         { text: '#', dataIndex: 'id'},        
         { text: 'Дата', dataIndex: 'date', renderer: Ext.util.Format.dateRenderer('Y-m-d H:i') },       
+        { text: 'Подтвержден', dataIndex: 'approved', renderer: Ext.util.Format.dateRenderer('Y-m-d H:i') },
         { text: 'Числа', dataIndex: 'lucky_numbers', flex: 1 },
         { text: 'Билетов', dataIndex: 'tickets' },
         { text: 'Пользователей', dataIndex: 'users' },
-        { text: 'Сумма', dataIndex: 'sum' },
-        { text: 'Подтверждена', dataIndex: 'approved', renderer: Ext.util.Format.dateRenderer('Y-m-d H:i')  }
+        { text: 'Сумма', dataIndex: 'sum' }
     ],
     dockedItems: [{
         xtype: 'pagingtoolbar',
-        store: 'Tickets',
+        store: 'Games',
         dock: 'bottom',
         displayInfo: true
     }]    

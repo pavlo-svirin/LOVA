@@ -11,6 +11,8 @@ require DAO::Ticket;
 my $log = Log::Log4perl->get_logger("Controller::Tickets");
 my $ticketDao = new DAO::Ticket();
 
+sub getName { return 'Controller::Tickets' };
+
 sub getLinks
 {
     return {

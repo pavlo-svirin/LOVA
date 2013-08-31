@@ -56,6 +56,7 @@ my $gameDao = new DAO::Game();
 # Controllers
 our $controllers = {};
 my $gamesController = new Controller::Games();
+my $budgetController = new Controller::Budget();
 
 #=======================Template Variables================
 
@@ -74,8 +75,8 @@ if ($URL =~ /\/options\/save(\/|$)/)
 $optionsService->load();
 
 my $controller = Controller::Abstract::_getByUrl($URL);
-$log->debug("URL:", $URL);
-$log->debug("Controller:", $controller);
+$log->debug("URL: ", $URL);
+$log->debug("Controller: ", $controller->getName()) if ($controller);
 if ($controller)
 {
     my $params = $CGI->Vars();
@@ -337,18 +338,6 @@ sub ajaxStage
         {
         	my $jsonObj = $obj->getData();
         	$jsonObj->{'total'} = $obj->getGames() * $obj->getGamePrice();
-            push(@{$response->{data}}, $jsonObj);
-        }
-        print $json->encode($response);
-    }    
-    elsif (($URL =~ /\/games\//) && ($URL =~ /\/load\//))
-    {
-        my $response->{'success'} = JSON::true;
-        my $params = $CGI->Vars();
-        my @objects = $gameDao->findExtJs($params);
-        foreach my $obj (@objects)
-        {
-            my $jsonObj = $obj->getData();
             push(@{$response->{data}}, $jsonObj);
         }
         print $json->encode($response);

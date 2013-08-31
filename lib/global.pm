@@ -33,6 +33,7 @@ use DAO::HtmlContent;
 use DAO::Ticket;
 use DAO::Game;
 use DAO::GameStat;
+use DAO::Budget;
 
 use Data::Abstract;
 use Data::User;
@@ -41,9 +42,11 @@ use Data::HtmlContent;
 use Data::Ticket;
 use Data::Game;
 use Data::GameStat;
+use Data::Budget;
 
 use Controller::Abstract;
 use Controller::Tickets;
 use Controller::Games;
+use Controller::Budget;
 
 1;

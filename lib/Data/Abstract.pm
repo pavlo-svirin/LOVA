@@ -20,10 +20,7 @@ sub new
     return $self;
 }
 
-sub getFields
-{
-	return ();
-}
+sub getFields { };
 
 sub getSqlAddFields
 {

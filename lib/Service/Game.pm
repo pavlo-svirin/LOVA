@@ -6,10 +6,13 @@ use Log::Log4perl;
 
 require DAO::Ticket;
 require DAO::Game;
+require DAO::Budget;
+require Data::Budget;
 
 my $log = Log::Log4perl->get_logger("Service::Game");
 my $ticketDao = DAO::Ticket->new();
 my $gameDao = DAO::Game->new();
+my $budgetDao = DAO::Budget->new();
 
 sub new
 {
@@ -266,6 +269,56 @@ sub findNextGames
     
     $log->debug("Next games: ", join(" ", @closest));
     return @closest;
+}
+
+sub approve
+{
+	my ($self, $id, $budgetParams) = @_;
+	my $game = $gameDao->findById($id);
+	die "Game by game id '$id' not found." if(!$game);
+	die "Game '$id' already approved." if($game->getApproved());
+	
+    # Run transaction
+    $::sql->handle->begin_work();
+    eval
+    {
+        $game->setApproved($::sql->now());
+        $gameDao->save($game);
+        
+        my $budget = $self->createBudget($game, $budgetParams);
+        $budgetDao->save($budget);
+        
+        $log->info("Game #", $game->getId(), " from ", $game->getDate(), " was approved.");
+        $::sql->handle->commit();
+    };
+    if($@)
+    {
+        $log->error("Game approve was unsuccessful. Error was: ", $@);
+        eval{ $::sql->handle->rollback(); };
+        die("Error during game approve.");
+    }
+}
+
+sub createBudget
+{
+    my ($self, $game, $budgetParams) = @_;
+    my $budget = new Data::Budget();
+    $budget->setGameId($game->getId());
+    $budget->setSum($game->getSum());
+    $budget->setPrize(_calcBudget($game->getSum(), $budgetParams->{'prize'}));
+    $budget->setFond(_calcBudget($game->getSum(), $budgetParams->{'fond'}));
+    $budget->setTickets(_calcBudget($game->getSum(), $budgetParams->{'tickets'}));
+    $budget->setBonus(_calcBudget($game->getSum(), $budgetParams->{'bonus'}));
+    $budget->setCosts(_calcBudget($game->getSum(), $budgetParams->{'costs'}));
+    $budget->setProfit(_calcBudget($game->getSum(), $budgetParams->{'profit'}));
+	return $budget;
+}
+
+sub _calcBudget
+{
+	my ($sum, $percent) = @_;
+	return 0 if (!$sum || !$percent);
+	return sprintf("%.2f", $sum * $percent / 100);
 }
 
 1;

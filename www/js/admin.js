@@ -9,7 +9,8 @@ Ext.application({
       'EmailTemplates',
       'HtmlContent',
       'Tickets',
-      'Games'
+      'Games',
+      'Budget'
     ],
     launch: function()
     {
@@ -73,7 +74,7 @@ Ext.application({
 	                      { xtype: 'gameDetails' }
 	                    ]
     	            },
-    	            
+    	            { xtype: 'budget' }
                 ]
             }]
         });

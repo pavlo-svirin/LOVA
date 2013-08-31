@@ -23,7 +23,7 @@ Ext.define('Loto.controller.Games', {
                 click: this._close
             },
             'gameDetails button[action=approve]': {
-                click: this._submit
+                click: this._approve
             },
             'gameDetails sliderfield': {
                 change: this._ballanceSliders
@@ -67,6 +67,16 @@ Ext.define('Loto.controller.Games', {
 
             if(game.get('approved')) {
             	details.down('button[action=approve]').disable();
+            	var sliders = details.query('sliderfield');
+	            for (var i = 0; i < sliders.length; i++) {
+	            	var slider = sliders[i]; 
+	            	slider.disable();
+	                var budget = slider.name.toLowerCase().replace("budget", "");
+	                var value = game.get('budget.' + budget) || 0;
+	                var labels = slider.up("fieldset").query("label[name='" + slider.name + "']");
+	            	labels[0].update('$' + value);
+	            }
+            	
             	// load sliders from budget
             } else {
             	details.down('button[action=approve]').enable();
@@ -77,8 +87,10 @@ Ext.define('Loto.controller.Games', {
 	            	var name = sliders[i].getName();
 	            	var val = sliders[i].thumbs[0].value;
 	            	var slider = details.down('sliderfield[name=' + name +']');
+	            	slider.enable();
 	               	slider.setValue(val);
-	            	slider.syncThumbs();            	
+	            	slider.syncThumbs();
+	            	this._ballanceSliders(slider);
 	            }
             }
         }
@@ -126,22 +138,33 @@ Ext.define('Loto.controller.Games', {
       	);    	
     },
     
-    _submit: function(source)
+    _approve: function(source)
     {
+    	var self = this;
     	var msg = "Вы уверены что хотите подтвердить розыгрыш?"; 
       	Ext.Msg.confirm('Розыгрыш',
       	    msg,
   			function (btn){
 	  			if(btn == 'yes') {
+	  				var approveParams = new Object;
+	  	            var details = source.up("tabpanel").down("gameDetails");
+	  	            var game = details.getRecord();
+	  				approveParams.gameId = game.get('id');
+	  				var sliders = details.query('sliderfield');
+		            for (var i = 0; i < sliders.length; i++) {
+		            	var name = sliders[i].getName();
+		            	var val = sliders[i].thumbs[0].value;
+		            	approveParams[name] = val;
+		            }	  				
 	  				Ext.Ajax.request({
 	  					url: "/admin/game/approve/ajax/",
 	        		    method: 'POST',
-	  					params: {
-	  					},
+	  					params: approveParams,
 	            		success: function (result, request) {
 	            			result = Ext.decode(result.responseText);
 	            			if(result.success) {
 	            				Ext.data.StoreManager.lookup('Games').load();
+	            				self._close(source);
 	            			} else {
 	            		      	Ext.Msg.alert('Ошибка', result.message);
 	            			}

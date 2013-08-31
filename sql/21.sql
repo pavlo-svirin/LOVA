@@ -43,12 +43,25 @@ CREATE TABLE `game_stats` (
   `game_id` int(10) unsigned NOT NULL,
   `guessed` int(8) unsigned NOT NULL,
   `tickets` int(10) unsigned not null,
-  `users` int(10) unsigned not null  
+  `users` int(10) unsigned not null,
+  PRIMARY KEY (`game_id`)
 ) ENGINE=InnoDB;
-CREATE INDEX game_id_idx ON `game_stats` (`game_id`);
 
 INSERT INTO `html_content` (lang, page, code, type, content) VALUES
 ('ru', 'CABINET', 'LOTTERY_STAT_TICKETS', 'STRING', 'билет'),
 ('ru', 'CABINET', 'LOTTERY_STAT_TICKETS_1', 'STRING', 'билет'),
 ('ru', 'CABINET', 'LOTTERY_STAT_TICKETS_2', 'STRING', 'билета'),
 ('ru', 'CABINET', 'LOTTERY_STAT_TICKETS_5', 'STRING', 'билетов');
+
+DROP TABLE IF EXISTS `budget`;
+CREATE TABLE `budget` (
+  `game_id` int(10) unsigned NOT NULL,
+  `sum` numeric(8,2) unsigned default 0,
+  `prize` numeric(8,2) unsigned default 0,
+  `fond` numeric(8,2) unsigned default 0,
+  `gift` numeric(8,2) unsigned default 0,  
+  `bonus` numeric(8,2) unsigned default 0,  
+  `costs` numeric(8,2) unsigned default 0,
+  `profit` numeric(8,2) unsigned default 0,
+  PRIMARY KEY (`game_id`)
+) ENGINE=InnoDB;

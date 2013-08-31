@@ -20,6 +20,7 @@ sub new
 }
 
 sub getLinks { }
+sub getName { }
 
 sub register { 
 	my ($self) = @_;

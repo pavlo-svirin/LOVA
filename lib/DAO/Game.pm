@@ -14,6 +14,8 @@ sub findExtJs
 
     $where .= " AND `date` >= " . $::sql->quote($params->{'from'} . " 00:00:00") if($params->{'from'}); 
     $where .= " AND `date` <= " . $::sql->quote($params->{'to'} . " 23:59:59") if($params->{'to'});
+    $order .= " ORDER BY " . $::sql->quote_field($params->{'sort'}) if($params->{'sort'});
+    $order .= " DESC" if($params->{'dir'} eq 'DESC');
     return $self->findSql({
         where => $where,
         order => $order,
@@ -26,7 +28,8 @@ sub findLast
 {
 	my $self = shift;
     return $self->findSql({
-    	order => "ORDER BY `date` DESC",
+    	where => " AND `approved` IS NOT NULL",
+    	order => "ORDER BY `id` DESC",
     	start => 0,
     	limit => 1
     })	

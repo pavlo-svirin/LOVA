@@ -1,19 +1,19 @@
-Ext.define('Loto.store.Games', {
+Ext.define('Loto.store.Budget', {
     extend: 'Ext.data.Store', 
-    model: 'Loto.model.Game',
+    model: 'Loto.model.Budget',
     autoLoad: false,
     pageSize: 50,
     remoteSort: true,
     proxy: new Ext.data.HttpProxy({
         type: 'jsonp',
-    	url: '/admin/game/load/ajax/',
+    	url: '/admin/budget/load/ajax/',
     	simpleSortMode: true,
         reader: {
             root: 'data'
         }
     }),
     sorters: [{
-        property: 'id',
+        property: 'game_id',
         direction: 'DESC'
     }]
 });
