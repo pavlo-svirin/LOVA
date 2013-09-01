@@ -15,63 +15,52 @@ sub getName { return 'Controller::Tickets' };
 
 sub getLinks
 {
+	my $self = shift;
     return {
         'tickets' => {
-            'add' => {},
-            'delete' => {},
-            'pay' => {}       
+            'add' => sub { $self->addTicket( @_ ) },
+            'delete' => sub { $self->deleteTicket( @_ ) },
+            'pay' => sub { $self->pay( @_ ) }       
         },
     }
 }
 
-sub process 
+sub addTicket
 {
     my($self, $url, $params) = @_;
     my $response = { 'type' => 'redirect', 'data' => '/cab/' };
-    
     my $user = $::userService->getCurrentUser();
     return unless($user);
     
-    if($url =~ /\/add\//)
-    {
-        $self->addTicket($params, $user);
-    }
-    elsif($url =~ /\/delete\//)
-    {
-        $self->deleteTicket($params, $user);
-    }
-    elsif($url =~ /\/pay\//)
-    {
-    	$response->{'type'} = 'ajax';
-        $response->{'data'} = $self->pay($params, $user); 
-    }
-    return $response;
-}
-
-sub addTicket
-{
-    my($self, $params, $user) = @_;
  	my @numbers = split(",", $params->{'selected_lottery_numbers'});
 	my $games = $params->{'games_count'};
 	if(@numbers && $games)
 	{
 		$::ticketService->addTicket({userId => $user->getId(), games => $games, numbers => \@numbers});
 	}
+	return $response;
 }
 
 sub deleteTicket
 {
+    my($self, $url, $params) = @_;
+    my $response = { 'type' => 'redirect', 'data' => '/cab/' };
+    my $user = $::userService->getCurrentUser();
+    return unless($user);
 }
 
 sub pay
 {
-    my($self, $params, $user) = @_;
+    my($self, $url, $params) = @_;
+    my $user = $::userService->getCurrentUser();
+    return unless($user);
+    
     my $response = { success => JSON::false, message => "Ошбика обработки." };
     
     if (not $params->{'selectedAccounts'} =~ /acc/ )
     {
     	$response->{'message'} = "Выберите счет для оплаты."; 
-    	return $response;
+    	return { 'type' => 'ajax', 'data' => $response};
     }
     
     my @accounts = map { lc }
@@ -83,19 +72,20 @@ sub pay
     if (! @accounts )
     {
         $response->{'message'} = "Выберите счет для оплаты."; 
-        return $response;
+        return { 'type' => 'ajax', 'data' => $response};
     }
 
     eval { $::ticketService->pay(@accounts); };
     if($@)
     {
         $response->{'message'} = $@;
-        return $response;
+        $response->{'message'} =~ s/\sat\s.+//;
+        return { 'type' => 'ajax', 'data' => $response};
     }
     
     $response->{'success'} = JSON::true;
     $response->{'message'} = "Оплата произведена успешно.";
-    return $response;
+    return { 'type' => 'ajax', 'data' => $response};
 }
 
 1;

@@ -3,7 +3,7 @@ use strict;
 require Log::Log4perl;
 
 my $log = Log::Log4perl->get_logger("Controller::Abstract");
-my @generics = ('admin', 'ajax', 'ru', 'en', 'ua');
+my @generics = ('admin', 'cab', 'ajax', 'ru', 'en', 'ua');
 
 sub new
 {

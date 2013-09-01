@@ -7,12 +7,14 @@ use Log::Log4perl;
 require DAO::Ticket;
 require DAO::Game;
 require DAO::Budget;
+require DAO::GameStat;
 require Data::Budget;
 
 my $log = Log::Log4perl->get_logger("Service::Game");
 my $ticketDao = DAO::Ticket->new();
 my $gameDao = DAO::Game->new();
 my $budgetDao = DAO::Budget->new();
+my $gameStatDao = new DAO::GameStat();
 
 sub new
 {
@@ -76,6 +78,7 @@ sub runGame
     $::sql->handle->begin_work();
     eval
     {
+    	my $maxGuessed = 0;
 	    foreach my $ticket (@tickets)
 	    {
 	        # update tickets "games left"
@@ -85,6 +88,7 @@ sub runGame
 	
 	        # calculate how many numbers were guesed for each tickets
 	        my $guessed = $::ticketService->calcGuessed($ticket, @luckyNumbers);
+	        $maxGuessed = $guessed if ($guessed > $maxGuessed);
 	        
 	        $gamePrice += $ticket->getGamePrice(); 
 	        push(@{$ticketsByGuessedNumbers->{$guessed}}, $ticket);        
@@ -92,6 +96,9 @@ sub runGame
 	    
 	    $game->setSum($gamePrice);
 	    $log->info("Game Price: ", $game->getSum());
+
+        my $winners = $self->findWinners(@{$ticketsByGuessedNumbers->{$maxGuessed}});
+        $game->setWinners($winners);
 	
         $gameDao->save($game);
         $self->writeGameStat($game, $ticketsByGuessedNumbers);
@@ -170,7 +177,6 @@ sub writeGameStat
     	my %users;
     	foreach my $ticket (@tickets)
     	{
-    		$log->debug($ticket);
     		$users{$ticket->getUserId()} = 1 if($ticket);
     	}
     	my $usersCount = scalar (keys %users);
@@ -285,8 +291,32 @@ sub approve
         $game->setApproved($::sql->now());
         $gameDao->save($game);
         
+        # Распределение бюджета
         my $budget = $self->createBudget($game, $budgetParams);
         $budgetDao->save($budget);
+        
+        # Увеличение "Общего выигрыша"
+        $::optionsService->load();
+        my $win = $::optionsService->get('totalWin');
+        $win += $budget->getPrize();
+        $::optionsService->set('totalWin', $win);
+        $::optionsService->save();
+        
+        # Начисление выигрыша победителям
+        my $gameStat = $gameStatDao->findByGameId($game->getId());
+        if ($gameStat && $gameStat->getNumOfWinnerTickets())
+        {
+            my $ticketWin = sprintf("%.2f", $budget->getPrize() / $gameStat->getNumOfWinnerTickets());
+            my $maxGuessed = $gameStat->getMaxGuessed(); 
+        	my @tickets = $ticketDao->findWinnerTickets($game->getId(), $maxGuessed);
+        	foreach my $ticket (@tickets)
+        	{
+        		my $user = $::userService->findById($ticket->getUserId());
+        		$::userService->loadAccount($user);
+        		$user->getAccount()->{'win'} += $ticketWin;
+        		$::userService->saveAccount($user);
+        	}
+        }
         
         $log->info("Game #", $game->getId(), " from ", $game->getDate(), " was approved.");
         $::sql->handle->commit();
@@ -319,6 +349,20 @@ sub _calcBudget
 	my ($sum, $percent) = @_;
 	return 0 if (!$sum || !$percent);
 	return sprintf("%.2f", $sum * $percent / 100);
+}
+
+sub findWinners
+{
+	my ($self, @tickets) = @_;
+	return  unless (@tickets);
+	my %winners;
+	foreach my $ticket (@tickets)
+	{
+		my $userId = $ticket->getUserId();
+		my $user = $::userService->findById($userId);
+		$winners{$user->getLogin()}++ if ($user);
+	}
+	return join(', ', keys %winners);
 }
 
 1;

@@ -8,6 +8,7 @@ Ext.define('Loto.model.Game', {
     { name: 'users', type: 'int'},
     { name: 'sum'},
     { name: 'approved', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+    { name: 'winners', type: 'string'},
     { name: 'budget.sum' },
     { name: 'budget.prize' },
     { name: 'budget.fond' },

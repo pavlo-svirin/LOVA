@@ -3,6 +3,7 @@ Ext.define('Loto.view.Options', {
     alias: 'widget.options',
     title: 'Настройки',
     frame: true,
+    autoScroll:true,
     fieldDefaults: {
     	labelAlign: 'left',
     	labelWidth: 200,
@@ -48,8 +49,6 @@ Ext.define('Loto.view.Options', {
           autoHeight: true,
           width: 600,
           defaults: {
-          	minValue: 0,
-          	maxValue: 100,
           	allowBlank: false
           },
           defaultType: 'numberfield',

@@ -480,6 +480,7 @@ sub loadAccount()
     $user->getAccount()->{'personal'} = $ref->{'personal'};
     $user->getAccount()->{'fond'} = $ref->{'fond'};
     $user->getAccount()->{'referal'} = $ref->{'referal'};
+    $user->getAccount()->{'win'} = $ref->{'win'};
 }
 
 sub saveAccount()
@@ -489,11 +490,12 @@ sub saveAccount()
     my $rv = $sth->execute($user->getId());
     if($rv == 1)
     {
-        $sth = $::sql->handle->prepare("UPDATE `user_account` SET `personal` = ?, `fond` = ?, `referal` = ? WHERE `user_id` = ?");
+        $sth = $::sql->handle->prepare("UPDATE `user_account` SET `personal` = ?, `fond` = ?, `referal` = ?, `win` = ? WHERE `user_id` = ?");
         $sth->execute(
             $user->getAccount()->{'personal'},
             $user->getAccount()->{'fond'},
             $user->getAccount()->{'referal'},
+            $user->getAccount()->{'win'},            
             $user->getId()
         );
     }

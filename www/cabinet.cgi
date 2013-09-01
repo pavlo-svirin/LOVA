@@ -42,6 +42,7 @@ my $htmlContentDao = new DAO::HtmlContent();
 my $ticketDao = new DAO::Ticket();
 my $gameDao = new DAO::Game(); 
 my $gameStatDao = new DAO::GameStat(); 
+my $budgetDao = new DAO::Budget(); 
 
 # Services
 our $userService = new Service::User();
@@ -91,12 +92,14 @@ if($user)
     $vars->{'data'}->{'account'}->{'personal'} = sprintf("%.02f", $user->getAccount()->{'personal'});
 	$vars->{'data'}->{'account'}->{'fond'} = sprintf("%.02f", $user->getAccount()->{'fond'});
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
+    $vars->{'data'}->{'account'}->{'win'} = sprintf("%.02f", $user->getAccount()->{'win'});
     
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'} = $user;
     $vars->{'data'}->{'profile'}->{'validateEmail'} = $user->getProfile()->{'validateEmail'};
 
     # Lottery options 
+    $vars->{'data'}->{'options'}->{'lottery'}->{'totalWin'} = $optionsService->get('totalWin');
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxNumber'} = $optionsService->get('maxNumber');
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxNumbers'} = $optionsService->get('maxNumbers');
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxGames'} = $optionsService->get('maxGames');
@@ -105,36 +108,44 @@ if($user)
     my @games = $gameService->findNextGames(2);
     $vars->{'data'}->{'options'}->{'lottery'}->{'nextGames'} = \@games; 
     
-    my @activeTickets = $ticketDao->findActive();
+    my @activeTickets = $ticketDao->findActive($user->getId());
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'active'} = \@activeTickets;
-    my @notPaidTickets = $ticketDao->findNotPaid();
+    my @notPaidTickets = $ticketDao->findNotPaid($user->getId());
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
     $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $ticketService->calcTicketsSum(@notPaidTickets);
 
     my $lastGame =  $gameDao->findLast();
-    $vars->{'data'}->{'lottery'}->{'last'}->{'game'} = $lastGame;
-    my $lastGameStat = $gameStatDao->findByGameId($lastGame->getId());
-    my $lastGameResult;
-    my $lastGameTotalTickets = $lastGameStat->getTickets();
-    if ($lastGameTotalTickets)
+    if($lastGame)
     {
-        my $maxGuessed = $lastGameStat->getMaxGuessed();
-	    for (my $i = 1; $i <= $optionsService->get('maxNumbers'); $i++)
+    	my $budget = $budgetDao->find({ game_id => $lastGame->getId() });
+	    $vars->{'data'}->{'lottery'}->{'last'}->{'win'} = $budget->getPrize() if ($budget);
+	    $vars->{'data'}->{'lottery'}->{'last'}->{'game'} = $lastGame;
+	    my $lastGameStat = $gameStatDao->findByGameId($lastGame->getId());
+	    if ($lastGameStat)
 	    {
-	        my $tickets = $lastGameStat->getTickets($i);
-	        $lastGameResult->{$i} = 0;
-	        if ($i == $maxGuessed)
-	        {
-                $lastGameResult->{$i} = $tickets . " " . $htmlContentService->getContent('LOTTERY_STAT_TICKETS', $tickets); 
-	        }
-	        elsif ($tickets)
-	        {
-                $lastGameResult->{$i} = int (100 * $tickets / $lastGameTotalTickets) . " %"; 
-	        }
-	    }
+		    my $lastGameResult;
+		    my $lastGameTotalTickets = $lastGameStat->getTickets();
+		    if ($lastGameTotalTickets)
+		    {
+		        my $maxGuessed = $lastGameStat->getMaxGuessed();
+			    for (my $i = 1; $i <= $optionsService->get('maxNumbers'); $i++)
+			    {
+			        my $tickets = $lastGameStat->getTickets($i);
+			        $lastGameResult->{$i} = 0;
+			        if ($i == $maxGuessed)
+			        {
+		                $lastGameResult->{$i} = $tickets . " " . $htmlContentService->getContent('LOTTERY_STAT_TICKETS', $tickets); 
+			        }
+			        elsif ($tickets)
+			        {
+		                $lastGameResult->{$i} = int (100 * $tickets / $lastGameTotalTickets) . " %"; 
+			        }
+			    }
+		    }
+		    
+		    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'} = $lastGameResult;
+        }
     }
-    
-    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'} = $lastGameResult;
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)
     {
         $vars->{'data'}->{'profile'}->{'referalDisabled'} = 'disabled';

@@ -38,6 +38,7 @@ Ext.define('Loto.view.Games', {
         { text: 'Дата', dataIndex: 'date', renderer: Ext.util.Format.dateRenderer('Y-m-d H:i') },       
         { text: 'Подтвержден', dataIndex: 'approved', renderer: Ext.util.Format.dateRenderer('Y-m-d H:i') },
         { text: 'Числа', dataIndex: 'lucky_numbers', flex: 1 },
+        { text: 'Победители', dataIndex: 'winners', flex: 1 },
         { text: 'Билетов', dataIndex: 'tickets' },
         { text: 'Пользователей', dataIndex: 'users' },
         { text: 'Сумма', dataIndex: 'sum' }

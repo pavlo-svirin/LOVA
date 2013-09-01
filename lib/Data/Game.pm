@@ -15,6 +15,7 @@ sub getFields
         'sum' => { sql => 'sum', add => '1' },
         'users' => { sql => 'users', add => '1' },
         'tickets' => { sql => 'tickets', add => '1' },
+        'winners' => { sql => 'winners', add => '1' },
         'approved' => { sql => 'approved', update => '1' }
 	)
 };

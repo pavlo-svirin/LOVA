@@ -53,4 +53,13 @@ sub getTickets
     return $count;
 }
 
+# Return number of tickets with max guessed
+sub getNumOfWinnerTickets
+{
+    my $self = shift;
+    my $max = $self->getMaxGuessed();
+    return 0 unless ($max);
+    return $self->get('guessed')->{$max}->{'tickets'};
+}
+
 1;

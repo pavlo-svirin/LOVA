@@ -41,8 +41,6 @@ sub findByGameId
     my $stat = ${model}->new();
     $stat->setGameId($gameId);
     $stat->setGuessed($guessed);
-    $log->debug($gameId);
-    $log->debug($stat->getGuessed());
     return $stat;  
 }
 

@@ -47,5 +47,25 @@ sub findExtJs
     });
 }
 
+sub findWinnerTickets
+{
+    my ($self, $gameId, $guessed) = @_;
+    
+    my $table = $self->getTable();
+    my $model = $self->getModel();
+    
+    my $query = "SELECT `tickets`.* FROM `game_tickets`";
+    $query .= " JOIN `tickets` ON `game_tickets`.`ticket_id` = `tickets`.`id`";
+    $query .= " WHERE `game_tickets`.`game_id` = ? AND `game_tickets`.`guessed` = ?";
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute($gameId, $guessed);
+    my @objects;
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+      push(@objects, ${model}->new(%$ref));
+    }
+    
+    return @objects;
+}
 
 1;

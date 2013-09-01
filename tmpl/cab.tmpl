@@ -53,7 +53,7 @@
             </table>           
         </td></tr>
         <tr><td>[% IF !data.profile.validateEmail %]<div id="validateEmail" class="alert alert-error">[% content.ALERT_EMAIL %]</div>[% END %]</td></tr>
-        <tr><td class="total_win">Выиграно $0.00</td></tr>
+        <tr><td class="total_win">Выиграно $[% data.options.lottery.totalWin %]</td></tr>
         <tr><td align="center">[% INCLUDE "../tmpl/lottery.tmpl" %]</td></tr>
         <tr><td class="row-separator"></td></tr>
         <tr><td>
