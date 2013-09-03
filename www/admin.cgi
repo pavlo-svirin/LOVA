@@ -57,6 +57,7 @@ my $gameDao = new DAO::Game();
 our $controllers = {};
 my $gamesController = new Controller::Games();
 my $budgetController = new Controller::Budget();
+my $usersController = new Controller::Users();
 
 #=======================Template Variables================
 
@@ -161,123 +162,6 @@ sub ajaxStage
             $emailService->sendToRecipients($subject, $body, $recipients);
         }
     }    
-    elsif(($URL =~ /\/users\//) && ($URL =~ /\/chart\//))
-    {
-    	my %usersByDate;
-        my @users = $userService->findCreatedInRange({
-            from => $CGI->param('from'),
-            to => $CGI->param('to')
-        });
-
-        foreach my $user (@users)
-        {
-            my $date = $user->getCreatedByScale($CGI->param('scale'));
-        	$usersByDate{$date}->{'registered'}++;
-            if($user->getReferal())
-            {
-                $usersByDate{$date}->{'referals'}++;
-            }
-            $userService->loadProfile($user);
-            my $activationDate = $user->getActivatedByScale($CGI->param('scale'));
-            if ($activationDate)
-            {
-                $usersByDate{$activationDate}->{'activated'}++;
-            }
-            
-        }
-
-        my $result->{'success'} = JSON::true;
-        $result->{'data'} = (); 
-        for my $date (sort keys %usersByDate)
-        {
-        	my $row->{'date'} = $date;
-        	$row->{'registered'} = $usersByDate{$date}->{'registered'} || 0;
-        	$row->{'activated'} = $usersByDate{$date}->{'activated'} || 0;
-            $row->{'referals'} = $usersByDate{$date}->{'referals'} || 0;
-        	push(@{$result->{'data'}}, $row);
-        }
-        print $json->encode($result);                
-     
-    }
-    elsif($URL =~ /\/users\//)
-    {
-        my $params = $CGI->Vars();
-        my $response->{'success'} = JSON::true;
-        $response->{'total'} = $userService->countExtJs($params);
-        my @users = $userService->findExtJs($params);
-        foreach my $user (@users)
-        {
-        	my $data = $user->getData();
-        	$data->{'meta'}->{'referals'} = $userService->countReferals($user);
-            push(@{$response->{data}}, $data);
-		}
-		print $json->encode($response);
-    }
-    elsif (($URL =~ /\/user\//) && ($URL =~ /\/delete\//))
-    {
-    	my $user = $userService->findById($CGI->param('id'));
-        my $response->{'success'} = JSON::false;
-    	if($user)
-    	{
-    		$userService->deleteUser($user);
-    		$response->{'success'} = JSON::true;
-    	}
-    	print $json->encode($response);
-    } 
-    elsif (($URL =~ /\/user\//) && ($URL =~ /\/load\//))
-    {
-        my $user = $userService->findById($CGI->param('id'));
-        my $response->{'success'} = JSON::false;
-        if($user)
-        {
-        	$userService->loadProfile($user);
-        	$userService->loadAccount($user);
-        	if($user->getProfile()->{'validateEmail'})
-        	{
-        		$user->getProfile()->{'validateEmail'} = JSON::true;
-        	}
-            if($user->getProfile()->{'like'})
-            {
-                $user->getProfile()->{'like'} = JSON::true;
-            }
-        	my $data =  $user->getData();
-            $data->{'meta'}->{'referals'} = $userService->countReferals($user);
-            push(@{$response->{data}}, $data);
-            $response->{'success'} = JSON::true;
-        }
-        print $json->encode($response);
-    }
-    elsif (($URL =~ /\/user\//) && ($URL =~ /\/save\//))
-    {
-        my $user = $userService->findById($CGI->param('id'));
-        $userService->loadProfile($user);
-        $userService->loadAccount($user);
-        # verify login and email
-        $user->setLogin($CGI->param('login'));
-        $user->setEmail($CGI->param('email'));
-        $user->setFirstName($CGI->param('first_name'));
-        $user->setLastName($CGI->param('last_name'));
-        if($CGI->param('password'))
-        {
-            $user->setPassword($CGI->param('password'));
-        }
-        $user->setReferal($CGI->param('referal'));
-        
-        $user->getProfile()->{'skype'} = $CGI->param('profile.skype');
-        $user->getProfile()->{'phone'} = $CGI->param('profile.phone');
-        $user->getProfile()->{'country'} = $CGI->param('profile.country');
-        $user->getProfile()->{'lang'} = $CGI->param('profile.lang');
-
-        $user->getAccount()->{'personal'} = $CGI->param('account.personal');
-        $user->getAccount()->{'fond'} = $CGI->param('account.fond');
-        $user->getAccount()->{'referal'} = $CGI->param('account.referal');
-        
-        $userService->save($user);
-        $userService->saveProfile($user);
-        $userService->saveAccount($user);
-        my $response->{'success'} = JSON::true;
-        print $json->encode($response);
-    }
     elsif (($URL =~ /\/emailTemplate\//) && ($URL =~ /\/load\//))
     {
     	my $response->{'success'} = JSON::true;
@@ -329,19 +213,6 @@ sub ajaxStage
         my $response->{'success'} = JSON::true;
         print $json->encode($response);
     }
-    elsif (($URL =~ /\/tickets\//) && ($URL =~ /\/load\//))
-    {
-        my $response->{'success'} = JSON::true;
-        my $params = $CGI->Vars();
-        my @objects = $ticketDao->findExtJs($params);
-        foreach my $obj (@objects)
-        {
-        	my $jsonObj = $obj->getData();
-        	$jsonObj->{'total'} = $obj->getGames() * $obj->getGamePrice();
-            push(@{$response->{data}}, $jsonObj);
-        }
-        print $json->encode($response);
-    }    
 }
 
 sub printOptions()

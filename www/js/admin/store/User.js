@@ -6,7 +6,7 @@ Ext.define('Loto.store.User', {
     autoLoad: true,
     proxy: new Ext.data.HttpProxy({
         type: 'jsonp',
-        url: '/admin/users/load/ajax/',
+        url: '/admin/users/list/ajax/',
         simpleSortMode: true,
         reader: {
             totalProperty: 'total',

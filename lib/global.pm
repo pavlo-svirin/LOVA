@@ -48,5 +48,6 @@ use Controller::Abstract;
 use Controller::Tickets;
 use Controller::Games;
 use Controller::Budget;
+use Controller::Users;
 
 1;

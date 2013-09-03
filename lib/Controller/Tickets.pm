@@ -18,11 +18,27 @@ sub getLinks
 	my $self = shift;
     return {
         'tickets' => {
+            'list' => sub { $self->list( @_ ) },
             'add' => sub { $self->addTicket( @_ ) },
             'delete' => sub { $self->deleteTicket( @_ ) },
             'pay' => sub { $self->pay( @_ ) }       
         },
     }
+}
+
+# List all Tickets for Tickets store
+sub list
+{
+    my($self, $url, $params) = @_;
+    my $response->{'success'} = JSON::true;
+    my @objects = $ticketDao->findExtJs($params);
+    foreach my $obj (@objects)
+    {
+        my $jsonObj = $obj->getData();
+        $jsonObj->{'total'} = $obj->getGames() * $obj->getGamePrice();
+        push(@{$response->{data}}, $jsonObj);
+    }
+    return { type => 'ajax', data => $response};
 }
 
 sub addTicket

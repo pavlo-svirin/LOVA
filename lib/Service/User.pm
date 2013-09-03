@@ -1,8 +1,13 @@
 package Service::User;
 use strict;
 
+use DateTime;
+require DAO::User;
+
+
 my $table = "users";
 my @systemProfileValues = ("like", "emailCode", "validateEmail", "showEmailWarning");
+my $userDao = new DAO::User();
 
 sub new
 {
@@ -163,26 +168,6 @@ sub findSubscribed
     
     my $sth = $::sql->handle->prepare( $query );
     my $rv = $sth->execute();
-    return () if($rv == 0E0);
-    my @users;
-    while(my $ref = $sth->fetchrow_hashref())
-    {
-      push(@users, Data::User->new(%$ref));
-    }
-    return @users;
-}
-
-sub findCreatedInRange
-{
-    my ($self, $conf) = @_;
-    
-    my $from = $conf->{'from'} || '1970-01-01';
-    $from .= ' 00:00:00';
-    my $to = $conf->{'to'} || '2999-01-01';
-    $to .= ' 23:59:59';
-    
-    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` WHERE `created` >= ? AND `created` <= ? ORDER BY `created`");
-    my $rv = $sth->execute($from, $to);
     return () if($rv == 0E0);
     my @users;
     while(my $ref = $sth->fetchrow_hashref())
@@ -548,5 +533,60 @@ sub getCurrentUser
 	return undef unless($userId);
 	return $self->findById($userId);
 }
+
+sub calcChart
+{
+    my($self, $params) = @_;
+    
+    my $registered = $userDao->countRegisteredUsers({
+        from => $params->{'from'},
+        to => $params->{'to'},
+        scale => $params->{'scale'}
+    });
+
+    my $activated = $userDao->countActivatedUsers({
+        from => $params->{'from'},
+        to => $params->{'to'},
+        scale => $params->{'scale'}
+    });
+
+    my $referals = $userDao->countReferalUsers({
+        from => $params->{'from'},
+        to => $params->{'to'},
+        scale => $params->{'scale'}
+    });
+    
+    my $all = {};
+    for my $timestamp (keys %$registered)
+    {
+    	my $truncate = DateTime->from_epoch(epoch => $timestamp)->truncate(to => $params->{'scale'})->epoch();
+        $all->{$truncate}->{'registered'} = $registered->{$timestamp}; 
+    }
+    for my $timestamp (keys %$activated)
+    {
+        my $truncate = DateTime->from_epoch(epoch => $timestamp)->truncate(to => $params->{'scale'})->epoch();
+        $all->{$truncate}->{'activated'} = $activated->{$timestamp}; 
+    }
+    for my $timestamp (keys %$referals)
+    {
+        my $truncate = DateTime->from_epoch(epoch => $timestamp)->truncate(to => $params->{'scale'})->epoch();
+        $all->{$truncate}->{'referals'} = $referals->{$timestamp}; 
+    }
+    
+    my @result;
+	for my $timestamp (sort {$a <=> $b} keys %$all)
+	{
+		my $date = DateTime->from_epoch(epoch => $timestamp)->ymd('-');
+		push(@result, {
+			'date' => $date,
+			'registered' => int($all->{$timestamp}->{'registered'}),
+            'activated' => int($all->{$timestamp}->{'activated'}),
+            'referals' => int($all->{$timestamp}->{'referals'})
+		});
+	}
+	return @result;
+}
+
+
 
 1;

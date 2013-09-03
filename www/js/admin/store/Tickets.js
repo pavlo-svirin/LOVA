@@ -6,7 +6,7 @@ Ext.define('Loto.store.Tickets', {
     remoteSort: true,
     proxy: new Ext.data.HttpProxy({
         type: 'jsonp',
-    	url: '/admin/tickets/load/ajax/',
+    	url: '/admin/tickets/list/ajax/',
         reader: {
             root: 'data'
         }

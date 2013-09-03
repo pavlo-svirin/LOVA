@@ -99,7 +99,7 @@ Ext.define('Loto.controller.Users', {
                if(btn == 'yes')
         	   {
             	   Ext.Ajax.request({
-            		   url: "/admin/user/delete/ajax/",
+            		   url: "/admin/users/delete/ajax/",
             		   method: 'GET',
             		   params: {id: userId},
             		   success: function (result, request) {
@@ -115,7 +115,7 @@ Ext.define('Loto.controller.Users', {
     _saveUser: function(btn)
     {
     	btn.up("userDetails").getForm().submit({
-    		url: '/admin/user/save/ajax/',
+    		url: '/admin/users/save/ajax/',
     		success: function(form, action) {
  			   Ext.data.StoreManager.lookup('User').load();
     		}
