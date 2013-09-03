@@ -7,6 +7,7 @@ use Email::Simple;
 
 $Service::Email::SMTP_HOST ||= 'localhost';
 $Service::Email::FROM_ADDRESS ||= 'LOVA <send.lova@pemes.net>';
+@Service::Email::BLACK_LIST = ('mail.ru', 'bk.ru', 'list.ru', 'inbox.ru');
 
 sub new
 {
@@ -67,6 +68,7 @@ sub sendInviteEmail
 {
     my ($self, $user) = @_;
     my $userService = $self->{'userService'};
+    return if(_addressInBlackList($user));
     
     $userService->loadProfile($user);
     my $lang = $user->getProfile()->{'lang'} || 'ru';
@@ -185,6 +187,15 @@ sub sendHtmlEmail
     });
 
     sendmail($message, { transport => $transport });    
+}
+
+sub _addressInBlackList
+{
+    my $email = shift;
+    foreach my $black (@Service::Email::BLACK_LIST)
+    {
+    	return 1 if($email =~ /\@$black/);
+    }
 }
 
 1;
