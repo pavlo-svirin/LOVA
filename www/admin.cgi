@@ -58,6 +58,7 @@ our $controllers = {};
 my $gamesController = new Controller::Games();
 my $budgetController = new Controller::Budget();
 my $usersController = new Controller::Users();
+my $ticketsController = new Controller::Tickets();
 
 #=======================Template Variables================
 
