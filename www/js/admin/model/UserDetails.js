@@ -18,6 +18,8 @@ Ext.define('Loto.model.UserDetails', {
     {name: 'account.personal'},
     {name: 'account.fond'},
     {name: 'account.referal'},
+    {name: 'account.win'},
+    {name: 'account.bonus'},
     {name: 'meta.referals', type: 'int'}
   ]
 });

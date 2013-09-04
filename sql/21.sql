@@ -61,4 +61,5 @@ CREATE TABLE `budget` (
   PRIMARY KEY (`game_id`)
 ) ENGINE=InnoDB;
 
-ALTER TABLE `user_account` ADD COLUMN `win` NUMERIC(10,2) DEFAULT 0;
+ALTER TABLE `user_account` ADD COLUMN `win` NUMERIC(10,2) unsigned DEFAULT 0;
+ALTER TABLE `user_account` ADD COLUMN `bonus` int(10) unsigned DEFAULT 0;

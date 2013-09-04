@@ -58,10 +58,27 @@ sub save
         push (@tokens, "?");
     }
     my $query = "INSERT INTO `$table` ( " . join(",", @fieldsList) . " ) VALUES ( " . join(",", @tokens) . " )";
-      my $sth = $::sql->handle->prepare($query);
+    my $sth = $::sql->handle->prepare($query);
     $sth->execute(@values);
     $object->setId($::sql->handle->{'mysql_insertid'});
 }
 
+# Returns total number of guessed numbers for the game groupped by user id
+sub findGuessedByUserId
+{
+    my ($self, $gameId) = @_;
+	my $query = "SELECT `t`.`user_id`, SUM(`gt`.`guessed`) AS total FROM `game_tickets` gt";
+	$query .= " JOIN `tickets` t ON `gt`.`ticket_id` = `t`.`id`";
+	$query .= " WHERE `gt`.`game_id` = ? ";
+	$query .= " GROUP BY `t`.`user_id`";
+    my $sth = $::sql->handle->prepare($query);
+    $sth->execute( $gameId );
+    my $result = {};
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+    	$result->{$ref->{'user_id'}} = $ref->{'total'};
+    }	
+    return $result;
+}
 
 1;

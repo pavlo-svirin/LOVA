@@ -93,6 +93,7 @@ sub save
     $user->getAccount()->{'fond'} = $params->{'account.fond'};
     $user->getAccount()->{'referal'} = $params->{'account.referal'};
     $user->getAccount()->{'win'} = $params->{'account.win'};
+    $user->getAccount()->{'bonus'} = $params->{'account.bonus'};
         
     $::userService->save($user);
     $::userService->saveProfile($user);

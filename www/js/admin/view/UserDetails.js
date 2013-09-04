@@ -105,6 +105,8 @@ Ext.define('Loto.view.UserDetails', {
     			        { name: 'account.personal', fieldLabel: 'Персональный' },
     			        { name: 'account.fond', fieldLabel: 'Фонд' },
     			        { name: 'account.referal', fieldLabel: 'Реферальный' },        	        
+    			        { name: 'account.win', fieldLabel: 'Выигрыш' },        	        
+    			        { name: 'account.bonus', fieldLabel: 'Балы' },        	        
     	        	]
     	        }
         	]

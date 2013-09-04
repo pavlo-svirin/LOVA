@@ -93,6 +93,7 @@ if($user)
 	$vars->{'data'}->{'account'}->{'fond'} = sprintf("%.02f", $user->getAccount()->{'fond'});
     $vars->{'data'}->{'account'}->{'referal'} = sprintf("%.02f", $user->getAccount()->{'referal'});
     $vars->{'data'}->{'account'}->{'win'} = sprintf("%.02f", $user->getAccount()->{'win'});
+    $vars->{'data'}->{'account'}->{'bonus'} = $user->getAccount()->{'bonus'};
     
     $userService->loadProfile($user);
     $vars->{'data'}->{'user'} = $user;

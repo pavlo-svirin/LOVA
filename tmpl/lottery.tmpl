@@ -32,7 +32,7 @@
   <tr><td colspan="3" class="separator"></td></tr>
   <tr><td colspan="3" class="separator"></td></tr>
   <tr>
-    <td class="last_game_stat">В прошлом розыгрыше:
+    <td class="last_game_stat" rowspan="2">В прошлом розыгрыше:
       <table width="100%">
         [% FOREACH num IN data.lottery.last.stat.keys.nsort.reverse %]
         <tr>
@@ -47,20 +47,28 @@
         [% END %]
       </table>
     </td>
-    <td align="center" class="last_game">Розыгрыш #[% data.lottery.last.game.getId() %] от [% data.lottery.last.game.getSchedule() %]
+    <td align="center" class="last_game" rowspan="2">Розыгрыш #[% data.lottery.last.game.getId() %] от [% data.lottery.last.game.getSchedule() %]
       <br>Приз составил: [% data.lottery.last.win %]
       <br>Удачные числа: [% data.lottery.last.game.getLuckyNumbers().join(', ') %]
       <br><br>
       <br>Ваш последний результат: лучше чем у 1 пользователя
       <br>Ваш лучший результат: лучше чем у 3 пользователей
     </td>
-    <td class="next_game">
+    <td>
       Следующие розыгрышы <span  class="" style="font-size:75%;color:#062170;vertical-align: super;">UTC</span>
       [% FOREACH nextGame IN data.options.lottery.nextGames %]
       <br>[% nextGame %]
       [% END %]
     </td>
   </tr>
+  <tr>
+    <td valign="bottom" align="right" style="vertical-align: bottom;">
+      <table width="150px">
+        <tr><td class="statHeader">Балы</td></tr>
+        <tr><td class="stat" rowspan="1"><h3>[% data.account.bonus || "0" %]</h3></td></tr>            
+      </table>
+    </td>
+  </tr>  
 </table>
 </form> 
 

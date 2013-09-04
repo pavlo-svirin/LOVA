@@ -215,7 +215,7 @@ sub getSchedules
         $runMin = $2;
     }
   
-    my $deltaDays = int((($count + 1) / scalar @scheduledDays) + 1) * 7;
+    my $deltaDays = int(($count / scalar @scheduledDays) + 1) * 7;
     my $startTimestamp = time - $deltaDays * 24 * 60 * 60;
     my $endTimestamp = time + $deltaDays * 24 * 60 * 60;
     my $current = $startTimestamp;
@@ -315,6 +315,21 @@ sub approve
         		$::userService->loadAccount($user);
         		$user->getAccount()->{'win'} += $ticketWin;
         		$::userService->saveAccount($user);
+        	}
+        }
+        
+        # Начисление балов
+        my $guessedByUsedId = $gameStatDao->findGuessedByUserId($game->getId());
+        foreach my $userId (keys %$guessedByUsedId)
+        {
+        	my $bonus = $guessedByUsedId->{$userId};
+        	$log->debug("User <", $userId, "> get ", $bonus, " bonuses.");
+        	my $user = $::userService->findById($userId);
+        	if($user)
+        	{
+                $::userService->loadAccount($user);
+        		$user->getAccount()->{'bonus'} += $bonus;
+                $::userService->saveAccount($user);
         	}
         }
         
