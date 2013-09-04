@@ -323,7 +323,7 @@ sub approve
         foreach my $userId (keys %$guessedByUsedId)
         {
         	my $bonus = $guessedByUsedId->{$userId};
-        	$log->debug("User <", $userId, "> get ", $bonus, " bonuses.");
+        	$log->info("User <", $userId, "> get ", $bonus, " bonuses.");
         	my $user = $::userService->findById($userId);
         	if($user)
         	{
