@@ -113,7 +113,7 @@ if($user)
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'active'} = \@activeTickets;
     my @notPaidTickets = $ticketDao->findNotPaid($user->getId());
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
-    $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = $ticketService->calcTicketsSum(@notPaidTickets);
+    $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = sprintf("%.02f", $ticketService->calcTicketsSum(@notPaidTickets));
 
     my $lastGame =  $gameDao->findLast();
     if($lastGame)
