@@ -107,6 +107,10 @@ if($user)
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxTickets'} = $optionsService->get('maxTickets');
     $vars->{'data'}->{'options'}->{'lottery'}->{'gamePrice'} = $optionsService->get('gamePrice');
     my @games = $gameService->findNextGames(2);
+    for (my $i = 0; $i < @games ; $i++)
+    {
+        $games[$i] = toTimeZone($games[$i], 'Europe/Kiev');
+    }
     $vars->{'data'}->{'options'}->{'lottery'}->{'nextGames'} = \@games; 
     
     my @activeTickets = $ticketDao->findActive($user->getId());
@@ -118,9 +122,12 @@ if($user)
     my $lastGame =  $gameDao->findLast();
     if($lastGame)
     {
+        my $schedule = toTimeZone($lastGame->getSchedule(), 'Europe/Kiev');
+        $lastGame->setSchedule($schedule);
+        $vars->{'data'}->{'lottery'}->{'last'}->{'game'} = $lastGame;
+    	
     	my $budget = $budgetDao->find({ game_id => $lastGame->getId() });
 	    $vars->{'data'}->{'lottery'}->{'last'}->{'win'} = $budget->getPrize() if ($budget);
-	    $vars->{'data'}->{'lottery'}->{'last'}->{'game'} = $lastGame;
 	    my $lastGameStat = $gameStatDao->findByGameId($lastGame->getId());
 	    if ($lastGameStat)
 	    {
@@ -332,4 +339,21 @@ sub getLang
     $lang = $user->getProfile()->{'lang'} if($user);	
 	$lang = $1 if($URL =~ /(ru|ua|en)/);
 	return $lang || 'ru';
+}
+
+sub toTimeZone
+{
+	my ($date, $tz) = @_;
+    $date =~ /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/; 
+    my $dt = DateTime->new(
+        year      => $1,
+        month     => $2,
+        day       => $3,
+        hour      => $4,
+        minute    => $5,
+        second    => 0,
+        time_zone => 'UTC'
+    );
+    $dt->set_time_zone($tz);
+    return $dt->ymd("-") . ' ' . sprintf("%02d:%02d", $dt->hour(), $dt->minute());        
 }
