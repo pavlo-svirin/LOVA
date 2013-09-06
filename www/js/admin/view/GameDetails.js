@@ -64,11 +64,11 @@ Ext.define('Loto.view.GameDetails', {
 		              },
 		              {
 		                  fieldLabel: 'Подарочные билеты',
-		                  name: 'budgetGiftTickets'
+		                  name: 'budgetGift'
 		               },
 		               {
 		                  xtype: 'label',
-		                  name: 'budgetGiftTickets',
+		                  name: 'budgetGift',
 		                  width: 80,
 		                  margin: '0 0 0 15'
 		              },

@@ -196,11 +196,11 @@ Ext.define('Loto.view.Options', {
             },
             {
                 fieldLabel: 'Подарочные билеты',
-                name: 'budgetGiftTickets'
+                name: 'budgetGift'
              },
              {
                 xtype: 'label',
-                name: 'budgetGiftTickets',
+                name: 'budgetGift',
                 width: 50,
                 margin: '0 0 0 15'
             },

@@ -92,7 +92,7 @@ sub AUTOLOAD
         }
         else
         {
-        	$log->warn("No such field: ", $fieldName);
+        	$log->warn("No such field: ", $fieldName, " model: ", $self);
         }
             
     }

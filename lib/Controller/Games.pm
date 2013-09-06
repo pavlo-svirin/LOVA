@@ -67,7 +67,7 @@ sub approve
     my $budget = {
     	prize => $params->{'budgetPrize'} || 0,
         fond => $params->{'budgetFond'} || 0,
-        gift => $params->{'budgetGiftTickets'} || 0,
+        gift => $params->{'budgetGift'} || 0,
         bonus => $params->{'budgetBonus'} || 0,
         costs => $params->{'budgetCosts'} || 0,
         profit => $params->{'budgetProfit'} || 0
