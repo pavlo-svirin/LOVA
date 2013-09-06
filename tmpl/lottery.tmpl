@@ -47,17 +47,15 @@
         [% END %]
       </table>
     </td>
-    <td align="center" class="last_game" rowspan="2">Розыгрыш #[% data.lottery.last.game.getId() %] от [% data.lottery.last.game.getSchedule() %]
-      <br>Приз составил: [% data.lottery.last.win %]
+    <td align="center" class="last_game" rowspan="2">В розыгрыше #[% data.lottery.last.game.getId() %] от [% data.lottery.last.game.getSchedule() %]
+      <br><strong><span class="text-success">Разыграно: <span style="color:#062170">[% data.lottery.last.win %]</span> $</strong>
       <br>Удачные числа: [% data.lottery.last.game.getLuckyNumbers().join(', ') %]
-      <br><br>
-      <br>Ваш последний результат: лучше чем у 1 пользователя
-      <br>Ваш лучший результат: лучше чем у 3 пользователей
+      <br>
     </td>
     <td>
-      Следующие розыгрышы <span  class="" style="font-size:75%;color:#062170;vertical-align: super;">UTC</span>
+      Следующие розыгрыши <span  class="text-info" style="font-size:75%;vertical-align: super;">UTC</span>
       [% FOREACH nextGame IN data.options.lottery.nextGames %]
-      <br>[% nextGame %]
+      <br>#[% data.lottery.last.game.getId() + loop.index + 1 %] от [% nextGame %]
       [% END %]
     </td>
   </tr>
