@@ -31,6 +31,7 @@ sub list
 {
     my($self, $url, $params) = @_;
     my $response->{'success'} = JSON::true;
+    $response->{'total'} = $ticketDao->countExtJs($params);
     my @objects = $ticketDao->findExtJs($params);
     foreach my $obj (@objects)
     {
@@ -38,7 +39,8 @@ sub list
         $jsonObj->{'total'} = $obj->getGames() * $obj->getGamePrice();
         push(@{$response->{data}}, $jsonObj);
     }
-    return { type => 'ajax', data => $response};
+    
+    return { type => 'ajax', data => $response };
 }
 
 sub addTicket

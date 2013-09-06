@@ -47,6 +47,21 @@ sub findExtJs
     });
 }
 
+sub countExtJs
+{
+    my ($self, $params) = @_;
+    my ($where, $order);
+
+    $where .= " AND `created` >= " . $::sql->quote($params->{'from'} . " 00:00:00") if($params->{'from'}); 
+    $where .= " AND `created` <= " . $::sql->quote($params->{'to'} . " 23:59:59") if($params->{'to'});
+    $where .= " AND `paid` IS NOT NULL" if($params->{'paid'} || $params->{'active'});
+    $where .= " AND `games_left` > 0" if($params->{'active'});
+    return $self->countSql({
+        where => $where,
+        order => $order
+    });
+}
+
 sub findWinnerTickets
 {
     my ($self, $gameId, $guessed) = @_;

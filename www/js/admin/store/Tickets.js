@@ -8,6 +8,7 @@ Ext.define('Loto.store.Tickets', {
         type: 'jsonp',
     	url: '/admin/tickets/list/ajax/',
         reader: {
+            totalProperty: 'total',
             root: 'data'
         }
     })
