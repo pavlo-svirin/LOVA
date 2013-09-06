@@ -24,6 +24,15 @@ sub findExtJs
     });
 }
 
+sub countExtJs
+{
+    my ($self, $params) = @_;
+    my $where;
+    $where .= " AND `date` >= " . $::sql->quote($params->{'from'} . " 00:00:00") if($params->{'from'}); 
+    $where .= " AND `date` <= " . $::sql->quote($params->{'to'} . " 23:59:59") if($params->{'to'});
+    return $self->countSql({ where => $where });
+}
+
 sub findLast
 {
 	my $self = shift;

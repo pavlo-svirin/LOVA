@@ -29,6 +29,7 @@ sub load
     my($self, $url, $params) = @_;	
     my @games = $gameDao->findExtJs($params);
     my $response->{'success'} = JSON::true;
+    $response->{'total'} = $gameDao->countExtJs($params);
     foreach my $game (@games)
     {
         my $data = $game->getData();

@@ -9,6 +9,7 @@ Ext.define('Loto.store.Games', {
     	url: '/admin/game/load/ajax/',
     	simpleSortMode: true,
         reader: {
+            totalProperty: 'total',        	
             root: 'data'
         }
     }),
