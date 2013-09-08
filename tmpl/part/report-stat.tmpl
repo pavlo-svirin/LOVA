@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Информация рекламного агента</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <!-- Bootstrap -->
+    <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="/lib/bootstrap/js/bootstrap.min.js"></script>
+    <link href="/css/main.css" rel="stylesheet">
+</head>
+<body style="background:url(/img/tile3.jpg)">
+    <table class="container">
+        <tr><td class="logo"><img alt="LoVa" src="/img/logo.gif"></td></tr>
+        <tr><td>
+            <table class="table table-striped">
+                <tr><th>#</th><th>Имя</th><th>Фамилия</th><th>E-mail</th></tr>
+                [% FOR user IN referals %]
+                <tr><td>[% loop.index + 1 %]</td>
+                    <td>[% user.getFirstName() %]</td>
+                    <td>[% user.getLastName() %]</td>
+                    <td>[% user.getEmail() %]</td>
+                </tr>
+                [% END %]
+            </table>
+        </td></tr>
+    </table>
+</body>
+</html>

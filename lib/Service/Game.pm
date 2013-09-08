@@ -15,6 +15,7 @@ my $ticketDao = DAO::Ticket->new();
 my $gameDao = DAO::Game->new();
 my $budgetDao = DAO::Budget->new();
 my $gameStatDao = new DAO::GameStat();
+my $userDao = DAO::User->new();
 
 sub new
 {
@@ -311,7 +312,7 @@ sub approve
         	my @tickets = $ticketDao->findWinnerTickets($game->getId(), $maxGuessed);
         	foreach my $ticket (@tickets)
         	{
-        		my $user = $::userService->findById($ticket->getUserId());
+        		my $user = $userDao->findById($ticket->getUserId());
         		$::userService->loadAccount($user);
         		$user->getAccount()->{'win'} += $ticketWin;
         		$::userService->saveAccount($user);
@@ -324,7 +325,7 @@ sub approve
         {
         	my $bonus = $guessedByUsedId->{$userId};
         	$log->info("User <", $userId, "> get ", $bonus, " bonuses.");
-        	my $user = $::userService->findById($userId);
+        	my $user = $userDao->findById($userId);
         	if($user)
         	{
                 $::userService->loadAccount($user);
@@ -374,7 +375,7 @@ sub findWinners
 	foreach my $ticket (@tickets)
 	{
 		my $userId = $ticket->getUserId();
-		my $user = $::userService->findById($userId);
+		my $user = $userDao->findById($userId);
 		$winners{$user->getLogin()}++ if ($user);
 	}
 	return join(', ', keys %winners);

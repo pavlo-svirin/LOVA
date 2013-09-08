@@ -43,6 +43,7 @@ my $ticketDao = new DAO::Ticket();
 my $gameDao = new DAO::Game(); 
 my $gameStatDao = new DAO::GameStat(); 
 my $budgetDao = new DAO::Budget(); 
+my $userDao = new DAO::User(); 
 
 # Services
 our $userService = new Service::User();
@@ -65,7 +66,7 @@ if($URL =~ /(\w{32})/)
 }
 
 my $userId = $cgiSession->param('userId');
-my $user = $userService->findById($userId);
+my $user = $userDao->findById($userId);
 
 my $lang = &getLang();
 
@@ -76,6 +77,7 @@ our $gameService = new Service::Game();
 
 # Controllers
 my $ticketsController = new Controller::Tickets();
+my $reportsController = new Controller::Reports();
 
 #=======================Template Variables================
  
@@ -86,7 +88,8 @@ if($user)
 {
 	$vars->{'data'}->{'users'}->{'active'} = $userService->countActive();
 	$vars->{'data'}->{'refLink'} = "?ref=" . $user->getLogin();
-    $vars->{'data'}->{'referals'} = $userService->countReferals($user);
+    $vars->{'data'}->{'referals'}->{'active'} = $userDao->countActiveReferals($user);
+    $vars->{'data'}->{'referals'}->{'all'} = $userDao->countReferals($user);
     
 	$userService->loadAccount($user);
     $vars->{'data'}->{'account'}->{'personal'} = sprintf("%.02f", $user->getAccount()->{'personal'});
@@ -311,7 +314,7 @@ sub sendInvite
     {
         $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_ONE_EMAIL_ALLOWED');
     }
-    elsif ($userService->findByEmail($email))
+    elsif ($userDao->findByEmail($email))
     {
         $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_EMAIL_EXISTS');
     }

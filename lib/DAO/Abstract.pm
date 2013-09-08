@@ -112,6 +112,26 @@ sub findExtJs
 
 # ============ COUNT METHODS ===================
 
+sub count
+{
+    my ($self, $params) = @_;
+    my $table = $self->getTable();
+    my $model = $self->getModel();
+    
+    my @values;
+    my $query = "SELECT count(*) AS `total` FROM `$table` WHERE 1 = 1";
+    foreach my $field (keys %$params)
+    {
+        $query .= " AND `$field` = ?";
+        push(@values, $params->{$field});
+    }
+    $log->trace("Count: ", $query);
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute(@values);
+    my $ref = $sth->fetchrow_hashref();
+    return $ref->{'total'};
+}
+
 sub countSql
 {
     my ($self, $params) = @_;

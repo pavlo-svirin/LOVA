@@ -9,8 +9,9 @@ use Log::Log4perl;
 require DAO::User;
 
 my $log = Log::Log4perl->get_logger("Controller::Users");
+my $userDao = new DAO::User();  
 
-sub getName { return 'Controller::Tickets' };
+sub getName { return 'Controller::Users' };
 
 sub getLinks
 {
@@ -36,7 +37,7 @@ sub list
     foreach my $user (@users)
     {
         my $data = $user->getData();
-        $data->{'meta'}->{'referals'} = $::userService->countReferals($user);
+        $data->{'meta'}->{'referals'} = $userDao->countReferals($user);
         push(@{$response->{data}}, $data);
     }
    return { type => 'ajax', data => $response};
@@ -47,7 +48,7 @@ sub load
 {
     my($self, $url, $params) = @_;
     my $response->{'success'} = JSON::false;
-    my $user = $::userService->findById($params->{'id'});
+    my $user = $userDao->findById($params->{'id'});
     if($user)
     {
         $::userService->loadProfile($user);
@@ -61,7 +62,7 @@ sub load
             $user->getProfile()->{'like'} = JSON::true;
         }
         my $data =  $user->getData();
-        $data->{'meta'}->{'referals'} = $::userService->countReferals($user);
+        $data->{'meta'}->{'referals'} = $userDao->countReferals($user);
         push(@{$response->{data}}, $data);
         $response->{'success'} = JSON::true;
     }
@@ -107,7 +108,7 @@ sub delete
 {
     my($self, $url, $params) = @_;
     my $response->{'success'} = JSON::false;
-    my $user = $::userService->findById($params->{'id'});
+    my $user = $userDao->findById($params->{'id'});
     if($user)
     {
         $::userService->deleteUser($user);

@@ -9,6 +9,9 @@ $Service::Email::SMTP_HOST ||= 'localhost';
 $Service::Email::FROM_ADDRESS ||= 'LOVA <send.lova@pemes.net>';
 @Service::Email::BLACK_LIST = ('mail.ru', 'bk.ru', 'list.ru', 'inbox.ru');
 
+require DAO::User;
+my $userDao = new DAO::User();
+
 sub new
 {
     my $proto = shift;                 # извлекаем имя класса или указатель на объект
@@ -87,7 +90,7 @@ sub sendInviteEmail
         $vars->{'senderFirstName'} = "";
         $vars->{'senderLastName'} = "";
         
-        my $invitee = $userService->findByLogin($user->getReferal());
+        my $invitee = $userDao->find({ login => $user->getReferal() });
         if($invitee)
         {
         	$vars->{'senderFirstName'} = $invitee->getFirstName();
@@ -114,7 +117,7 @@ sub sendEmailTemplate
 sub sendToAllUsers
 {
     my ($self, $subject, $body) = @_;
-    my @users = $self->{'userService'}->findAll();
+    my @users = $userDao->findAll();
     foreach my $user (@users)
     {
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 

@@ -73,8 +73,8 @@
                     <td width="5%" rowspan="1"></td>                    
                     <td class="stat" rowspan="1"><h2>$[% data.account.fond || "0.00" %]</h2></td>
                     <td width="5%" rowspan="1"></td>                    
-                    <td class="stat"><h3>$[% data.account.referal || "0.00" %]</h2></td>
-                    <td class="stat"><h3>[% data.referals || "0" %]</h2></td>
+                    <td class="stat"><h3>$[% data.account.referal || "0.00" %]</h3></td>
+                    <td class="stat">[% '<a href="#statDiv" data-toggle="modal">' IF data.referals.all %]<h3>[% data.referals.all || "0" %]</h3>[% '</a>' IF data.referals.all %]</td>
                     <td width="" rowspan="1"></td>                    
                     <td class="stat" rowspan="1"><h2>$[% data.account.win || "0.00" %]</h2></td>
                 </tr>
@@ -91,14 +91,14 @@
                     </td>
                     <td width="5%" rowspan="1"></td>                    
                     <td  align="center" colspan="2">
-                        <button class="btn btn-info">Пригласите друга</button>
+                        <button class="btn btn-info" href="#inviteDiv" data-toggle="modal" >Пригласите друга</button>
                     </td>
                     <td width="" rowspan="1"></td>                    
                     <td align="center"><button class="btn btn-success">Выплата</button></td>
                 </tr>
                 <tr><td class="row-separator"></td></tr>
                 <tr><td></td><td></td><td></td>
-                    <td colspan="4" align="center">У вас есть 5 подарочных билетов<br>Рейтинг привлекающих: #567890</td>
+                    <td colspan="4" align="center">У вас есть 5 подарочных билетов</td>
                     <td></td>
                 </tr>
             </table>
@@ -110,7 +110,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="restoreLabel">[% content.INVITE_LABEL %]</h3>
-      < /div>
+      </div>
       <div class="modal-body">
           [% IF !data.user.getLastName() %]
           <div class="alert alert-error">[% content.INVITE_ALERT_PROFILE %]</div>
@@ -140,6 +140,39 @@
       </div>
       </form>
     </div>
-    
+
+    [% IF data.referals.all %]
+    <div id="statDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="statLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="statLabel">Информация рекламного агента</h3>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-error hide"></div>
+        <div class="row">
+            <div class="span3">Активных приглашенных</div>
+            <div class="span2 text-left text-success">[% data.referals.active || "0" %]</div>
+        </div>    
+        <div class="row">
+            <div class="span3">Всего приглашено</div>
+            <div class="span2 text-left muted">[% data.referals.all || "0" %]</div>
+        </div>
+        [%#    
+        <div class="row">
+            <div class="span3">Прибыль от приглашенных</div>
+            <div class="span2 text-left text-success">$0.00</div>
+        </div>    
+        <div class="row">
+            <div class="span3">Ваш рекламный рейтинг</div>
+            <div class="span2 text-left"># 123 456</div>
+        </div>
+        %]    
+      </div>
+      <div class="modal-footer">
+        <a target="_blank" href="/cab/reports/referal/" class="btn btn-primary">Подробный отчет</a>
+        <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+      </div>
+    </div>
+    [% END %]
 </body>
 </html>

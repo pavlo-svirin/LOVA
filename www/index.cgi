@@ -39,6 +39,7 @@ my $cookie = new CGI::Cookie(-expires=>'+3M', -name=>'sid', -value=>$cgiSession-
 
 # DAO
 my $htmlContentDao = new DAO::HtmlContent();
+my $userDao = DAO::User->new();
 
 # Services
 my $userService = new Service::User();
@@ -111,7 +112,7 @@ sub ajaxStage
     {
     	my $result->{'success'} = 'false';
 
-        my $user = $userService->findByLoginOrEmail({
+        my $user = $userDao->findByLoginOrEmail({
         	login => $CGI->param("login"),
         	email => $CGI->param("email")
         });
@@ -136,7 +137,7 @@ sub checkUserLogin
     {
     	my $email = $CGI->param("email");
         my $pwd = $CGI->param("password");
-    	my $user = $userService->findByEmail($email);
+    	my $user = $userDao->findByEmail($email);
     	if($user && $user->checkPassword($pwd))
     	{
             $cgiSession->param('userId', $user->getId());
@@ -148,7 +149,7 @@ sub checkUserLogin
 sub checkReferal
 {
 	my $ref = $CGI->param('ref');
-	if($ref && $userService->findByLogin($ref))
+	if($ref && $userDao->findByLogin($ref))
 	{
         $cgiSession->param('ref', $ref);       
 	}
@@ -160,7 +161,7 @@ sub getLang
     my $userId = $cgiSession->param('userId'); 
     if($userId)
     {
-    	my $user = $userService->findById($userId);
+    	my $user = $userDao->findById($userId);
     	$userService->loadProfile($user);
         $lang = $user->getProfile()->{'lang'} if($user);    
     }

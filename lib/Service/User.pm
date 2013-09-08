@@ -22,69 +22,6 @@ sub new
     return $self;
 }
 
-sub findById
-{
-    my ($self, $id) = @_;
-    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` WHERE `id`= ?");
-    my $rv = $sth->execute($id);
-    return undef if($rv == 0E0);
-    my $ref = $sth->fetchrow_hashref();
-    my $user = Data::User->new(%$ref);
-    return $user;
-}
-
-sub findByLogin
-{
-    my ($self, $login) = @_;
-    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` WHERE `login`= ?");
-    my $rv = $sth->execute($login);
-    return undef if($rv == 0E0);
-    my $ref = $sth->fetchrow_hashref();
-    my $user = Data::User->new(%$ref);
-    return $user;
-}
-
-sub findByEmail
-{
-    my ($self, $email) = @_;
-    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` WHERE `email`= ?");
-    my $rv = $sth->execute($email);
-    return undef if($rv == 0E0);
-    my $ref = $sth->fetchrow_hashref();
-    my $user = Data::User->new(%$ref);
-    return $user;
-}
-
-sub findByLoginOrEmail
-{
-    my $self = shift;
-    my $values = shift;
-    my $user;
-    if($values->{"login"})
-    {
-        $user = $self->findByLogin($values->{"login"});
-    }
-    if(!$user && $values->{"email"})
-    {
-        $user = $self->findByEmail($values->{"email"});
-    }
-    return $user;
-}
-
-sub findAll
-{
-    my ($self) = @_;
-    my $sth = $::sql->handle->prepare("SELECT * FROM `$table` ORDER BY `created`");
-    my $rv = $sth->execute();
-    return () if($rv == 0E0);
-    my @users;
-    while(my $ref = $sth->fetchrow_hashref())
-    {
-      push(@users, Data::User->new(%$ref));
-    }
-    return @users;
-}
-
 sub findExtJs
 {
     my ($self, $config) = @_;
@@ -244,19 +181,6 @@ sub countActive
     return $ref->{'total'} + 3000;
 }
 
-sub countReferals
-{
-    my ($self, $user) = @_;
-    my $query = "SELECT count(`u`.`id`) AS `total` FROM `$table` `u`";
-    $query .= " JOIN `user_profile` `p` ON `u`.`id` = `p`.`user_id` ";
-    $query .= " WHERE `p`.`name` = 'validateEmail' ";
-    $query .= " AND `referal` = ? ";
-    my $sth = $::sql->handle->prepare($query);
-    my $rv = $sth->execute($user->getLogin());
-    my $ref = $sth->fetchrow_hashref();
-    return $ref->{'total'};
-}
-
 sub countSubscribed
 {
     my ($self) = @_;
@@ -347,7 +271,7 @@ sub validate
     }
     if($user->getReferal())
     {
-        unless($self->findByLogin($user->getReferal()))
+        unless($userDao->findByLogin($user->getReferal()))
         {
             $result->{'fields'}->{'referal'} = 'Пользователь с таким ником не найден';
             $result->{'success'} = 'false';
@@ -365,14 +289,14 @@ sub validate
     }
     
     # Validate uniq keys
-    my $emailUser = $self->findByEmail($user->getEmail()); 
+    my $emailUser = $userDao->findByEmail($user->getEmail()); 
     if($emailUser && ($emailUser->getId() != $user->getId()))
     {
         $result->{'fields'}->{'email'} = 'Такая почта уже зарегистрирована';
         $result->{'success'} = 'false';
     }
     
-    my $loginUser = $self->findByLogin($user->getLogin()); 
+    my $loginUser = $userDao->findByLogin($user->getLogin()); 
     if($loginUser && ($loginUser->getId() != $user->getId()))
     {
     	
@@ -531,7 +455,7 @@ sub getCurrentUser
 	my $cgiSession = new CGI::Session("driver:MySQL;", $sid, {Handle=>$::sql->handle});
 	my $userId = $cgiSession->param('userId');
 	return undef unless($userId);
-	return $self->findById($userId);
+	return $userDao->findById($userId);
 }
 
 sub calcChart
