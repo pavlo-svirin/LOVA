@@ -80,12 +80,7 @@ sub sendInviteEmail
     	$log->warn("Cannot send invite because email: '", $email, "' is in black list.");
     	return;
     }
-    if(_addressInGreyList($user->getEmail()))
-    {
-        $log->warn("Cannot send invite because email: '", $email, "' is in grey list.");
-        return;
-    }
-    
+   
     $userService->loadProfile($user);
     my $lang = $user->getProfile()->{'lang'} || 'ru';
     my $emailCode = Sirius::Common::GenerateRandomString(32);
@@ -214,11 +209,6 @@ sub _addressInBlackList
     }
 }
 
-# Find email in grey list
-sub _addressInGreyList
-{
-    my $email = shift;
-    return $::sql->count('grey_email', " WHERE `email`=" . $::sql->q($email));
-}
+
 
 1;

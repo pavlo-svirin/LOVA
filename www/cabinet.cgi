@@ -3,6 +3,7 @@ use strict;
 use utf8;
 
 use FindBin qw($Bin);
+use Log::Log4perl;
 use lib "$Bin/../lib/";
 
 use Sirius::Common qw(debug);
@@ -11,6 +12,8 @@ use options;
 use global;
 
 #=======================Variables=========================
+
+my $log = Log::Log4perl->get_logger("cabinet.cgi");
 
 our $sql     = Sirius::MySQL->new(host=>$MYSQL{'host'}, db=>$MYSQL{'base'}, user=>$MYSQL{'user'}, password=>$MYSQL{'pass'}, debug=>1);
 my $dbh      = $sql->connect;
@@ -305,6 +308,7 @@ sub sendInvite
     my $name = $CGI->param('first_name');
     my $email = $CGI->param('email');
     my $numAtSign = () = $email =~ /\@/gi;
+    $log->debug("Lang: $lang");
     if (!$name || !$email)
     {
         $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_REQUIRED_FIELDS');
@@ -324,6 +328,10 @@ sub sendInvite
     elsif ($userService->countLatestInvitedUsers({ referal => $user->getLogin(), interval => 60 }) > $optionsService->get("invitesLimit"))
     {
         $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_LIMIT');
+    }
+    elsif (addressInGreyList($email))
+    {
+        $result->{'error'} = "На данный почтовый ящик уже отправлено достаточно приглашений.<br>Попробуйте отправить приглашение на другой почтовый ящик.";
     }
     else
     {
@@ -362,4 +370,11 @@ sub toTimeZone
     );
     $dt->set_time_zone($tz);
     return $dt->ymd("-") . ' ' . sprintf("%02d:%02d", $dt->hour(), $dt->minute());        
+}
+
+# Find email in grey list
+sub addressInGreyList
+{
+    my $email = shift;
+    return $::sql->count('grey_emails', " WHERE `email`=" . $::sql->q($email));
 }
