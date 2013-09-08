@@ -97,6 +97,11 @@ Ext.define('Loto.view.Options', {
             	  xtype: 'textfield',
             	  fieldLabel: 'Буферное время (мин)',
             	  name: 'bufferTime'
+            },
+            {
+          	  xtype: 'textfield',
+          	  fieldLabel: 'Лимит билетов на игру',
+          	  name: 'ticketsLimit'
             }
           ]
       },

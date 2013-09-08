@@ -26,8 +26,12 @@
     <td></td>
     <td align="center">
         <input type="hidden" name="selected_lottery_numbers">
+        [% IF data.lottery.session.tickets.limit %]
+        <div class="alert alert-error">Вы уже выбрали максимальное количество билетов на следующую игру.</div>
+        [% ELSE %]
         Выбрано <span id="count_selected_numbers">[% data.session.selectedNumbers || 0 %]</span> из [% data.options.lottery.maxNumbers %] чисел
         <br><button type="button" class="btn" name="auto_select" onClick="autoSelectNumbers()">Выбрать числа автоматически</button>
+        [% END %]
     </td>
     <td></td>
   </tr>

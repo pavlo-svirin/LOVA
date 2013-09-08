@@ -109,6 +109,8 @@ if($user)
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxGames'} = $optionsService->get('maxGames');
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxTickets'} = $optionsService->get('maxTickets');
     $vars->{'data'}->{'options'}->{'lottery'}->{'gamePrice'} = $optionsService->get('gamePrice');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'ticketsLimit'} = $optionsService->get('ticketsLimit');
+        
     my @games = $gameService->findNextGames(2);
     for (my $i = 0; $i < @games ; $i++)
     {
@@ -121,6 +123,8 @@ if($user)
     my @notPaidTickets = $ticketDao->findNotPaid($user->getId());
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
     $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = sprintf("%.02f", $ticketService->calcTicketsSum(@notPaidTickets));
+    my $ticketsCount = scalar @activeTickets + scalar @notPaidTickets;
+    $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'limit'}  = 1 if ($optionsService->get('ticketsLimit') && ($optionsService->get('ticketsLimit') >= $ticketsCount));
 
     my $lastGame =  $gameDao->findLast();
     if($lastGame)

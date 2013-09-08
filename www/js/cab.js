@@ -162,7 +162,7 @@ function toggleLotteryNumber(num) {
   }
   var selected = countSelectedNumbers();
   $("#count_selected_numbers").html(selected);
-  if(selected == config.maxNumbers) {
+  if(!session.limit && (selected == config.maxNumbers)) {
 	  $("#addTicketBtn").removeClass("disabled").removeAttr("disabled");
   } else {
 	  $("#addTicketBtn").addClass("disabled").attr("disabled", "disabled");

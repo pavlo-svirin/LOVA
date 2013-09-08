@@ -48,8 +48,14 @@ sub addTicket
     my($self, $url, $params) = @_;
     my $response = { 'type' => 'redirect', 'data' => '/cab/' };
     my $user = $::userService->getCurrentUser();
-    return unless($user);
-    
+    return $response unless($user);
+
+    # Do not add tickets if game limit reached    
+    my @activeTickets = $ticketDao->findActive($user->getId());
+    my @notPaidTickets = $ticketDao->findNotPaid($user->getId());    
+    my $ticketsCount = scalar @activeTickets + scalar @notPaidTickets;
+    return $response if ($::optionsService->get('ticketsLimit') && ($::optionsService->get('ticketsLimit') >= $ticketsCount));        
+        
  	my @numbers = split(",", $params->{'selected_lottery_numbers'});
 	my $games = $params->{'games_count'};
 	if(@numbers && $games)
