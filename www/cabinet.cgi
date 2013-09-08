@@ -128,6 +128,9 @@ if($user)
         my $schedule = toTimeZone($lastGame->getSchedule(), 'Europe/Kiev');
         $lastGame->setSchedule($schedule);
         $vars->{'data'}->{'lottery'}->{'last'}->{'game'} = $lastGame;
+        
+        my @userTickets = $ticketDao->findByGameAndUser($lastGame->getId(), $user->getId());
+    	$vars->{'data'}->{'lottery'}->{'last'}->{'userTickets'} = \@userTickets;
     	
     	my $budget = $budgetDao->find({ game_id => $lastGame->getId() });
 	    $vars->{'data'}->{'lottery'}->{'last'}->{'win'} = $budget->getPrize() if ($budget);

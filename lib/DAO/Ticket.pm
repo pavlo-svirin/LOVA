@@ -83,4 +83,25 @@ sub findWinnerTickets
     return @objects;
 }
 
+sub findByGameAndUser
+{
+    my ($self, $gameId, $userId) = @_;
+
+    my $table = $self->getTable();
+    my $model = $self->getModel();
+    
+    my $query = "SELECT `$table`.* FROM `game_tickets`";
+    $query .= " JOIN `$table` ON `game_tickets`.`ticket_id` = `$table`.`id`";
+    $query .= " WHERE `game_tickets`.`game_id` = ? AND `$table`.`user_id` = ? ";
+    my $sth = $::sql->handle->prepare($query);
+    my $rv = $sth->execute($gameId, $userId);
+    my @objects;
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+      push(@objects, ${model}->new(%$ref));
+    }
+    
+    return @objects;
+}
+
 1;

@@ -39,11 +39,8 @@
         [% FOREACH num IN data.lottery.last.stat.keys.nsort.reverse %]
         <tr>
         <td>[% num %] цифр</td>
-        <td>[% IF data.lottery.last.stat.$num %]
-                [% data.lottery.last.stat.$num %]
-            [% ELSE %]
-                не угадал никто
-            [% END %]
+        <td>[% IF data.lottery.last.stat.$num %][% data.lottery.last.stat.$num %]
+            [% ELSE %]не угадал никто[% END %]
         </td>
         </tr>
         [% END %]
@@ -52,7 +49,7 @@
     <td align="center" class="last_game" rowspan="2">В розыгрыше #[% data.lottery.last.game.getId() %] от [% data.lottery.last.game.getSchedule() %]
       <br><strong><span class="text-success">Разыграно: <span style="color:#062170">[% data.lottery.last.win %]</span> $</strong>
       <br>Удачные числа: [% data.lottery.last.game.getLuckyNumbers().join(', ') %]
-      <br>
+      <br>[% IF data.lottery.last.userTickets %]<a href="#userTicketsDiv" data-toggle="modal">Ваши результаты</a>[% END %]
     </td>
     <td>
       Следующие розыгрыши <span  class="text-info" style="font-size:75%;vertical-align: super;">Kiev</span>
@@ -124,4 +121,39 @@
   </div>
   </form>
 </div>
+
+[% IF data.lottery.last.userTickets %]
+<div id="userTicketsDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="userTicketsLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="userTicketsLabel">Ваши результаты</h3>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-error hide"></div>
+    <div class="row">
+        <div class="span1"><strong>#</strong></div>
+        <div class="span4"><strong>Числа</strong></div>
+        <div class="span1"><strong>Угадано</strong></div>
+    </div>
+    [% FOREACH ticket IN data.lottery.last.userTickets %]
+        [% SET guessed = 0 %]
+        [% SET lucky = data.lottery.last.game.getLuckyNumbers() %] 
+    <div class="row">
+        <div class="span1">[% loop.index + 1 %]</div>
+        <div class="span4">[% FOREACH num IN ticket.getNumbers() %]
+            [% SET class = "" %]
+            [% FOREACH x IN lucky %]
+                [% IF x == num %][% SET guessed = guessed + 1 %][% SET class = 'text-warning' %][% ELSIF x > num %][% LAST %][% END %]
+            [% END %]
+            <span class="[% class %]">[% num %]</span>[% ', ' IF !loop.last %]
+        [% END %]</div>
+        <div class="span1">[% guessed %]</div>
+    </div>
+    [% END %]    
+  </div>
+  <div class="modal-footer">
+    <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+  </div>
+</div>
+[% END %]
        
