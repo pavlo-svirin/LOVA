@@ -15,8 +15,10 @@
     <td width="25%" align="center">
       Количество игр: <a href="javascript:decGame()">&lt;</a><input type="text" name="games_count" class="games_count input-sm" value="1"><a href="javascript:incGame()">&gt;</a>
       <br><button type="button" id="addTicketBtn" class="btn btn-success disabled" disabled="disabled" onclick="addTicket()">Добавить билет</button>
+      [%# AUTO_ADD_TICKETS
       <br><br>Количество билетов: <a href="javascript:decTickets()">&lt;</a><input type="text" name="tickets_count" class="games_count input-sm" value="1"><a href="javascript:incTickets()">&gt;</a>
       <br><button type="button" class="btn btn-info" onclick="addTicket()">Заполнить на удачу</button>
+      %]
     </td>
   </tr>
   <tr><td colspan="3" class="separator"></td></tr>
