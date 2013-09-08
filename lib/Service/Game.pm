@@ -353,7 +353,7 @@ sub createBudget
     $budget->setSum($game->getSum());
     $budget->setPrize(_calcBudget($game->getSum(), $budgetParams->{'prize'}));
     $budget->setFond(_calcBudget($game->getSum(), $budgetParams->{'fond'}));
-    $budget->setGift(_calcBudget($game->getSum(), $budgetParams->{'tickets'}));
+    $budget->setGift(_calcBudget($game->getSum(), $budgetParams->{'gift'}));
     $budget->setBonus(_calcBudget($game->getSum(), $budgetParams->{'bonus'}));
     $budget->setCosts(_calcBudget($game->getSum(), $budgetParams->{'costs'}));
     $budget->setProfit(_calcBudget($game->getSum(), $budgetParams->{'profit'}));
