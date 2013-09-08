@@ -4,6 +4,9 @@ use strict;
 use Email::Sender::Simple qw(sendmail);
 use Email::Sender::Transport::SMTP;
 use Email::Simple;
+use Log::Log4perl;
+
+my $log = Log::Log4perl->get_logger("Service::Email");
 
 $Service::Email::SMTP_HOST ||= 'localhost';
 $Service::Email::FROM_ADDRESS ||= 'LOVA <send.lova@pemes.net>';
@@ -71,7 +74,17 @@ sub sendInviteEmail
 {
     my ($self, $user) = @_;
     my $userService = $self->{'userService'};
-    return if(_addressInBlackList($user));
+    my $email = $user->getEmail();
+    if(_addressInBlackList($email))
+    {
+    	$log->warn("Cannot send invite because email: '", $email, "' is in black list.");
+    	return;
+    }
+    if(_addressInGreyList($user->getEmail()))
+    {
+        $log->warn("Cannot send invite because email: '", $email, "' is in grey list.");
+        return;
+    }
     
     $userService->loadProfile($user);
     my $lang = $user->getProfile()->{'lang'} || 'ru';
@@ -150,7 +163,7 @@ sub sendToRecipients
 sub sendPlainEmail
 {
     my ($self, $to, $subject, $body) = @_;
-
+    
     my $message = Email::Simple->create(
         header => [
             From    => $Service::Email::FROM_ADDRESS,
@@ -199,6 +212,13 @@ sub _addressInBlackList
     {
     	return 1 if($email =~ /\@$black/);
     }
+}
+
+# Find email in grey list
+sub _addressInGreyList
+{
+    my $email = shift;
+    return $::sql->count('grey_email', " WHERE `email`=" . $::sql->q($email));
 }
 
 1;
