@@ -56,7 +56,7 @@ if($URL =~ /(\w{32})/)
 	my $user = $userService->findByEmailCode($emailCode);
 	if($user)
 	{
-		$userService->deleteProfile($user, 'emailCode');
+		$userDao->deleteProfile($user, 'emailCode');
 		$cgiSession->param('userId', $user->getId());
 		$userService->loadProfile($user);
 		$user->getProfile()->{'validateEmail'} = time;

@@ -180,4 +180,34 @@ sub countActiveReferals
     return $ref->{'total'};
 }
 
+sub delete
+{
+	my ($self, $user) = @_;
+	$self->deleteAccount($user);
+    $self->deleteProfile($user);
+    $self->SUPER::delete($user);	
+}
+
+sub deleteProfile()
+{
+    my ($self, $user, $name) = @_;
+    if($name)
+    {
+        my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `user_id` = ? AND `name` = ?");
+        $sth->execute($user->getId(), $name);
+    }
+    else
+    {
+        my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `flag_id` <> 1 AND `user_id` = ?");
+        $sth->execute($user->getId());
+    }
+}
+
+sub deleteAccount()
+{
+    my ($self, $user) = @_;
+    my $sth = $::sql->handle->prepare("DELETE FROM `user_account` WHERE `user_id` = ?");
+    $sth->execute($user->getId());
+}
+
 1;

@@ -336,7 +336,7 @@ sub loadProfile()
 sub saveProfile()
 {
     my ($self, $user) = @_;
-    $self->deleteProfile($user);
+    $userDao->deleteProfile($user);
     my $profile = $user->getProfile();
     foreach my $name (keys %$profile)
     {
@@ -346,36 +346,12 @@ sub saveProfile()
             my $flag_id = $self->getProfileValueFlag($name);
             if($flag_id == 1) # system value
             {
-            	$self->deleteProfile($user, $name);
+            	$userDao->deleteProfile($user, $name);
             }    		
 	        my $sth = $::sql->handle->prepare("INSERT INTO `user_profile` (`user_id`, `name`, `value`, `flag_id`) VALUES (?, ?, ?, ?)");
 	        $sth->execute($user->getId(), $name, $profile->{$name}, $flag_id);
     	}
     }    
-}
-
-sub deleteUser
-{
-	my ($self, $user) = @_;
-	$self->deleteAccount($user);
-	$self->deleteProfile($user);
-    my $sth = $::sql->handle->prepare("DELETE FROM `$table` WHERE `id` = ?");
-    $sth->execute($user->getId());
-}
-
-sub deleteProfile()
-{
-    my ($self, $user, $name) = @_;
-    if($name)
-    {
-        my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `user_id` = ? AND `name` = ?");
-        $sth->execute($user->getId(), $name);
-    }
-    else
-    {
-        my $sth = $::sql->handle->prepare("DELETE FROM `user_profile` WHERE `flag_id` <> 1 AND `user_id` = ?");
-        $sth->execute($user->getId());
-    }
 }
 
 sub loadAccount()
@@ -420,13 +396,6 @@ sub saveAccount()
             $user->getAccount()->{'referal'}
         );
     } 
-}
-
-sub deleteAccount()
-{
-    my ($self, $user) = @_;
-    my $sth = $::sql->handle->prepare("DELETE FROM `user_account` WHERE `user_id` = ?");
-    $sth->execute($user->getId());
 }
 
 sub parseFilters

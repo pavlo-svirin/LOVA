@@ -111,7 +111,7 @@ sub delete
     my $user = $userDao->findById($params->{'id'});
     if($user)
     {
-        $::userService->deleteUser($user);
+        $userDao->delete($user);
         $response->{'success'} = JSON::true;
     }
     return { type => 'ajax', data => $response};
