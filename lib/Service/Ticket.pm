@@ -1,8 +1,8 @@
 package Service::Ticket;
 use strict;
 
+use Log::Log4perl;
 require DAO::Ticket;
-require Log::Log4perl;
 
 my $log = Log::Log4perl->get_logger("Service::Ticket");
 my $ticketDao = DAO::Ticket->new();
@@ -157,6 +157,7 @@ sub pay
         } 
         
         # bill Accounts
+        my %creditByAccounts;
         foreach my $account (@accounts)
         {
             last if($sum <= 0);
@@ -166,8 +167,13 @@ sub pay
             $sum -= $credit;
             $log->info('Took $', $credit, ' from ', $account);
             $log->info('$', $sum, " left to bill.");
+            
+            $creditByAccounts{$account} = $credit;
         }
         $::userService->saveAccount($user);
+
+        # Referal payment for Fond and Personal accounts
+        $::userService->payReferal($user->getReferal(), %creditByAccounts) if($user->getReferal());
         
         # save tickets stats
         foreach my $ticket (@tickets) 
@@ -205,6 +211,5 @@ sub calcGuessed
     }
     return $guessed;
 }
-
 
 1;

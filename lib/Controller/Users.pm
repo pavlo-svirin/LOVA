@@ -73,7 +73,7 @@ sub save
 {
     my($self, $url, $params) = @_;
     my $response->{'success'} = JSON::true; 
-    my $user = $::userService->findById($params->{'id'});
+    my $user = $userDao->findById($params->{'id'});
     $::userService->loadProfile($user);
     $::userService->loadAccount($user);
     

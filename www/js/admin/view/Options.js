@@ -235,6 +235,27 @@ Ext.define('Loto.view.Options', {
               margin: '0 0 0 15'
             }
           ]
+      },
+      {
+          xtype:'fieldset',
+          title: 'Начисления Пользователям за покупки Рефералов',
+          collapsible: false,
+          autoHeight: true,
+          width: 600,
+          defaults: {
+          	allowBlank: false
+          },
+          defaultType: 'numberfield',
+          items: [
+            {
+              fieldLabel: 'С Основного счета (%)',
+              name: 'refPersonal',
+            },
+            {
+              fieldLabel: 'С Фонда (%)',
+              name: 'refFond',
+            }
+          ]
       },      
       {
           xtype:'fieldset',

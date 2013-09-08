@@ -1,9 +1,11 @@
 package Service::User;
 use strict;
-
 use DateTime;
+use Log::Log4perl;
+
 require DAO::User;
 
+my $log = Log::Log4perl->get_logger("Service::User");
 
 my $table = "users";
 my @systemProfileValues = ("like", "emailCode", "validateEmail", "showEmailWarning");
@@ -511,6 +513,33 @@ sub calcChart
 	return @result;
 }
 
+sub payReferal
+{
+    my ($self, $referal, %creditByAccounts) = @_;
+    my $user = $userDao->findByLogin($referal);
+
+    $self->loadAccount($user);
+    if($::optionsService->get('refPersonal') && $creditByAccounts{'personal'})
+    {
+    	my $reward = int ($creditByAccounts{'personal'} * $::optionsService->get('refPersonal')) / 100;
+    	if($reward >= 0.01)
+    	{
+            $user->getAccount()->{'referal'} += $reward;
+            $log->info("User <", $user->getId(), '> get $', $reward, " from referal.");
+    	}
+    }
+
+    if($::optionsService->get('refFond') && $creditByAccounts{'fond'})
+    {
+        my $reward = int ($creditByAccounts{'fond'} * $::optionsService->get('refFond')) / 100;
+        if($reward >= 0.01)
+        {
+            $user->getAccount()->{'referal'} += $reward;
+            $log->info("User <", $user->getId(), '> get $', $reward, " from referal.");
+        }
+    }
+    $self->saveAccount($user);
+}
 
 
 1;
