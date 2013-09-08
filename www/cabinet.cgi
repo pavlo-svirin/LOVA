@@ -139,17 +139,13 @@ if($user)
 		    if ($lastGameTotalTickets)
 		    {
 		        my $maxGuessed = $lastGameStat->getMaxGuessed();
-			    for (my $i = 1; $i <= $optionsService->get('maxNumbers'); $i++)
+			    for (my $i = $optionsService->get('maxNumbers'); $i >= $maxGuessed; $i--)
 			    {
-			        my $tickets = $lastGameStat->getTickets($i);
 			        $lastGameResult->{$i} = 0;
 			        if ($i == $maxGuessed)
 			        {
-		                $lastGameResult->{$i} = $tickets . " " . $htmlContentService->getContent('LOTTERY_STAT_TICKETS', $tickets); 
-			        }
-			        elsif ($tickets)
-			        {
-		                $lastGameResult->{$i} = int (100 * $tickets / $lastGameTotalTickets) . " %"; 
+                        my $tickets = $lastGameStat->getTickets($i);
+		                $lastGameResult->{$i} = $tickets . " " . $htmlContentService->getContent('LOTTERY_STAT_TICKETS', $tickets);
 			        }
 			    }
 		    }
