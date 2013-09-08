@@ -51,7 +51,7 @@ sub getContent
 sub _getCodeSufixByCount
 {
 	my $count = shift;
-	
+	return unless ($count);
 	$count = $count % 100;
     return "_5" if (($count >= 11) && ($count <= 19));
 
