@@ -27,7 +27,7 @@
     <td align="center">
         <input type="hidden" name="selected_lottery_numbers">
         [% IF data.lottery.session.tickets.limit %]
-        <div class="alert alert-error">Вы уже выбрали максимальное количество билетов на следующую игру.</div>
+        <div class="alert alert-error">Получение билетов на ознакомительную игру ограничено!<br>Получение новых билетов будет доступно после завершения ближайшего розыгрыша!</div>
         [% ELSE %]
         Выбрано <span id="count_selected_numbers">[% data.session.selectedNumbers || 0 %]</span> из [% data.options.lottery.maxNumbers %] чисел
         <br><button type="button" class="btn" name="auto_select" onClick="autoSelectNumbers()">Выбрать числа автоматически</button>
