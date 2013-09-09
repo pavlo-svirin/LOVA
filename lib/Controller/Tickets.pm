@@ -54,7 +54,7 @@ sub addTicket
     my @activeTickets = $ticketDao->findActive($user->getId());
     my @notPaidTickets = $ticketDao->findNotPaid($user->getId());    
     my $ticketsCount = scalar @activeTickets + scalar @notPaidTickets;
-    return $response if ($::optionsService->get('ticketsLimit') && ($::optionsService->get('ticketsLimit') >= $ticketsCount));        
+    return $response if ($::optionsService->get('ticketsLimit') && ( $ticketsCount >= $::optionsService->get('ticketsLimit') ));        
         
  	my @numbers = split(",", $params->{'selected_lottery_numbers'});
 	my $games = $params->{'games_count'};

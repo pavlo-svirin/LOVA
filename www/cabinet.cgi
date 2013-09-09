@@ -127,7 +127,7 @@ if($user)
     $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'new'}  = \@notPaidTickets;
     $vars->{'data'}->{'lottery'}->{'session'}->{'totalSum'} = sprintf("%.02f", $ticketService->calcTicketsSum(@notPaidTickets));
     my $ticketsCount = scalar @activeTickets + scalar @notPaidTickets;
-    $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'limit'}  = 1 if ($optionsService->get('ticketsLimit') && ($optionsService->get('ticketsLimit') >= $ticketsCount));
+    $vars->{'data'}->{'lottery'}->{'session'}->{'tickets'}->{'limit'}  = 1 if ($optionsService->get('ticketsLimit') && ($ticketsCount >= $optionsService->get('ticketsLimit') ));
 
     my $lastGame =  $gameDao->findLast();
     if($lastGame)
