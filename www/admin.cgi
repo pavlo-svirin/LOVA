@@ -65,8 +65,10 @@ my $ticketsController = new Controller::Tickets();
 #=======================Main Stage========================	
 if ($URL =~ /\/options\/save(\/|$)/)
 {
+	$log->info("Saving options.");
     foreach (keys %{$CGI->Vars})
     {
+    	$log->debug("Option '", $_, "' set to '", $CGI->param($_) , "'");
         $optionsService->set($_, $CGI->param($_));
     }
     $optionsService->save();
