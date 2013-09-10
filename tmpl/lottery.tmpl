@@ -13,7 +13,8 @@
       [% WHILE num < data.options.lottery.maxNumber %][% SET num=num+1 %]<a href='javascript:toggleLotteryNumber("[% num %]")' id="lottery_num_[% num %]"><span class="badge">[% num %]</span></a>[% END %]
     </td>
     <td width="25%" align="center">
-      Количество игр: <a href="javascript:decGame()">&lt;</a><input type="text" name="games_count" class="games_count input-sm" value="1"><a href="javascript:incGame()">&gt;</a>
+    <input type="hidden" name="games_count" value="1">
+      [%# Количество игр: <a href="javascript:decGame()">&lt;</a><input type="text" name="games_count" class="games_count input-sm" value="1"><a href="javascript:incGame()">&gt;</a> %]
       <br><button type="button" id="addTicketBtn" class="btn btn-success disabled" disabled="disabled" onclick="addTicket()">Добавить билет</button>
       [%# AUTO_ADD_TICKETS
       <br><br>Количество билетов: <a href="javascript:decTickets()">&lt;</a><input type="text" name="tickets_count" class="games_count input-sm" value="1"><a href="javascript:incTickets()">&gt;</a>
@@ -27,7 +28,7 @@
     <td align="center">
         <input type="hidden" name="selected_lottery_numbers">
         [% IF data.lottery.session.tickets.limit %]
-        <div class="alert alert-error">Получение билетов на ознакомительную игру ограничено!<br>Получение новых билетов будет доступно после завершения ближайшего розыгрыша!</div>
+        <div class="alert alert-success">Получение билетов на ознакомительную игру ограничено!<br>Получение новых билетов будет доступно после завершения ближайшего розыгрыша!</div>
         [% ELSE %]
         Выбрано <span id="count_selected_numbers">[% data.session.selectedNumbers || 0 %]</span> из [% data.options.lottery.maxNumbers %] чисел
         <br><button type="button" class="btn" name="auto_select" onClick="autoSelectNumbers()">Выбрать числа автоматически</button>
