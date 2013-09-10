@@ -321,6 +321,10 @@ sub sendInvite
     {
         $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_ONE_EMAIL_ALLOWED');
     }
+    elsif($email =~ /,/)
+    {
+        $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_ONE_EMAIL_ALLOWED');
+    }
     elsif ($userDao->findByEmail($email))
     {
         $result->{'error'} = $htmlContentService->getContent('INVITE_ALERT_EMAIL_EXISTS');
