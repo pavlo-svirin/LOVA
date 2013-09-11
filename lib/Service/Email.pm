@@ -125,11 +125,13 @@ sub sendEmailTemplate
 sub sendToAllUsers
 {
     my ($self, $subject, $body) = @_;
-    my @users = $userDao->findAll();
+    my @users = $userDao->findActive();
+    $log->info("Sending message to all activated users. Total num of email: ", scalar @users);
     foreach my $user (@users)
     {
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
         my $email = $userName . "<" . $user->getEmail() . ">";
+        $log->trace("Active recipient", $email);
         $self->sendHtmlEmail($email, $subject, $body);
     }
 }
@@ -138,10 +140,12 @@ sub sendToSubscribedUsers
 {
     my ($self, $subject, $body) = @_;
     my @users = $self->{'userService'}->findSubscribed();
+    $log->info("Sending message to subscribed users. Total num of email: ", scalar @users);
     foreach my $user (@users)
     {
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
         my $email = $userName . "<" . $user->getEmail() . ">";
+        $log->trace("Subscribed recipient", $email);
         $self->sendHtmlEmail($email, $subject, $body);
     }
 }

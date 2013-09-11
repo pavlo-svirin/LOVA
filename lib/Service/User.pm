@@ -73,7 +73,6 @@ sub findActive
     my $query = "SELECT `u`.* FROM `$table` u";
     $query .= " JOIN `user_profile` p ON `u`.`id` = `p`.`user_id` ";
     $query .= " WHERE `p`.`name` = 'validateEmail' ";
-    $query .= " ORDER BY `u`.`created`";
     my $sth = $::sql->handle->prepare($query);
     my $rv = $sth->execute();
     return () if($rv == 0E0);
