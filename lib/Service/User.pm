@@ -489,7 +489,10 @@ sub payReferal
 {
     my ($self, $referal, %creditByAccounts) = @_;
     my $user = $userDao->findByLogin($referal);
-
+    if (!$user) {
+    	$log->warn("Cannot pay to referal. Because user with login: <", $referal, "> not found.");
+    	return;
+    }
     $self->loadAccount($user);
     if($::optionsService->get('refPersonal') && $creditByAccounts{'personal'})
     {
