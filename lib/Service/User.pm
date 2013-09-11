@@ -322,6 +322,7 @@ sub loadProfile()
 {
 	my ($self, $user) = @_;
     return unless($user);
+    
 	# Create empty profile
     $user->getProfile();
 	my $sth = $::sql->handle->prepare("SELECT `name`, `value` FROM `user_profile` WHERE `user_id` = ?");
@@ -356,6 +357,7 @@ sub saveProfile()
 sub loadAccount()
 {
     my ($self, $user) = @_;
+    return unless($user);
     
     my $sth = $::sql->handle->prepare("SELECT * FROM `user_account` WHERE `user_id` = ?");
     my $rv = $sth->execute($user->getId());
@@ -371,6 +373,8 @@ sub loadAccount()
 sub saveAccount()
 {
     my ($self, $user) = @_;
+    return unless($user);
+    
     my $sth = $::sql->handle->prepare("SELECT * FROM `user_account` WHERE `user_id` = ?");
     my $rv = $sth->execute($user->getId());
     if($rv == 1)
