@@ -9,10 +9,10 @@ sub getFields
 	return
 	(
 	    'id' => { sql => 'id', key => '1' },
-	    'code' => { sql => 'code', updatable => '1' },
-	    'lang' => { sql => 'lang', updatable => '1' },
-	    'subject' => { sql => 'subject', updatable => '1' },
-	    'body' => { sql => 'body', updatable => '1' }
+	    'code' => { sql => 'code', add => '1', update => '1' },
+	    'lang' => { sql => 'lang', add => '1', update => '1' },
+	    'subject' => { sql => 'subject', add => '1', update => '1' },
+	    'body' => { sql => 'body', add => '1', update => '1' }
 	)
 };
 

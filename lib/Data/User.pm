@@ -13,14 +13,14 @@ sub getFields
 	return
 	(
 	    'id' => { sql => 'id', key => '1' },
-	    'firstName' => { sql => 'first_name', updatable => '1' },
-	    'lastName' => { sql => 'last_name', updatable => '1' },
-	    'login' => { sql => 'login', updatable => '1' },
-	    'email' => { sql => 'email', updatable => '1' },
-	    'password' => { sql => 'password', updatable => '1' },
-        'referal' => { sql => 'referal', updatable => '1' },
-        'created' => { sql => 'created', updatable => '1' },
-        'lastSeen' => { sql => 'last_seen', updatable => '1' }
+	    'firstName' => { sql => 'first_name', add => '1', update => '1' },
+	    'lastName' => { sql => 'last_name', add => '1', update => '1' },
+	    'login' => { sql => 'login', add => '1' },
+	    'email' => { sql => 'email', add => '1', update => '1' },
+	    'password' => { sql => 'password', add => '1', update => '1' },
+        'referal' => { sql => 'referal', add => '1', update => '1' },
+        'created' => { sql => 'created', add => '1' },
+        'lastSeen' => { sql => 'last_seen', update => '1' }
 	)
 };
 
