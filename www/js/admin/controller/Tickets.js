@@ -31,23 +31,24 @@ Ext.define('Loto.controller.Tickets', {
     _refresh: function(source)
     {
     	var widget = source.up("panel");
- 
+        var store = Ext.data.StoreManager.lookup('Tickets');
+
     	var from = widget.down("datefield[name=from]").getValue();
     	var to = widget.down("datefield[name=to]").getValue();
     	var paid = widget.down("checkbox[name=paid]").getValue();
     	var active = widget.down("checkbox[name=active]").getValue();
-
-        var store = Ext.data.StoreManager.lookup('Tickets');    	
+    	
     	if(from && to && !store.isLoading()) {
-            store.load({
-                params: {
-                    from: Ext.Date.format(from, 'Y-m-d'),
-                    to: Ext.Date.format(to, 'Y-m-d'),
-                    paid: (paid) ? paid : null,
-                    active: (active) ? active : null
-                }        	
-            });
-		}
+    		store.getProxy().extraParams = {
+                from: Ext.Date.format(from, 'Y-m-d'),
+                to: Ext.Date.format(to, 'Y-m-d'),
+                paid: (paid) ? paid : null,
+                active: (active) ? active : null
+    		};
+    		
+    		store.load();
+    	}
+    	
     },
     
 });
