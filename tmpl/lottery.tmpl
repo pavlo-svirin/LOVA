@@ -173,18 +173,19 @@
     <div class="alert alert-error hide"></div>
     <div class="row">
         <div class="span0"><strong>#</strong></div>
-        <div class="span3"><strong>Числа</strong></div>
+        <div class="span4"><strong>Числа</strong></div>
         <div class="span1"><strong>Игр</strong></div>
         <div class="span1"><strong>Стоимость</strong></div>
-        <div class="span1"></div>
+        <div class="span0"></div>
     </div>
     [% FOREACH ticket IN data.lottery.session.tickets.new %]
+    [% SET code = ticket.getEncodedId() %]
     <div class="row">
         <div class="span0">[% loop.index + 1 %]</div>
-        <div class="span3">[% ticket.getNumbers().join(", ") %]</div>
+        <div class="span4">[% ticket.getNumbers().join(", ") %]</div>
         <div class="span1">[% ticket.getGames() %]</div>
         <div class="span1">$[% ticket.getGames() * ticket.getGamePrice() %]</div>
-        <div class="span1"><input type="checkbox" name="ticket_[% ticket.getEncodedId() %]" value="[% ticket.getEncodedId() %]"></div>
+        <div class="span0"><input type="checkbox" name="ticket_[% code %]" value="[% code %]"></div>
     </div>
     [% END %]    
   </div>
