@@ -133,6 +133,23 @@ jQuery(function($) {
 			.removeClass("alert-error")
 			.removeClass("alert-success");    	
     });
+    
+    $('#newTicketsDiv').on('change', 'input[type=checkbox]', function(event) {
+    	var chks = $('#newTicketsDiv').find('input[type=checkbox]');
+    	var checked = false;
+    	for(var i = 0; i < chks.length; i++) {
+    		if(chks[i].checked) {
+    			checked = true;
+    			break;
+    		}
+    	}
+    	if(checked) {
+			$('#newTicketsDiv').find('button[name=delete]').prop('disabled', false);
+    	} else {
+   		 	$('#newTicketsDiv').find('button[name=delete]').prop('disabled', true);;
+    	}
+    });
+    
 });
 
 function sendFirstEmail() {

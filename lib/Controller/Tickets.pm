@@ -20,7 +20,7 @@ sub getLinks
         'tickets' => {
             'list' => sub { $self->list( @_ ) },
             'add' => sub { $self->addTicket( @_ ) },
-            'delete' => sub { $self->deleteTicket( @_ ) },
+            'delete' => sub { $self->delete( @_ ) },
             'pay' => sub { $self->pay( @_ ) }       
         },
     }
@@ -65,12 +65,31 @@ sub addTicket
 	return $response;
 }
 
-sub deleteTicket
+sub delete
 {
     my($self, $url, $params) = @_;
     my $response = { 'type' => 'redirect', 'data' => '/cab/' };
     my $user = $::userService->getCurrentUser();
-    return unless($user);
+    return $response unless($user);
+    
+    my @tickets = map { $params->{$_} } 
+                  grep { /ticket/ }
+                  keys %$params;
+
+    $log->info("User <", $user->getId(), "> trying to remove ", scalar @tickets, " tickets.");
+    $log->debug("Tickets #: ", join(", ", @tickets));
+
+    my $removed = 0;
+    foreach my $id (@tickets) {
+    	my $ticket = $ticketDao->findById($id);
+    	if($ticket && ($ticket->getUserId() == $user->getId())) {
+    		$ticketDao->delete($ticket);
+    		$removed++;
+    	}
+    }
+    $log->info("Removed $removed tickets by user <", $user->getId(), ">.");
+        
+    return $response;
 }
 
 sub pay

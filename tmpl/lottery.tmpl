@@ -4,7 +4,7 @@
     <td width="25%">
         <table width="100%">
             <tr><td>Оплаченные билеты:</td><td>[% data.lottery.session.tickets.active.size || 0 %]</td></tr>
-            <tr><td>Заполненные билеты:</td><td>[% data.lottery.session.tickets.new.size || 0 %]</td></tr>
+            <tr><td>Заполненные билеты:</td><td>[% IF data.lottery.session.tickets.new.size %]<a href="#newTicketsDiv" data-toggle="modal">[% data.lottery.session.tickets.new.size %]</a>[% ELSE %]0 [% END %]</td></tr>
             <tr><td>К оплате:</td><td>$[% data.lottery.session.totalSum || "0.00" %]</td></tr>            
             <tr><td colspan="2" align="center"><button class="btn btn-success" [% IF ! data.lottery.session.totalSum %]disabled="disabled"[% END %] href="#payDiv" data-toggle="modal" type="button">Оплатить</button></td></tr>
         </table>
@@ -161,4 +161,37 @@
   </div>
 </div>
 [% END %]
-       
+
+[% IF data.lottery.session.tickets.new %]
+<div id="newTicketsDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newTicketsLabel" aria-hidden="true">
+  <form id="newTicketsForm" data-async class="form-horizontal" method="POST" action="/cab/tickets/delete/">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="newTicketsLabel">Добавленные билеты</h3>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-error hide"></div>
+    <div class="row">
+        <div class="span0"><strong>#</strong></div>
+        <div class="span3"><strong>Числа</strong></div>
+        <div class="span1"><strong>Игр</strong></div>
+        <div class="span1"><strong>Стоимость</strong></div>
+        <div class="span1"></div>
+    </div>
+    [% FOREACH ticket IN data.lottery.session.tickets.new %]
+    <div class="row">
+        <div class="span0">[% loop.index + 1 %]</div>
+        <div class="span3">[% ticket.getNumbers().join(", ") %]</div>
+        <div class="span1">[% ticket.getGames() %]</div>
+        <div class="span1">$[% ticket.getGames() * ticket.getGamePrice() %]</div>
+        <div class="span1"><input type="checkbox" name="ticket_[% ticket.getId() %]" value="[% ticket.getId() %]"></div>
+    </div>
+    [% END %]    
+  </div>
+  <div class="modal-footer">
+    <button name="delete" type="submit" disabled="disabled" class="btn btn-danger">Удалить</button>
+    <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+  </div>
+  </form>
+</div>
+[% END %]       
