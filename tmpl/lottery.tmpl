@@ -184,7 +184,7 @@
         <div class="span3">[% ticket.getNumbers().join(", ") %]</div>
         <div class="span1">[% ticket.getGames() %]</div>
         <div class="span1">$[% ticket.getGames() * ticket.getGamePrice() %]</div>
-        <div class="span1"><input type="checkbox" name="ticket_[% ticket.getId() %]" value="[% ticket.getId() %]"></div>
+        <div class="span1"><input type="checkbox" name="ticket_[% ticket.getEncodedId() %]" value="[% ticket.getEncodedId() %]"></div>
     </div>
     [% END %]    
   </div>

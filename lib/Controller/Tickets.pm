@@ -72,11 +72,12 @@ sub delete
     my $user = $::userService->getCurrentUser();
     return $response unless($user);
     
-    my @tickets = map { $params->{$_} } 
+    my $userId = $user->getId();
+    my @tickets = map { &Data::Ticket::_decodeId($params->{$_}, $userId) } 
                   grep { /ticket/ }
                   keys %$params;
 
-    $log->info("User <", $user->getId(), "> trying to remove ", scalar @tickets, " tickets.");
+    $log->info("User <", $userId, "> trying to remove ", scalar @tickets, " tickets.");
     $log->debug("Tickets #: ", join(", ", @tickets));
 
     my $removed = 0;
@@ -87,7 +88,7 @@ sub delete
     		$removed++;
     	}
     }
-    $log->info("Removed $removed tickets by user <", $user->getId(), ">.");
+    $log->info("Removed $removed tickets by user <", $userId, ">.");
         
     return $response;
 }

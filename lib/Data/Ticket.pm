@@ -4,6 +4,7 @@ use strict;
 use lib "..";
 use parent 'Data::Abstract';
 
+
 sub getFields
 {
 	return
@@ -33,6 +34,20 @@ sub getNumbers
     my $self = shift;
     my $list = $self->get('numbers');
     return sort {$a <=> $b} split(",", $list);    	
+}
+
+sub getEncodedId
+{
+	my $self = shift;
+	my $code = int($self->getId()) ^ int($self->getUserId());
+	return sprintf("%o", $code);
+}
+
+sub _decodeId
+{
+	my ($code, $userId) = @_;
+	my $id = oct($code);
+	return $id ^ int($userId);
 }
 
 1;
