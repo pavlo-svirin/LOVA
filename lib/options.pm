@@ -17,7 +17,7 @@ $MYSQL{'user'}='lova';
 $MYSQL{'pass'}='lova';
 
 our %OPTIONS;
-$OPTIONS{'SMTP'} = 'la.net.ua';
+$OPTIONS{'SMTP'} = 'localhost';
 $OPTIONS{'FROM'} = 'LOVA <send.lova@pemes.net>';
 
 $Sirius::Common::debugFile = '/tmp/loto.log';

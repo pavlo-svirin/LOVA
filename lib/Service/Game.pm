@@ -231,7 +231,6 @@ sub getSchedules
     	if(grep { /$wday/ } @scheduledDays)
     	{
             my $ts = Date_to_Time( $year, $mon, $mday, $runHour, $runMin, 0 );
-            $log->debug("Found schedule: ", $::sql->utcTimestampToDate($ts), " ($ts)");
             push(@schedules, $ts); 
     	}
     	

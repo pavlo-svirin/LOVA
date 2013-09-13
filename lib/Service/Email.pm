@@ -131,7 +131,7 @@ sub sendToAllUsers
     {
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
         my $email = $userName . "<" . $user->getEmail() . ">";
-        $log->trace("Active recipient", $email);
+        $log->trace("Active recipient: ", $email);
         $self->sendHtmlEmail($email, $subject, $body);
     }
 }
@@ -145,7 +145,7 @@ sub sendToSubscribedUsers
     {
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
         my $email = $userName . "<" . $user->getEmail() . ">";
-        $log->trace("Subscribed recipient", $email);
+        $log->trace("Subscribed recipient: ", $email);
         $self->sendHtmlEmail($email, $subject, $body);
     }
 }
@@ -153,8 +153,10 @@ sub sendToSubscribedUsers
 sub sendToRecipients
 {
     my ($self, $subject, $body, $recipients) = @_;
+    $log->info("Sending message to individual recipients. Total num of email: ", scalar split(',', $recipients));
 	foreach my $email (split(',', $recipients))
 	{
+        $log->trace("Recipient: ", $email);
 		$self->sendHtmlEmail($email, $subject, $body);
 	}
 }
