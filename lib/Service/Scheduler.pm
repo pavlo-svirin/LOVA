@@ -25,7 +25,7 @@ sub run
 {
 	my $self = shift;
 	my @tasks = $scheduleDao->findScheduledForNow();
-    $log->info("Scheduler service is running. There are ", scalar @tasks, " to run.");
+    $log->info("Scheduler service is running. There are ", scalar @tasks, " tasks to run.");
     foreach my $task (@tasks) {
         $self->runTask($task);
     }
