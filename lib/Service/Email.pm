@@ -213,7 +213,7 @@ sub _sendPlainEmail
         port => 25,
     });
 
-   # sendmail($message, { transport => $transport });    
+    sendmail($message, { transport => $transport });    
 }
 
 # Send cp1251 email
@@ -236,7 +236,7 @@ sub _sendHtmlEmail
         port => 25,
     });
 
-   # sendmail($message, { transport => $transport });    
+    sendmail($message, { transport => $transport });    
 }
 
 sub _addressInBlackList
