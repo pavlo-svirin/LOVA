@@ -67,23 +67,6 @@ sub findExtJs
     return @users;
 }
 
-sub findActive
-{
-    my ($self) = @_;
-    my $query = "SELECT `u`.* FROM `$table` u";
-    $query .= " JOIN `user_profile` p ON `u`.`id` = `p`.`user_id` ";
-    $query .= " WHERE `p`.`name` = 'validateEmail' ";
-    my $sth = $::sql->handle->prepare($query);
-    my $rv = $sth->execute();
-    return () if($rv == 0E0);
-    my @users;
-    while(my $ref = $sth->fetchrow_hashref())
-    {
-      push(@users, Data::User->new(%$ref));
-    }
-    return @users;
-}
-
 sub findByEmailCode
 {
     my ($self, $emailCode) = @_;
@@ -93,24 +76,6 @@ sub findByEmailCode
     my $ref = $sth->fetchrow_hashref();
     my $user = Data::User->new(%$ref);
     return $user;
-}
-
-sub findSubscribed
-{
-    my ($self) = @_;
-    my $query = "SELECT `u`.* FROM `$table` `u` ";
-    $query .= " JOIN `user_profile` p  ON `u`.id = `p`.`user_id`  AND `p`.`name`  = 'subscribe' AND `p`.`value` = 'true'";
-    $query .= " JOIN `user_profile` pa ON `u`.id = `pa`.`user_id` AND `pa`.`name` = 'validateEmail'";
-    
-    my $sth = $::sql->handle->prepare( $query );
-    my $rv = $sth->execute();
-    return () if($rv == 0E0);
-    my @users;
-    while(my $ref = $sth->fetchrow_hashref())
-    {
-      push(@users, Data::User->new(%$ref));
-    }
-    return @users;
 }
 
 sub countAll

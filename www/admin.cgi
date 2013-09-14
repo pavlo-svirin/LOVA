@@ -6,11 +6,10 @@ use FindBin qw($Bin);
 use lib "$Bin/../lib/";
 use CGI::Carp qw ( fatalsToBrowser );
 use Encode;
+use Storable qw( nfreeze );
 
 use options;
 use global;
-
-use Sirius::Common qw(debug);
 
 #=======================Variables=========================
 
@@ -52,6 +51,7 @@ my $emailTemplateDao = new DAO::EmailTemplates();
 my $htmlContentDao = new DAO::HtmlContent();
 my $ticketDao = new DAO::Ticket();
 my $gameDao = new DAO::Game();
+my $scheduleDao = new DAO::Schedule();
 
 # Controllers
 our $controllers = {};
@@ -151,19 +151,30 @@ sub ajaxStage
          	 	$body .= $buffer;
          	 }
          }
-        	
+
+        # Send mass emails in background
+        my $schedule = new Data::Schedule();
+        $schedule->setSchedule('NOW');
+        $schedule->setStatus('SCHEDULED');
+        $schedule->setModule("Service::Email");
+        my @params = ($subject, $body);
+            	
         if($CGI->param('rcpt') eq 'all')
         {
-            $emailService->sendToAllUsers($subject, $body);
+            $schedule->setMethod('sendToAllUsers');
         }
         elsif($CGI->param('rcpt') eq 'subscribers')
         {
-            $emailService->sendToSubscribedUsers($subject, $body);
+            $schedule->setMethod('sendToSubscribedUsers');
         }
         else
         {
-            $emailService->sendToRecipients($subject, $body, $recipients);
+            $schedule->setMethod('sendToRecipients');
+            push(@params, $recipients);	
         }
+        $schedule->setParams( nfreeze(\@params) );
+        $scheduleDao->save($schedule);
+        
     }    
     elsif (($URL =~ /\/emailTemplate\//) && ($URL =~ /\/load\//))
     {

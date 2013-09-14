@@ -1,6 +1,12 @@
 package Service::Scheduler;
 use strict;
 use Date::Calc qw(Add_Delta_Days Mktime Localtime);
+use Log::Log4perl;
+use Storable qw(thaw);
+require DAO::Schedule;
+
+my $log = Log::Log4perl->get_logger("Service::Scheduler");
+my $scheduleDao = DAO::Schedule->new(); 
 
 sub new
 {
@@ -15,85 +21,42 @@ sub new
     return $self;
 }
 
-sub runAccountSchedule
+sub run 
 {
-    my $self = shift;
-    my $optionsService = $self->{'optionsService'};
-    my $userService = $self->{'userService'};
-
-    my $nextScheduleTime = $optionsService->get('nextAccountTime');
-    if($nextScheduleTime < time)
-    {
-    	print "Time to make money!";
-        $nextScheduleTime = $self->calcNextAccountTime();
-        $optionsService->set('nextAccountTime', $nextScheduleTime);
-        $optionsService->save();
-        # run game
-    }
-    else
-    {
-        $nextScheduleTime = $self->calcNextAccountTime();
-        if($nextScheduleTime != $optionsService->get('nextAccountTime'))
-        {
-            $optionsService->set('nextAccountTime', $nextScheduleTime);
-            $optionsService->save();
-        }
+	my $self = shift;
+	my @tasks = $scheduleDao->findScheduledForNow();
+    $log->info("Scheduler service is running. There are ", scalar @tasks, " to run.");
+    foreach my $task (@tasks) {
+        $self->runTask($task);
     }
 }
 
-sub calcNextAccountTime
+sub runTask
 {
-    my ($self, $time) = @_;
-    my $optionsService = $self->{'optionsService'};
-    $time = $time || time;
+	my ($self, $task) = @_;
+	$log->info("Running task: ", $task->getId());
 
-    my @scheduledDays;
-    push (@scheduledDays, 1) if($optionsService->get('scheduleMonday'));
-    push (@scheduledDays, 2) if($optionsService->get('scheduleTuesday'));
-    push (@scheduledDays, 3) if($optionsService->get('scheduleWednesday'));
-    push (@scheduledDays, 4) if($optionsService->get('scheduleThursday'));
-    push (@scheduledDays, 5) if($optionsService->get('scheduleFriday'));
-    push (@scheduledDays, 6) if($optionsService->get('scheduleSaturday'));
-    push (@scheduledDays, 7) if($optionsService->get('scheduleSunday'));
-    
-    Sirius::Common::debug("[Scheduler]: Scheduler options: " . @scheduledDays . ", time: " . $optionsService->get('scheduleTime'));
-	my $runHour = 12;
-    my $runMin = 0;
-    if ($optionsService->get('scheduleTime') =~ /^(\d+)\:(\d+)$/)
+    $task->setStatus('ACTIVE');
+    $task->setLastStart($::sql->now());
+    $scheduleDao->save($task);
+
+    my $module = $task->getModule();
+    my $method = $task->getMethod();
+    my @params = @{ thaw($task->getParams()) };
+    eval
     {
-        $runHour = $1;
-        $runMin = $2;
-    }
-    my $runTime = $runHour * 60 * 60 + $runMin * 60; # 12:00
-    my ($year, $mon, $mday, $hour, $min, $sec, $yday, $wday, $isdst) = Localtime($time);
-
-    my $currentTime = $hour * 60 * 60 + $min * 60 + $sec;
-    my $nextDay;
-
-    foreach my $day (@scheduledDays)
+    	my $result = $module->$method(@params);;
+        $task->setStatus('DONE');
+        $task->setLastResult($result);           
+    };
+    if($@)
     {
-        if(($wday == $day) and ($runTime > $currentTime))
-        {
-            # Today later
-            return Mktime( $year, $mon, $mday, $runHour, $runMin, 0 );
-        }
-        if(!$nextDay && ($day > $wday) )
-        {
-            $nextDay = $day;
-        }
-    }
-
-    # Day later this week
-    if($nextDay)
-    {
-        my ($nYear, $nMonth, $nDay) = Add_Delta_Days($year, $mon, $mday, $nextDay - $wday);
-        return Mktime( $nYear, $nMonth, $nDay, $runHour, $runMin, 0);
-    }
-
-    # Day on next week
-    my ($nYear, $nMonth, $nDay) = Add_Delta_Days($year, $mon, $mday, 7 - $wday + $scheduledDays[0]);
-    return Mktime( $nYear, $nMonth, $nDay, $runHour, $runMin, 0);
-	
+        $log->error("Task <", $task->getId(), "> failed with error: ", $@);
+        $task->setStatus('FAILED');           
+    } 
+    $task->setLastEnd($::sql->now());
+    $scheduleDao->save($task);
+	 
 }
 
 1;

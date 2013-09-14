@@ -23,4 +23,4 @@ $OPTIONS{'FROM'} = 'LOVA <send.lova@pemes.net>';
 $Sirius::Common::debugFile = '/tmp/loto.log';
 $CGI::POST_MAX = 1024 * 100;
 
-$Service::Email::SMTP_HOST = "mail.la.net.ua";
+$Service::Email::SMTP_HOST = "localhost";

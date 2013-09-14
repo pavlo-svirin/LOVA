@@ -34,6 +34,7 @@ use DAO::Ticket;
 use DAO::Game;
 use DAO::GameStat;
 use DAO::Budget;
+use DAO::Schedule;
 
 use Data::Abstract;
 use Data::User;
@@ -43,6 +44,7 @@ use Data::Ticket;
 use Data::Game;
 use Data::GameStat;
 use Data::Budget;
+use Data::Schedule;
 
 use Controller::Abstract;
 use Controller::Tickets;

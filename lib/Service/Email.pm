@@ -31,13 +31,12 @@ sub new
 sub sendFirstEmail
 {
     my ($self, $user) = @_;
-    my $userService = $self->{'userService'};
 
-    $userService->loadProfile($user);
+    $::userService->loadProfile($user);
     my $lang = $user->getProfile()->{'lang'} || 'ru';
     my $emailCode = Sirius::Common::GenerateRandomString(32);
     $user->getProfile()->{'emailCode'} = $emailCode;
-    $userService->saveProfile($user);
+    $::userService->saveProfile($user);
     
     my $tmpl = DAO::EmailTemplates->findByCodeAndLang('FIRST_EMAIL', $lang);
     if($tmpl)
@@ -52,13 +51,12 @@ sub sendFirstEmail
 sub sendPasswordEmail
 {
     my ($self, $user) = @_;
-    my $userService = $self->{'userService'};
     
-    $userService->loadProfile($user);
+    $::userService->loadProfile($user);
     my $lang = $user->getProfile()->{'lang'} || 'ru';
     my $emailCode = Sirius::Common::GenerateRandomString(32);
     $user->getProfile()->{'emailCode'} = $emailCode;
-    $userService->saveProfile($user);
+    $::userService->saveProfile($user);
     
     my $tmpl = DAO::EmailTemplates->findByCodeAndLang('PASSWORD_RESET', $lang);
     if($tmpl)
@@ -73,7 +71,7 @@ sub sendPasswordEmail
 sub sendInviteEmail
 {
     my ($self, $user) = @_;
-    my $userService = $self->{'userService'};
+
     my $email = $user->getEmail();
     if(_addressInBlackList($email))
     {
@@ -81,11 +79,11 @@ sub sendInviteEmail
     	return;
     }
    
-    $userService->loadProfile($user);
+    $::userService->loadProfile($user);
     my $lang = $user->getProfile()->{'lang'} || 'ru';
     my $emailCode = Sirius::Common::GenerateRandomString(32);
     $user->getProfile()->{'emailCode'} = $emailCode;
-    $userService->saveProfile($user);
+    $::userService->saveProfile($user);
     
     my $tmpl = DAO::EmailTemplates->findByCodeAndLang('INVITE', $lang);
     if($tmpl)
@@ -119,51 +117,86 @@ sub sendEmailTemplate
     my $subject = $tmpl->getSubject();
     my $body = $tmpl->getBody();
     
-	$self->sendPlainEmail($to, $subject, $body);
+	_sendPlainEmail($to, $subject, $body);
 }
 
 sub sendToAllUsers
 {
     my ($self, $subject, $body) = @_;
     my @users = $userDao->findActive();
+    
     $log->info("Sending message to all activated users. Total num of email: ", scalar @users);
+    my $sent = 0;
+    
     foreach my $user (@users)
     {
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
-        my $email = $userName . "<" . $user->getEmail() . ">";
-        $log->trace("Active recipient: ", $email);
-        $self->sendHtmlEmail($email, $subject, $body);
+        my $email = $userName . " <" . $user->getEmail() . ">";
+        
+        $log->trace("Active recipient: ", $user->getEmail());
+        
+        eval 
+        {
+            _sendHtmlEmail($email, $subject, $body);
+            $sent++;
+        };
+        $log->error("Cannot send email to: ", $user->getEmail(), " Error was: ", $@) if ($@);
     }
+    
+    $log->info("Sent $sent emails.");
+    return $sent;
 }
 
 sub sendToSubscribedUsers
 {
     my ($self, $subject, $body) = @_;
-    my @users = $self->{'userService'}->findSubscribed();
+    my @users = $userDao->findSubscribed();
+    
     $log->info("Sending message to subscribed users. Total num of email: ", scalar @users);
+    my $sent = 0;
+    
     foreach my $user (@users)
     {
         my $userName = $user->getFirstName() . ' ' . $user->getLastName(); 
-        my $email = $userName . "<" . $user->getEmail() . ">";
-        $log->trace("Subscribed recipient: ", $email);
-        $self->sendHtmlEmail($email, $subject, $body);
+        my $email = $userName . " <" . $user->getEmail() . ">";
+        $log->trace("Subscribed recipient: ", $user->getEmail());
+        
+        eval 
+        {
+            _sendHtmlEmail($email, $subject, $body);
+            $sent++;
+        };
+        $log->error("Cannot send email to: ", $user->getEmail(), " Error was: ", $@) if ($@);
     }
+    
+    $log->info("Sent $sent emails.");
+    return $sent;
 }
 
 sub sendToRecipients
 {
     my ($self, $subject, $body, $recipients) = @_;
+    
     $log->info("Sending message to individual recipients. Total num of email: ", scalar split(',', $recipients));
+    my $sent = 0;
+    
 	foreach my $email (split(',', $recipients))
 	{
         $log->trace("Recipient: ", $email);
-		$self->sendHtmlEmail($email, $subject, $body);
+        eval {
+		    _sendHtmlEmail($email, $subject, $body);
+            $sent++;
+        };
+        $log->error("Cannot send email to: ", $email, " Error was: ", $@) if ($@);
 	}
+	
+    $log->info("Sent $sent emails.");
+	return $sent;
 }
 
-sub sendPlainEmail
+sub _sendPlainEmail
 {
-    my ($self, $to, $subject, $body) = @_;
+    my ($to, $subject, $body) = @_;
     
     my $message = Email::Simple->create(
         header => [
@@ -180,13 +213,13 @@ sub sendPlainEmail
         port => 25,
     });
 
-    sendmail($message, { transport => $transport });    
+   # sendmail($message, { transport => $transport });    
 }
 
 # Send cp1251 email
-sub sendHtmlEmail
+sub _sendHtmlEmail
 {
-    my ($self, $to, $subject, $body) = @_;
+    my ($to, $subject, $body) = @_;
         
     my $message = Email::Simple->create(
         header => [
@@ -203,7 +236,7 @@ sub sendHtmlEmail
         port => 25,
     });
 
-    sendmail($message, { transport => $transport });    
+   # sendmail($message, { transport => $transport });    
 }
 
 sub _addressInBlackList
