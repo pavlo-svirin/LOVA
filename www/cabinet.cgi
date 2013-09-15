@@ -47,6 +47,7 @@ my $gameDao = new DAO::Game();
 my $gameStatDao = new DAO::GameStat(); 
 my $budgetDao = new DAO::Budget(); 
 my $userDao = new DAO::User(); 
+my $userStatDao = new DAO::UserStat(); 
 
 # Services
 our $userService = new Service::User();
@@ -160,7 +161,9 @@ if($user)
 			    }
 		    }
 		    
-		    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'} = $lastGameResult;
+		    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'}->{'game'} = $lastGameResult;
+		    my $userStat = $userStatDao->findByGameAndUser($lastGame->getId(), $user->getId());
+		    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'}->{'user'} = $userStat;
         }
     }
     if((time - $user->getCreatedUnixTime()) > 7 * 24 * 60 * 60)

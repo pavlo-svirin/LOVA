@@ -41,10 +41,10 @@
   <tr>
     <td class="last_game_stat" rowspan="2">В прошлом розыгрыше:
       <table width="100%">
-        [% FOREACH num IN data.lottery.last.stat.keys.nsort.reverse %]
+        [% FOREACH num IN data.lottery.last.stat.game.keys.nsort.reverse %]
         <tr>
         <td>[% num %] цифр</td>
-        <td>[% IF data.lottery.last.stat.$num %][% data.lottery.last.stat.$num %]
+        <td>[% IF data.lottery.last.stat.game.$num %][% data.lottery.last.stat.game.$num %]
             [% ELSE %]не угадал никто[% END %]
         </td>
         </tr>
@@ -67,7 +67,10 @@
     <td valign="bottom" align="right" style="vertical-align: bottom;">
       <table width="150px">
         <tr><td class="statHeader text-center">Балы</td></tr>
-        <tr><td class="stat" rowspan="1"><h3>[% data.account.bonus || "0" %]</h3></td></tr>            
+        <tr><td class="stat" rowspan="1"><h3>
+            [% data.account.bonus || "0" %] 
+            [% IF data.lottery.last.stat.user.getBonus() %]<span class="label label-success" style="vertical-align: super;">[% data.lottery.last.stat.user.getBonus() %]</span>[% END %]
+        </h3></td></tr>            
       </table>
     </td>
   </tr>  

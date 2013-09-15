@@ -8,7 +8,9 @@ require DAO::Ticket;
 require DAO::Game;
 require DAO::Budget;
 require DAO::GameStat;
+require DAO::UserStat;
 require Data::Budget;
+require Data::UserStat;
 
 my $log = Log::Log4perl->get_logger("Service::Game");
 my $ticketDao = DAO::Ticket->new();
@@ -16,6 +18,7 @@ my $gameDao = DAO::Game->new();
 my $budgetDao = DAO::Budget->new();
 my $gameStatDao = new DAO::GameStat();
 my $userDao = DAO::User->new();
+my $userStatDao = DAO::UserStat->new();
 
 sub new
 {
@@ -306,22 +309,22 @@ sub approve
         my $gameStat = $gameStatDao->findByGameId($game->getId());
         if ($gameStat && $gameStat->getNumOfWinnerTickets())
         {
-            my $ticketWin = sprintf("%.2f", $budget->getPrize() / $gameStat->getNumOfWinnerTickets());
+            my $eachTicketWin = sprintf("%.2f", $budget->getPrize() / $gameStat->getNumOfWinnerTickets());
             my $maxGuessed = $gameStat->getMaxGuessed(); 
         	my @tickets = $ticketDao->findWinnerTickets($game->getId(), $maxGuessed);
         	foreach my $ticket (@tickets)
         	{
         		my $user = $userDao->findById($ticket->getUserId());
         		$::userService->loadAccount($user);
-        		$user->getAccount()->{'win'} += $ticketWin;
+        		$user->getAccount()->{'win'} += $eachTicketWin;
         		$::userService->saveAccount($user);
         	}
         }
         
-        # Начисление балов
         my $guessedByUsedId = $gameStatDao->findGuessedByUserId($game->getId());
         foreach my $userId (keys %$guessedByUsedId)
         {
+        	# Начисление балов
         	my $bonus = $guessedByUsedId->{$userId};
         	$log->info("User <", $userId, "> get ", $bonus, " bonuses.");
         	my $user = $userDao->findById($userId);
@@ -331,7 +334,16 @@ sub approve
         		$user->getAccount()->{'bonus'} += $bonus;
                 $::userService->saveAccount($user);
         	}
+        	
+            # Сохранение статистики по пользователям        	
+        	my $userStat = new Data::UserStat();
+        	$userStat->setUserId($userId);
+        	$userStat->setGameId( $game->getId() );
+        	$userStat->setBonus($bonus);
+        	$userStatDao->save($userStat);
         }
+        
+
         
         $log->info("Game #", $game->getId(), " from ", $game->getDate(), " was approved.");
         $::sql->handle->commit();
