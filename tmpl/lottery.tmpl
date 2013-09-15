@@ -69,7 +69,7 @@
         <tr><td class="statHeader text-center">Балы</td></tr>
         <tr><td class="stat" rowspan="1"><h3>
             [% data.account.bonus || "0" %] 
-            [% IF data.lottery.last.stat.user.getBonus() %]<span class="label label-success" style="vertical-align: super;">[% data.lottery.last.stat.user.getBonus() %]</span>[% END %]
+            [% IF data.lottery.last.stat.user && data.lottery.last.stat.user.getBonus() %]<span class="label label-success" style="vertical-align: super;">[% data.lottery.last.stat.user.getBonus() %]</span>[% END %]
         </h3></td></tr>            
       </table>
     </td>
