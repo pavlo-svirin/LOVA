@@ -36,6 +36,13 @@ sub runTask
 	my ($self, $task) = @_;
 	$log->info("Running task: ", $task->getId());
 
+    # Verify status
+    $task = $scheduleDao->findById($task->getId());
+    if( $task->getStatus() ne 'SCHEDULED' ) {
+    	$log->warn("Status for task <", $task->getId(), "> is not SCHEDULED. Exiting.");
+    	return;
+    }
+
     $task->setStatus('ACTIVE');
     $task->setLastStart($::sql->now());
     $scheduleDao->save($task);
