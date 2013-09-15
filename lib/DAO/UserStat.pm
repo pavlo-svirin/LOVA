@@ -12,9 +12,7 @@ sub getModel { return "Data::UserStat"; }
 sub findByGameAndUser
 {
 	my ($self, $gameId, $userId) = @_;
-	$log->debug($gameId,$userId);
 	my $stat = $self->find({ game_id => $gameId, user_id => $userId }); 
-    $log->debug($stat, $stat->getBonus());
 	return $stat;  
 }
 
