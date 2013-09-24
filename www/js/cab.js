@@ -190,6 +190,7 @@ function toggleTrickyNumber(num) {
 
 function verifyNumbers() {
 	var selected = countSelectedNumbers();
+	$("#count_selected_numbers").html(selected);
 	var trickyNum = $("input[name=tricky_number]").val(); 
 	if(!session.limit && (selected == config.maxNumbers) && trickyNum && (trickyNum > 0)) {
 		$("#addTicketBtn").removeClass("disabled").removeAttr("disabled");
