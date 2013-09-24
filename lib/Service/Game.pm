@@ -223,8 +223,8 @@ sub getSchedules
     my $startTimestamp = time - $deltaDays * 24 * 60 * 60;
     my $endTimestamp = time + $deltaDays * 24 * 60 * 60;
     my $current = $startTimestamp;
-    $log->debug("Start time: ", $::sql->utcTimestampToDate($startTimestamp), " ($startTimestamp)");
-    $log->debug("End time: ", $::sql->utcTimestampToDate($endTimestamp), " ($endTimestamp)");
+    $log->trace("Start time: ", $::sql->utcTimestampToDate($startTimestamp), " ($startTimestamp)");
+    $log->trace("End time: ", $::sql->utcTimestampToDate($endTimestamp), " ($endTimestamp)");
     
     my (@schedules);
     while($current < $endTimestamp)
@@ -276,7 +276,7 @@ sub findNextGames
     }
     splice(@closest, $count);
     
-    $log->debug("Next games: ", join(" ", @closest));
+    $log->trace("Next games: ", join(" ", @closest));
     return @closest;
 }
 
