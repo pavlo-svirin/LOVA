@@ -42,13 +42,13 @@ my $htmlContentDao = new DAO::HtmlContent();
 my $userDao = DAO::User->new();
 
 # Services
-my $userService = new Service::User();
-my $emailService = new Service::Email(userService => $userService);
-my $optionsService = new Service::Options();
+our $userService = new Service::User();
+our $emailService = new Service::Email(userService => $userService);
+our $optionsService = new Service::Options();
 $optionsService->load();
 
 my $lang = &getLang();
-my $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'MAIN');
+our $htmlContentService = new Service::HtmlContent(dao => $htmlContentDao, lang => $lang, page => 'MAIN');
 
 
 checkUserLogin();
