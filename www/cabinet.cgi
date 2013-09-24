@@ -114,6 +114,7 @@ if($user)
     $vars->{'data'}->{'options'}->{'lottery'}->{'maxTickets'} = $optionsService->get('maxTickets');
     $vars->{'data'}->{'options'}->{'lottery'}->{'gamePrice'} = $optionsService->get('gamePrice');
     $vars->{'data'}->{'options'}->{'lottery'}->{'ticketsLimit'} = $optionsService->get('ticketsLimit');
+    $vars->{'data'}->{'options'}->{'lottery'}->{'maxTrickyNumber'} = $optionsService->get('maxTrickyNumber');
         
     my @games = $gameService->findNextGames(2);
     for (my $i = 0; $i < @games ; $i++)

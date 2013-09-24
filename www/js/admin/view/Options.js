@@ -102,7 +102,11 @@ Ext.define('Loto.view.Options', {
           	  xtype: 'textfield',
           	  fieldLabel: 'Лимит билетов на игру',
           	  name: 'ticketsLimit'
-            }
+            },
+            {
+                fieldLabel: 'Максимальное LOVA число',
+                name: 'maxTrickyNumber'
+            },
           ]
       },
       {

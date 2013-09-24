@@ -177,13 +177,25 @@ function toggleLotteryNumber(num) {
     addNum(num);
     $href.addClass("badge-success");
   }
-  var selected = countSelectedNumbers();
-  $("#count_selected_numbers").html(selected);
-  if(!session.limit && (selected == config.maxNumbers)) {
-	  $("#addTicketBtn").removeClass("disabled").removeAttr("disabled");
-  } else {
-	  $("#addTicketBtn").addClass("disabled").attr("disabled", "disabled");
-  }
+  verifyNumbers();
+}
+
+function toggleTrickyNumber(num) {
+	  $("#addNumDiv").children(".numbers").find("span").removeClass("badge-warning");
+	  $("#tricky_num_" + num).children("span").addClass("badge-warning");
+	  $("input[name=tricky_number]").val(num);
+	  $("#tricky_num").text(num);
+	  verifyNumbers();
+}
+
+function verifyNumbers() {
+	var selected = countSelectedNumbers();
+	var trickyNum = $("input[name=tricky_number]").val(); 
+	if(!session.limit && (selected == config.maxNumbers) && trickyNum && (trickyNum > 0)) {
+		$("#addTicketBtn").removeClass("disabled").removeAttr("disabled");
+	} else {
+		$("#addTicketBtn").addClass("disabled").attr("disabled", "disabled");
+	}
 }
 
 function countSelectedNumbers() {
@@ -253,6 +265,8 @@ function autoSelectNumbers() {
 	}
 	
 	$("#count_selected_numbers").html(countSelectedNumbers());
+	var num = Math.floor((Math.random() * config.maxTrickyNumber) + 1);
+	toggleTrickyNumber(num);
 	$("#addTicketBtn").removeClass("disabled").removeAttr("disabled");
 }  
 

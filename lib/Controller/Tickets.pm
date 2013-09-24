@@ -58,9 +58,10 @@ sub addTicket
         
  	my @numbers = split(",", $params->{'selected_lottery_numbers'});
 	my $games = $params->{'games_count'};
-	if(@numbers && $games)
+	my $trickyNum = $params->{'tricky_number'};
+	if(@numbers && $games && $trickyNum)
 	{
-		$::ticketService->addTicket({userId => $user->getId(), games => $games, numbers => \@numbers});
+		$::ticketService->addTicket({userId => $user->getId(), games => $games, numbers => \@numbers, trickyNum => $trickyNum});
 	}
 	return $response;
 }

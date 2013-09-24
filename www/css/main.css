@@ -128,3 +128,18 @@ td.total_win
 }
 
 #payDiv .span1 { font-weight: bold; }
+
+
+#addNumDiv .numbers
+{
+  text-align: center;
+  padding: 5px 30px;
+}
+
+#addNumDiv .numbers span
+{
+  margin: 5px 10px;
+  text-align: center;
+//  width: 33px;
+}
+
