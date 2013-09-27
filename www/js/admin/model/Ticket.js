@@ -4,6 +4,7 @@ Ext.define('Loto.model.Ticket', {
     {name: 'id', type: 'int'},
     {name: 'user_id', type: 'int'},
     {name: 'numbers', type: 'string'},
+    {name: 'lova_number', type: 'string'},
     {name: 'games', type: 'int'},
     {name: 'games_left', type: 'int'},
     {name: 'created', type: 'date', dateFormat: 'Y-m-d H:i:s'},

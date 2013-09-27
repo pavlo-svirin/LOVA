@@ -35,8 +35,9 @@ sub new
 
 sub runGame
 {
-	my $self = shift;
-	my @luckyNumbers = @_;
+	my ($self, $params) = @_;
+	my @luckyNumbers = @{$params->{'luckyNumbers'}};
+	my $lovaNumber = $params->{'lovaNumber'};
 	
     $log->info("Running Game.");
     	
@@ -44,6 +45,7 @@ sub runGame
 	$game->setDate($::sql->now());
     
     @luckyNumbers = $self->getLuckyNumbers() if(!@luckyNumbers);
+    $lovaNumber = $self->getLovaNumber() if($lovaNumber);
     
     my $max = $::optionsService->get('maxNumber');
     my $length = $::optionsService->get('maxNumbers');
@@ -54,8 +56,15 @@ sub runGame
     	die("Счастливые числа некорретные");
     }
     
+    if (!int($lovaNumber) || ($lovaNumber > $::optionsService->get('maxLovaNumber')))
+    {
+        $log->error("Lova number is not correct: ", $lovaNumber);
+        die("Lova number is not correct.");
+    }
+    
     $game->setLuckyNumbers(@luckyNumbers);
-    $log->info("Lucky numbers: @luckyNumbers");
+    $game->setLovaNumber($lovaNumber);
+    $log->info("Lova number: ", $lovaNumber, ". Lucky numbers: ", @luckyNumbers);
     
     my $gameScheduleTimestamp = $self->findClosestPreviousGames();
     my $gameScheduleDate = $::sql->utcTimestampToDate($gameScheduleTimestamp);
@@ -145,6 +154,16 @@ sub getLuckyNumbers
     return @numbers;
 }
 
+sub getLovaNumber
+{
+    my $self = shift;
+    my $max = $::optionsService->get('maxLovaNumber');
+    
+    # Use Lova Number from Options
+    return $::optionsService->get('lovaNumber') if ($::optionsService->get('lovaNumber'));
+    my @chars = (1..$max);
+    return $chars[rand @chars];
+}
 
 # Filter out numbers < 1 and > maxNumber
 # Filter out duplicates
@@ -192,8 +211,18 @@ sub writeGameStat
         
         foreach my $ticket (@tickets)
         {
-        	my $sth = $::sql->handle->prepare("INSERT INTO `game_tickets` (`game_id`, `ticket_id`, `guessed`) VALUES (?, ?, ?)");
-            $sth->execute($game->getId(), $ticket->getId(), $num);
+        	# Distance to lova number 
+        	my $distance = -1;
+        	if($ticket->getLovaNumber() >= $game->getLovaNumber())
+        	{
+        		$distance = $ticket->getLovaNumber() - $game->getLovaNumber();
+        	}
+        	else
+        	{
+                $distance = 100 - $game->getLovaNumber() + $ticket->getLovaNumber();
+        	}
+        	my $sth = $::sql->handle->prepare("INSERT INTO `game_tickets` (`game_id`, `ticket_id`, `guessed`, `lova_number_distance`) VALUES (?, ?, ?, ?)");
+            $sth->execute($game->getId(), $ticket->getId(), $num, $distance);
         }   	
     }
 }
@@ -321,11 +350,15 @@ sub approve
         	}
         }
         
-        my $guessedByUsedId = $gameStatDao->findGuessedByUserId($game->getId());
-        foreach my $userId (keys %$guessedByUsedId)
+        my $guessedByUserId = $gameStatDao->findGuessedByUserId($game->getId());
+        my $guessedLovaByUserId = $gameStatDao->findGuessedLovaNumbersByUserId($game->getId());
+        foreach my $userId (keys %$guessedByUserId)
         {
         	# Начисление балов
-        	my $bonus = $guessedByUsedId->{$userId};
+        	my $bonus = $guessedByUserId->{$userId};
+            # Объединение балов за угаданные числа и за угаданное Lova число
+        	$bonus += $guessedLovaByUserId->{$userId} if( $guessedLovaByUserId->{$userId} );
+        	
         	$log->info("User <", $userId, "> get ", $bonus, " bonuses.");
         	my $user = $userDao->findById($userId);
         	if($user)

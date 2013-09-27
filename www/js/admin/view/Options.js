@@ -87,6 +87,11 @@ Ext.define('Loto.view.Options', {
           	  name: 'luckyNumbers'
             },
             {
+        	  xtype: 'textfield',
+              fieldLabel: 'LOVA число для следующего розыгрыша',
+              name: 'lovaNumber'
+            },
+            {
                 fieldLabel: 'Общий приз',
                 name: 'totalWin',
                 allowDecimals: true,
@@ -105,7 +110,7 @@ Ext.define('Loto.view.Options', {
             },
             {
                 fieldLabel: 'Максимальное LOVA число',
-                name: 'maxTrickyNumber'
+                name: 'maxLovaNumber'
             },
           ]
       },

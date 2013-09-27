@@ -12,6 +12,7 @@ sub getFields
         'date' => { sql => 'date', add => '1' },        
         'schedule' => { sql => 'schedule', add => '1' },        
         'luckyNumbers' => { sql => 'lucky_numbers', add => '1' },
+        'lovaNumber' => { sql => 'lova_number', add => '1' },
         'sum' => { sql => 'sum', add => '1' },
         'users' => { sql => 'users', add => '1' },
         'tickets' => { sql => 'tickets', add => '1' },

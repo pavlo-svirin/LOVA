@@ -45,8 +45,9 @@ Ext.define('Loto.view.Tickets', {
         }
 	],
     columns: [
-        { text: 'Пользователь', dataIndex: 'user_id', flex: 1 },        
+        { text: 'Пользователь', dataIndex: 'user_id' },        
         { text: 'Числа', dataIndex: 'numbers', flex: 1 },       
+        { text: 'LOVA число', dataIndex: 'lova_number' },       
         { text: 'Игр всего', dataIndex: 'games' },
         { text: 'Игр осталось', dataIndex: 'games_left' },
         { text: 'Создан', dataIndex: 'created', renderer: Ext.util.Format.dateRenderer('Y-m-d H:i') },

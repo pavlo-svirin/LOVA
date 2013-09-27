@@ -27,13 +27,13 @@ sub addTicket
     my @numbers = _validateNumbers($::optionsService->get('maxNumber'), @{$params->{'numbers'}});
     my $userId = $params->{'userId'};
     my $gamePrice = $params->{'gamePrice'} || $::optionsService->get('gamePrice');
-    my $trickyNum = $params->{'trickyNum'};  
-    if($games && @numbers && $userId && $gamePrice && $trickyNum
+    my $lovaNumber = $params->{'lovaNumber'};  
+    if($games && @numbers && $userId && $gamePrice && $lovaNumber
         && $games > 0
         && ($games <= $::optionsService->get('maxGames'))
         && (scalar(@numbers) == $::optionsService->get('maxNumbers'))
-        && ($trickyNum > 0)
-        && ($trickyNum <= $::optionsService->get('maxTrickyNumber')))
+        && ($lovaNumber > 0)
+        && ($lovaNumber <= $::optionsService->get('maxLovaNumber')))
     {
     	my $ticket = Data::Ticket->new();
     	$ticket->setNumbers(@numbers);
@@ -42,7 +42,7 @@ sub addTicket
     	$ticket->setUserId($userId);
     	$ticket->setCreated($::sql->now());
         $ticket->setGamePrice($gamePrice);
-        $ticket->setTrickyNum($trickyNum);
+        $ticket->setLovaNumber($lovaNumber);
         $ticketDao->save($ticket);    
     }	
 }

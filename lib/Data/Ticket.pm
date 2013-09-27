@@ -17,7 +17,7 @@ sub getFields
 	    'created' => { sql => 'created', add => '1' },
 	    'paid' => { sql => 'paid', update => '1' },
 	    'gamePrice' => { sql => 'game_price', add => '1' },
-        'trickyNum' => { sql => 'tricky_num', add => '1' },
+        'lovaNumber' => { sql => 'lova_number', add => '1' },
 	)
 };
 

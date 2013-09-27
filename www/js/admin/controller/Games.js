@@ -25,8 +25,11 @@ Ext.define('Loto.controller.Games', {
             'gameDetails button[action=approve]': {
                 click: this._approve
             },
-            'gameDetails sliderfield': {
+            'gameDetails fieldset[id=budget] sliderfield': {
                 change: this._ballanceSliders
+            },
+            'gameDetails fieldset[id=prize] sliderfield': {
+                change: this._ballancePrizeSliders
             }
             
         });
@@ -64,10 +67,14 @@ Ext.define('Loto.controller.Games', {
             var details = selection.view.up("tabpanel").down("gameDetails");
             details.show();
             details.getForm().loadRecord(game);
-
+            
+            details.down('grid[id=winnerTickets]').reconfigure(game.winner_tickets());
+            
             if(game.get('approved')) {
             	details.down('button[action=approve]').disable();
-            	var sliders = details.query('sliderfield');
+            	
+	            // load sliders from budget            	
+            	var sliders = details.down('fieldset[id=budget]').query('sliderfield');
 	            for (var i = 0; i < sliders.length; i++) {
 	            	var slider = sliders[i]; 
 	            	slider.disable();
@@ -76,8 +83,10 @@ Ext.define('Loto.controller.Games', {
 	                var labels = slider.up("fieldset").query("label[name='" + slider.name + "']");
 	            	labels[0].update('$' + value);
 	            }
-            	
-            	// load sliders from budget
+           	
+	            // disable winner sliders
+	            details.down('fieldset[id=prize]').hide();
+
             } else {
             	details.down('button[action=approve]').enable();
             	
@@ -86,12 +95,16 @@ Ext.define('Loto.controller.Games', {
 	            for (var i = 0; i < sliders.length; i++) {
 	            	var name = sliders[i].getName();
 	            	var val = sliders[i].thumbs[0].value;
-	            	var slider = details.down('sliderfield[name=' + name +']');
+	            	var slider = details.down('fieldset[id=budget]').down('sliderfield[name=' + name +']');
 	            	slider.enable();
 	               	slider.setValue(val);
 	            	slider.syncThumbs();
 	            	this._ballanceSliders(slider);
 	            }
+	            
+	            // enable winner sliders
+	            details.down('fieldset[id=prize]').show();
+	            
             }
         }
     },
@@ -124,13 +137,13 @@ Ext.define('Loto.controller.Games', {
                 		success: function (result, request) {
                 			result = Ext.decode(result.responseText);
                 			if(result.success) {
+	            		      	Ext.Msg.alert('Проведение розыгрыша', 'Розыгрыш проведен успешно');                				
                 				Ext.data.StoreManager.lookup('Games').load();
                 			} else {
                 		      	Ext.Msg.alert('Ошибка', result.message);
                 			}
                 		},
                 		failure: function (result, request) {
-                			debugger;
                 		}
                 	});            	   
       			}
@@ -163,6 +176,7 @@ Ext.define('Loto.controller.Games', {
 	            		success: function (result, request) {
 	            			result = Ext.decode(result.responseText);
 	            			if(result.success) {
+	            		      	Ext.Msg.alert('Подтверждение розыгрыша', 'Розыгрыш подтвержден успешно');
 	            				Ext.data.StoreManager.lookup('Games').load();
 	            				self._close(source);
 	            			} else {
@@ -207,5 +221,28 @@ Ext.define('Loto.controller.Games', {
         	}
         }
         return total;
-    }        
+    },
+    
+    _ballancePrizeSliders: function(slider)
+    {
+        var sliders = slider.up("fieldset").query("sliderfield");
+        sliders = Ext.Array.remove(sliders, slider);
+        var currentSlider = slider.thumbs[0].value;
+        var otherSliders = this._sumSliders(sliders);
+        if ((otherSliders + currentSlider) > 100) {
+        	slider.setValue(100 - otherSliders)
+        	slider.syncThumbs();
+        }
+        var labels = slider.up("fieldset").query("label[name='" + slider.name + "']");
+        if (labels && labels.length > 0) {
+        	var percents = String(slider.thumbs[0].value) + '%';
+            var details = slider.up("tabpanel").down("gameDetails");
+            var game = details.getRecord();
+            var totalPrizeSlider = details.down('fieldset[id=budget]').down('sliderfield[name=budgetPrize]');
+            var totalPrize = game.get('sum') * 0.01 * totalPrizeSlider.thumbs[0].value;
+            var value = totalPrize * slider.thumbs[0].value * 0.01;
+        	labels[0].update('$' + value.toFixed(2) + ' (' + percents + ')');
+        }
+    }
+    
 });

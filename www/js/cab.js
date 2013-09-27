@@ -180,19 +180,19 @@ function toggleLotteryNumber(num) {
   verifyNumbers();
 }
 
-function toggleTrickyNumber(num) {
+function toggleLovaNumber(num) {
 	  $("#addNumDiv").children(".numbers").find("span").removeClass("badge-warning");
-	  $("#tricky_num_" + num).children("span").addClass("badge-warning");
-	  $("input[name=tricky_number]").val(num);
-	  $("#tricky_num").text(num);
+	  $("#lova_number_" + num).children("span").addClass("badge-warning");
+	  $("input[name=lova_number]").val(num);
+	  $("#lova_number").text(num);
 	  verifyNumbers();
 }
 
 function verifyNumbers() {
 	var selected = countSelectedNumbers();
 	$("#count_selected_numbers").html(selected);
-	var trickyNum = $("input[name=tricky_number]").val(); 
-	if(!session.limit && (selected == config.maxNumbers) && trickyNum && (trickyNum > 0)) {
+	var lovaNumber = $("input[name=lova_number]").val(); 
+	if(!session.limit && (selected == config.maxNumbers) && lovaNumber && (lovaNumber > 0)) {
 		$("#addTicketBtn").removeClass("disabled").removeAttr("disabled");
 	} else {
 		$("#addTicketBtn").addClass("disabled").attr("disabled", "disabled");
@@ -266,8 +266,8 @@ function autoSelectNumbers() {
 	}
 	
 	$("#count_selected_numbers").html(countSelectedNumbers());
-	var num = Math.floor((Math.random() * config.maxTrickyNumber) + 1);
-	toggleTrickyNumber(num);
+	var num = Math.floor((Math.random() * config.maxLovaNumber) + 1);
+	toggleLovaNumber(num);
 	$("#addTicketBtn").removeClass("disabled").removeAttr("disabled");
 }  
 

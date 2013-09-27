@@ -81,4 +81,23 @@ sub findGuessedByUserId
     return $result;
 }
 
+# Returns number of tickets with guessed Lova Number for the game groupped by user id
+sub findGuessedLovaNumbersByUserId
+{
+    my ($self, $gameId) = @_;
+    my $query = "SELECT `t`.`user_id`, COUNT(*) AS total FROM `game_tickets` gt";
+    $query .= " JOIN `tickets` t ON `gt`.`ticket_id` = `t`.`id`";
+    $query .= " WHERE `gt`.`game_id` = ? ";
+    $query .= " AND `gt`.`lova_number_distance` = 0 ";
+    $query .= " GROUP BY `t`.`user_id`";
+    my $sth = $::sql->handle->prepare($query);
+    $sth->execute( $gameId );
+    my $result = {};
+    while(my $ref = $sth->fetchrow_hashref())
+    {
+        $result->{$ref->{'user_id'}} = $ref->{'total'};
+    }   
+    return $result;
+}
+
 1;

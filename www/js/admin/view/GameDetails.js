@@ -2,7 +2,7 @@ Ext.define('Loto.view.GameDetails', {
 	extend: 'Ext.form.Panel',
 	alias: 'widget.gameDetails',
     frame: true,
-    height: 300,
+    height: 400,
     autoScroll: true,
     bodyPadding: 10,
     layout: 'column',
@@ -25,6 +25,7 @@ Ext.define('Loto.view.GameDetails', {
         	items: [
 		        {
 		            xtype:'fieldset',
+		            id: 'budget',
 		            title: 'Бюджет',
 		            autoHeight: true,
     	            layout: 'column',
@@ -36,74 +37,23 @@ Ext.define('Loto.view.GameDetails', {
 		            	width: 360,
 		            	minValue: 0,
 		            	maxValue: 100,
-		            	tipText: function(thumb)
-		            	{
-		            		return String(thumb.value) + '%';
-		            	},
+		            	tipText: function(thumb) { return String(thumb.value) + '%' }
 		            },
 		            items: [
-		              {
-		                fieldLabel: 'Приз',
-		                name: 'budgetPrize',
-		              },
-		              {
-		                xtype: 'label',
-		                name: 'budgetPrize',
-		                width: 80,
-		                margin: '0 0 0 15'
-		              },
-		              {
-		                  fieldLabel: 'Фонд',
-		                  name: 'budgetFond'
-		               },
-		               {
-		                  xtype: 'label',
-		                  name: 'budgetFond',
-		                  width: 80,
-		                  margin: '0 0 0 15'
-		              },
-		              {
-		                  fieldLabel: 'Подарочные билеты',
-		                  name: 'budgetGift'
-		               },
-		               {
-		                  xtype: 'label',
-		                  name: 'budgetGift',
-		                  width: 80,
-		                  margin: '0 0 0 15'
-		              },
-		              {
-		                  fieldLabel: 'Балы',
-		                  name: 'budgetBonus'
-		              },
-		              {
-		                  xtype: 'label',
-		                  name: 'budgetBonus',
-		                  width: 80,
-		                  margin: '0 0 0 15'
-		              },
-		              {
-		                fieldLabel: 'Затраты',
-		                name: 'budgetCosts'
-		              },
-		              {
-		                xtype: 'label',
-		                name: 'budgetCosts',
-		                width: 80,
-		                margin: '0 0 0 15'
-		              },
-		              {
-		                fieldLabel: 'Прибыль',
-		                name: 'budgetProfit'
-		              },
-		              {
-		                xtype: 'label',
-		                name: 'budgetProfit',
-		                width: 80,
-		                margin: '0 0 0 15'
-		              }
+		              { name: 'budgetPrize', fieldLabel: 'Приз' },
+		              { name: 'budgetPrize', xtype: 'label', width: 80, margin: '0 0 0 15' },
+		              { name: 'budgetFond', fieldLabel: 'Фонд' },
+		              { name: 'budgetFond', xtype: 'label', width: 80, margin: '0 0 0 15' },
+		              { name: 'budgetGift', fieldLabel: 'Подарочные билеты' },
+		              { name: 'budgetGift', xtype: 'label', width: 80, margin: '0 0 0 15' },
+		              { name: 'budgetBonus', fieldLabel: 'Балы' },
+		              { name: 'budgetBonus', xtype: 'label', width: 80, margin: '0 0 0 15' },
+		              { name: 'budgetCosts', fieldLabel: 'Затраты' },
+		              { name: 'budgetCosts', xtype: 'label', width: 80, margin: '0 0 0 15' },
+		              { name: 'budgetProfit', fieldLabel: 'Прибыль' },
+		              { name: 'budgetProfit', xtype: 'label', width: 80, margin: '0 0 0 15' }
 		            ]
-		          },      
+		        },      
 		    ]
         },
         {
@@ -114,7 +64,48 @@ Ext.define('Loto.view.GameDetails', {
         		anchor: '100%'
         	},
         	items: [
+		        {
+		            xtype:'fieldset',
+		            id: 'prize',
+		            title: 'Распределение приза',
+		            autoHeight: true,
+    	            layout: 'column',
+		            defaultType: 'sliderfield',
+    	        	defaults: {
+    	            	labelAlign: 'left',
+    	            	labelWidth: 140,
+    	            	readOnly: true,
+		            	width: 360,
+		            	minValue: 0,
+		            	maxValue: 100,
+		            	tipText: function(thumb) { return String(thumb.value) + '%' }
+		            },
+		            items: [
+		              { name: 'budgetPrizeSupperWinners', fieldLabel: 'Супер победители' },
+		              { name: 'budgetPrizeSupperWinners', xtype: 'label', width: 80, margin: '0 0 0 15' },
+		              { name: 'budgetPrizeWinners', fieldLabel: 'Победители' },
+		              { name: 'budgetPrizeWinners', xtype: 'label', width: 80, margin: '0 0 0 15' }
+	               ]
+		        }
         	]
+        },
+        
+        {
+        	columnWidth: 1,
+        	xtype: 'grid',
+        	id: 'winnerTickets',
+        	title: 'Билеты - победители',
+    	    columns: [
+              { header: 'Пользователь',  dataIndex: 'user_id', flex: 1, sortable: false, hideable: false,
+            	renderer: function (value) {
+            		var user = Ext.data.StoreManager.lookup('User').getById(value);
+            		return (user) ? user.get('login') : value;
+            	}
+              },
+              { header: 'Числа', dataIndex: 'numbers', flex: 1, sortable: false, hideable: false  },
+              { header: 'LOVA число', dataIndex: 'lova_number', sortable: false, hideable: false  }
+    	    ],
         }
+        
     ]    
 });

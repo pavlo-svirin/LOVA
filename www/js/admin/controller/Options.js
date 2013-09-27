@@ -44,13 +44,16 @@ Ext.define('Loto.controller.Options', {
     _toggleRandomGame: function(chkbox, checked)
     {
     	var luckyNumbers = chkbox.up("fieldset").down("textfield[name='luckyNumbers']");
+    	var lovaNumber = chkbox.up("fieldset").down("textfield[name='lovaNumber']");
         if(checked)
         {
         	luckyNumbers.disable();
+        	lovaNumber.disable();
         }
         else
         {
         	luckyNumbers.enable();
+        	lovaNumber.enable();
         }
     },
     
