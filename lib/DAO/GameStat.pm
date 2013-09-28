@@ -37,6 +37,7 @@ sub findByGameId
     {
         $guessed->{$ref->{'guessed'}}->{'tickets'} = $ref->{'tickets'};
         $guessed->{$ref->{'guessed'}}->{'users'} = $ref->{'users'};
+        $guessed->{$ref->{'guessed'}}->{'lova_tickets'} = $ref->{'lova_tickets'};
     }
     my $stat = ${model}->new();
     $stat->setGameId($gameId);

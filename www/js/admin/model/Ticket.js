@@ -11,5 +11,7 @@ Ext.define('Loto.model.Ticket', {
     {name: 'paid', type: 'date', dateFormat: 'Y-m-d H:i:s'},
     {name: 'game_price'},
     {name: 'total'},
+    {name: 'lova_number_distance'},
+    {name: 'min_lova_distance'}
   ]
 });

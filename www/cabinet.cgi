@@ -151,18 +151,21 @@ if($user)
 		    if ($lastGameTotalTickets)
 		    {
 		        my $maxGuessed = $lastGameStat->getMaxGuessed();
+                my $numOfLovaTickets = $lastGameStat->getNumOfLovaTickets($maxGuessed);
+                $vars->{'data'}->{'lottery'}->{'last'}->{'stat'}->{'lovaTickets'} = $numOfLovaTickets . " " . $htmlContentService->getContent('LOTTERY_STAT_TICKETS', $numOfLovaTickets);
+		        
 			    for (my $i = $optionsService->get('maxNumbers'); $i >= $maxGuessed; $i--)
 			    {
 			        $lastGameResult->{$i} = 0;
 			        if ($i == $maxGuessed)
 			        {
-                        my $tickets = $lastGameStat->getTickets($i);
+                        my $tickets = $lastGameStat->getTickets($i) - $numOfLovaTickets;
 		                $lastGameResult->{$i} = $tickets . " " . $htmlContentService->getContent('LOTTERY_STAT_TICKETS', $tickets);
 			        }
 			    }
+                $vars->{'data'}->{'lottery'}->{'last'}->{'stat'}->{'game'} = $lastGameResult;
 		    }
 		    
-		    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'}->{'game'} = $lastGameResult;
 		    my $userStat = $userStatDao->findByGameAndUser($lastGame->getId(), $user->getId());
 		    $vars->{'data'}->{'lottery'}->{'last'}->{'stat'}->{'user'} = $userStat;
         }

@@ -10,7 +10,8 @@ sub getFields
 	(
 	    'id' =>  { sql => 'id', key => '1' },
         'gameId' =>  { sql => 'game_id', add => '1' },	    
-	    'guessed' => { sql => 'guessed' }
+	    'guessed' => { sql => 'guessed' },
+        'lovaTickets' => { sql => 'lova_tickets' }
 	)
 };
 
@@ -24,6 +25,7 @@ sub getGuessed
 	return $self->get('guessed');
 }
 
+# Get max count of guessed numbers
 sub getMaxGuessed
 {
     my $self = shift;
@@ -34,6 +36,7 @@ sub getMaxGuessed
     }
 }
 
+# Count of tickets by count of guessed numbers 
 sub getTickets
 {
     my ($self, $num) = @_;
@@ -60,6 +63,17 @@ sub getNumOfWinnerTickets
     my $max = $self->getMaxGuessed();
     return 0 unless ($max);
     return $self->get('guessed')->{$max}->{'tickets'};
+}
+
+# Get number of tickets with min distance to lova number.
+sub getNumOfLovaTickets
+{
+    my ($self, $num) = @_;
+    if($self->get('guessed')->{$num})
+    {
+        return $self->get('guessed')->{$num}->{'lova_tickets'};
+    }
+    return undef;
 }
 
 1;

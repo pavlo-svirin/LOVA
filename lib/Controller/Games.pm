@@ -55,7 +55,7 @@ sub load
         if ($gameStat && $gameStat->getNumOfWinnerTickets())
         {
             my $maxGuessed = $gameStat->getMaxGuessed(); 
-            my @tickets = $ticketDao->findWinnerTickets($game->getId(), $maxGuessed);
+            my @tickets = $ticketDao->findWinnerTicketsWithStats($game->getId(), $maxGuessed);
             foreach my $ticket (@tickets) 
             {
                 push(@{$data->{'winner_tickets'}}, $ticket->getData());	

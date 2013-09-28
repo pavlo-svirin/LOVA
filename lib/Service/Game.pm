@@ -9,6 +9,7 @@ require DAO::Game;
 require DAO::Budget;
 require DAO::GameStat;
 require DAO::UserStat;
+require DAO::User;
 require Data::Budget;
 require Data::UserStat;
 
@@ -209,18 +210,11 @@ sub writeGameStat
         my $sth = $::sql->handle->prepare("INSERT INTO `game_stats` (`game_id`, `guessed`, `users`, `tickets`) VALUES (?, ?, ?, ?)");
         $sth->execute($game->getId(), $num, $usersCount, $ticketsCount);
         
+        my $minLovaDistance = _calcMinLovaDistance($game->getLovaNumber(), @tickets);
         foreach my $ticket (@tickets)
         {
-        	# Distance to lova number 
-        	my $distance = -1;
-        	if($ticket->getLovaNumber() >= $game->getLovaNumber())
-        	{
-        		$distance = $ticket->getLovaNumber() - $game->getLovaNumber();
-        	}
-        	else
-        	{
-                $distance = 100 - $game->getLovaNumber() + $ticket->getLovaNumber();
-        	}
+        	# Distance to lova number
+        	my $distance = _calcLovaDistance($game->getLovaNumber(), $ticket->getLovaNumber()); 
         	my $sth = $::sql->handle->prepare("INSERT INTO `game_tickets` (`game_id`, `ticket_id`, `guessed`, `lova_number_distance`) VALUES (?, ?, ?, ?)");
             $sth->execute($game->getId(), $ticket->getId(), $num, $distance);
         }   	
@@ -340,7 +334,7 @@ sub approve
         {
             my $eachTicketWin = sprintf("%.2f", $budget->getPrize() / $gameStat->getNumOfWinnerTickets());
             my $maxGuessed = $gameStat->getMaxGuessed(); 
-        	my @tickets = $ticketDao->findWinnerTickets($game->getId(), $maxGuessed);
+        	my @tickets = $ticketDao->findWinnerTicketsWithStats($game->getId(), $maxGuessed);
         	foreach my $ticket (@tickets)
         	{
         		my $user = $userDao->findById($ticket->getUserId());
@@ -423,6 +417,36 @@ sub findWinners
 		$winners{$user->getLogin()}++ if ($user);
 	}
 	return join(', ', keys %winners);
+}
+
+sub _calcMinLovaDistance
+{
+	my ($lovaNumber, @tickets) = @_;
+	my $minDistance = -1;
+	return $minDistance unless(@tickets);
+	
+	foreach my $ticket (@tickets)
+	{
+		 my $distance = _calcLovaDistance($lovaNumber, $ticket->getLovaNumber());
+		 $minDistance = $distance if(($minDistance == -1) || ($distance < $minDistance));
+	}
+	
+	return $minDistance; 
+}
+
+sub _calcLovaDistance
+{
+	my ($gameLovaNumber, $ticketLovaNumber) = @_;
+    my $distance = -1;
+    if($ticketLovaNumber >= $gameLovaNumber)
+    {
+        $distance = $ticketLovaNumber - $gameLovaNumber;
+    }
+    else
+    {
+        $distance = 100 - $gameLovaNumber + $ticketLovaNumber;
+    }
+    return $distance;	
 }
 
 1;

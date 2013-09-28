@@ -103,7 +103,15 @@ Ext.define('Loto.view.GameDetails', {
             	}
               },
               { header: 'Числа', dataIndex: 'numbers', flex: 1, sortable: false, hideable: false  },
-              { header: 'LOVA число', dataIndex: 'lova_number', sortable: false, hideable: false  }
+              { header: 'LOVA число', dataIndex: 'lova_number', sortable: false, hideable: false,
+            	  renderer: function (value, metaData, record) {
+            		  if(record.get('lova_number_distance') == record.get('min_lova_distance')) {
+            			  metaData.style="font-weight: bold; font-color: white; background-color: green;";
+            		  }
+            		  return value;
+
+            	  }
+              }
     	    ],
         }
         

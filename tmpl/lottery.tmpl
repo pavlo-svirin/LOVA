@@ -43,6 +43,12 @@
     <td class="last_game_stat" rowspan="2">В прошлом розыгрыше:
       <table width="100%">
         [% FOREACH num IN data.lottery.last.stat.game.keys.nsort.reverse %]
+        [% IF loop.last %]
+        <tr>
+        <td>[% num %] цифр + <span class="badge badge-warning">[% data.lottery.last.game.getLovaNumber() %]</span></td>
+        <td>[% data.lottery.last.stat.lovaTickets %]</td>
+        </tr>
+        [% END %]
         <tr>
         <td>[% num %] цифр</td>
         <td>[% IF data.lottery.last.stat.game.$num %][% data.lottery.last.stat.game.$num %]
@@ -50,6 +56,8 @@
         </td>
         </tr>
         [% END %]
+        
+         
       </table>
     </td>
     <td align="center" class="last_game" rowspan="2">В розыгрыше #[% data.lottery.last.game.getId() %] от [% data.lottery.last.game.getSchedule() %]
