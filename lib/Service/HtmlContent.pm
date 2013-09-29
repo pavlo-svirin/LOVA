@@ -51,13 +51,13 @@ sub getContent
 sub _getCodeSufixByCount
 {
 	my $count = shift;
-	return unless ($count);
+	return unless (defined $count);
 	$count = $count % 100;
     return "_5" if (($count >= 11) && ($count <= 19));
 
  	$count = $count % 10;
    	return "_1" if ($count == 1);
-    return "_2" if (($count == 2) || ($count == 2) || ($count == 4));
+    return "_2" if (($count == 2) || ($count == 3) || ($count == 4));
     return "_5";
 }
 

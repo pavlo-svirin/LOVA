@@ -150,4 +150,11 @@ sub findByGameAndUser
     return @objects;
 }
 
+sub countTicketsWithMinLovaDistance
+{
+    my ($self, @tickets) = @_;
+    return 0 unless (@tickets);
+    
+}
+
 1;

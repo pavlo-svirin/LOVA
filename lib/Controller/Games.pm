@@ -100,7 +100,9 @@ sub approve
         gift => $params->{'budgetGift'} || 0,
         bonus => $params->{'budgetBonus'} || 0,
         costs => $params->{'budgetCosts'} || 0,
-        profit => $params->{'budgetProfit'} || 0
+        profit => $params->{'budgetProfit'} || 0,
+        prizeSupperWinners => $params->{'budgetPrizeSupperWinners'} || 0,
+        prizeRegularWinners => $params->{'budgetPrizeWinners'} || 0       
     };
     eval { $::gameService->approve( $params->{'gameId'}, $budget ); };
     if($@)

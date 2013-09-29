@@ -115,7 +115,7 @@ sub runGame
         $game->setWinners($winners);
 	
         $gameDao->save($game);
-        $self->writeGameStat($game, $ticketsByGuessedNumbers);
+        $self->writeGameStat($game, $ticketsByGuessedNumbers, $maxGuessed);
         $log->info("Game #", $game->getId(), " from ", $game->getDate(), " was run.");
         $::sql->handle->commit();
     };
@@ -194,7 +194,8 @@ sub _inArray
 
 sub writeGameStat
 {
-    my ($self, $game, $ticketsByGuessedNumbers) = @_;	
+    my ($self, $game, $ticketsByGuessedNumbers, $maxGuessed) = @_;
+    
     foreach my $num (sort {$a <=> $b} keys %$ticketsByGuessedNumbers)
     {
     	my @tickets = @{$ticketsByGuessedNumbers->{$num}};
@@ -207,17 +208,20 @@ sub writeGameStat
         my $ticketsCount = scalar (@tickets);
         $log->info($num, " number: ", $usersCount, " users, ", $ticketsCount, " tickets");
         
-        my $sth = $::sql->handle->prepare("INSERT INTO `game_stats` (`game_id`, `guessed`, `users`, `tickets`) VALUES (?, ?, ?, ?)");
-        $sth->execute($game->getId(), $num, $usersCount, $ticketsCount);
-        
         my $minLovaDistance = _calcMinLovaDistance($game->getLovaNumber(), @tickets);
+        my $numOfTicketsGuessedLovaNumber = 0;
         foreach my $ticket (@tickets)
         {
         	# Distance to lova number
         	my $distance = _calcLovaDistance($game->getLovaNumber(), $ticket->getLovaNumber()); 
         	my $sth = $::sql->handle->prepare("INSERT INTO `game_tickets` (`game_id`, `ticket_id`, `guessed`, `lova_number_distance`, `min_lova_distance`) VALUES (?, ?, ?, ?, ?)");
             $sth->execute($game->getId(), $ticket->getId(), $num, $distance, $minLovaDistance);
-        }   	
+            $numOfTicketsGuessedLovaNumber++ if($distance == $minLovaDistance);
+        }
+        
+        my $sth = $::sql->handle->prepare("INSERT INTO `game_stats` (`game_id`, `guessed`, `users`, `tickets`, `lova_tickets`) VALUES (?, ?, ?, ?, ?)");
+        $sth->execute($game->getId(), $num, $usersCount, $ticketsCount, scalar $numOfTicketsGuessedLovaNumber);
+           	
     }
 }
 
@@ -320,6 +324,7 @@ sub approve
         # Распределение бюджета
         my $budget = $self->createBudget($game, $budgetParams);
         $budgetDao->save($budget);
+        $log->info("Total prize: \$", $budget->getPrize());
         
         # Увеличение "Общего выигрыша"
         $::optionsService->load();
@@ -334,16 +339,16 @@ sub approve
             my $maxGuessed = $gameStat->getMaxGuessed(); 
                     	
             # Начисление выигрыша Супер победителю
-            my $superPrize = _calcBudget($budget->getPrize(), $budgetParams->{'budgetPrizeSupperWinners'});
+            my $superPrize = _calcBudget($budget->getPrize(), $budgetParams->{'prizeSupperWinners'});
             my @superWinnerTickets = $ticketDao->findSuperWinnerTickets($game->getId(), $maxGuessed);
         	$self->payPerTicket($superPrize, @superWinnerTickets);
             $log->info("Total super prize: \$", $superPrize, " There are ", scalar @superWinnerTickets, " tickets for Super Prize.");
         	
    	        # Начисление выигрыша Остальным победителям
-            my $regularPrize = _calcBudget($budget->getPrize(), $budgetParams->{'budgetPrizeWinners'});
+            my $regularPrize = _calcBudget($budget->getPrize(), $budgetParams->{'prizeRegularWinners'});
             my @regularWinnerTickets = $ticketDao->findRegularWinnerTickets($game->getId(), $maxGuessed);
             $self->payPerTicket($regularPrize, @regularWinnerTickets);
-            $log->info("Total regular prize: \$", $superPrize, " There are ", scalar @regularWinnerTickets, " tickets for Regular Prize.");
+            $log->info("Total regular prize: \$", $regularPrize, " There are ", scalar @regularWinnerTickets, " tickets for Regular Prize.");
         }
         
         my $guessedByUserId = $gameStatDao->findGuessedByUserId($game->getId());
