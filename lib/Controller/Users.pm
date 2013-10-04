@@ -22,7 +22,8 @@ sub getLinks
             'load' => sub { $self->load( @_ ) },
             'save' => sub { $self->save( @_ ) },
             'delete' => sub { $self->delete( @_ ) },
-            'chart' => sub { $self->chart( @_ ) }
+            'chart' => sub { $self->chart( @_ ) },
+            'assignPrizeTickets' => sub { $self->assignPrizeTickets( @_ ) }
         },
     }
 }
@@ -124,6 +125,20 @@ sub chart
     my @stats = $::userService->calcChart($params);
     $response->{'data'} = \@stats;
 	return { type => 'ajax', data => $response};
+}
+
+sub assignPrizeTickets 
+{
+    my($self, $url, $params) = @_;
+    if( !$params->{id} ) { 
+    	$::userService->assignPrizeTickets( $params );
+    }
+    else {
+        $log->info( $params->{id} );
+        $::userService->assignPrizeTickets( $params ); 
+        return { type => 'ajax', data => $params->{count} };  
+    }
+    return { type => 'ajax', data => '1' };
 }
 
 1;

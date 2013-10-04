@@ -2,6 +2,7 @@ package Service::User;
 use strict;
 use DateTime;
 use Log::Log4perl;
+use Data::Dumper;
 
 require DAO::User;
 
@@ -479,6 +480,26 @@ sub payReferal
         }
     }
     $self->saveAccount($user);
+}
+
+sub assignPrizeTickets(){
+    my ($self, $params )  = @_;
+    $params->{count} = 1 if( $params->{count} == undef );
+    $log->info( "User id : " , Dumper( $params ) );
+    if( $params->{userId} == undef ){
+    	my $query = "CALL assignPrizeTickets()";
+    	#if( $userId != undef );
+    	my $sth = $::sql->handle->prepare( $query );
+    	$sth->execute();
+    }
+    else
+    {
+        my $query = "CALL assignPrizeTicketsForUser( $params->{userId}, $params->{count} )";
+        
+        my $sth = $::sql->handle->prepare( $query );
+        $sth->execute();
+    }
+    return $params->{count};    
 }
 
 

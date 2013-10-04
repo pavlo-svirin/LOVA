@@ -66,5 +66,10 @@ Ext.define('Loto.view.Users', {
         store: 'User',
         dock: 'bottom',
         displayInfo: true
+    }],
+
+    buttons: [{
+        text: 'Assign prize tickets',
+        action: 'assignPrizeTickets'
     }]    
  });

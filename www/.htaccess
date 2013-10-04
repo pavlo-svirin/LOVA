@@ -11,13 +11,13 @@ RewriteRule ^cab cabinet.cgi [L]
 <Files admin.cgi>
     AuthType Basic   
     AuthName "Authorization required" 
-    AuthUserFile  /tmp/.htpasswd
+    AuthUserFile  /home/hellcat/dev/.htpasswd
     Require user adminUser
 </Files>
 
 <FilesMatch "admin.js">
     AuthType Basic   
     AuthName "Authorization required" 
-    AuthUserFile  /tmp/.htpasswd
+    AuthUserFile /home/hellcat/dev/.htpasswd 
     Require user adminUser
 </FilesMatch>

@@ -107,9 +107,15 @@ Ext.define('Loto.view.UserDetails', {
     			        { name: 'account.referal', fieldLabel: 'Реферальный' },        	        
     			        { name: 'account.win', fieldLabel: 'Выигрыш' },        	        
     			        { name: 'account.bonus', fieldLabel: 'Балы' },        	        
+				{ text: 'Assign prize tickets', xtype : 'button', action : 'assignPrizeTicketsForUser'  },
+				{ name: 'cntPrizeTickets', value: '1'},
     	        	]
     	        }
         	]
         }
-    ]    
+    ],
+  /*  buttons: [{
+        text: 'Assign prize tickets',
+        action: 'assignPrizeTickets'
+        }] */   
 });

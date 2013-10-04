@@ -29,7 +29,13 @@ Ext.define('Loto.controller.Users', {
             },
             'userDetails button[action=save]': {
                 click: this._saveUser
-            }
+            },
+            'userDetails button[action=assignPrizeTicketsForUser]': {
+                click: this._assignPrizeTicketsForUser
+            },
+            'users button[action=assignPrizeTickets]': {
+                click: this._assignPrizeTickets
+            },
         });
     },
     
@@ -120,6 +126,41 @@ Ext.define('Loto.controller.Users', {
  			   Ext.data.StoreManager.lookup('User').load();
     		}
     	});
+    },
+
+    _assignPrizeTickets: function(btn){
+        //Ext.msg.confirm( "Prize ticket", 'Assign?', function(btn){} );
+	Ext.Ajax.request({
+                           url: "/admin/users/assignPrizeTickets/ajax/",
+                           method: 'GET',
+                           params: {},
+                           success: function (result, request) {
+                                   //Ext.data.StoreManager.lookup('User').load();
+                                   //me._closeUser(del);
+                           }
+                   });
+    },
+
+    _assignPrizeTicketsForUser: function(btn){
+        /*new Ext.MessageBox().show({
+   	title: 'Howdy',
+   	message: 'Pleased to meet you ' + text,
+	});
+	return;
+	*/
+        var userId = document.getElementsByName('id')[0].value; 
+        var cnt = document.getElementsByName("cntPrizeTickets")[0].value;
+	//user.get("id");
+        Ext.Ajax.request({
+                           url: "/admin/users/assignPrizeTickets/ajax/",
+                           method: 'GET',
+                           params: {id: userId, count: cnt},
+                           success: function (result, request) {
+                                   //Ext.data.StoreManager.lookup('User').load();
+                                   //me._closeUser(del);
+                           }
+                   });
     }
+
     
 });

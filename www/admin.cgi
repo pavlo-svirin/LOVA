@@ -133,6 +133,10 @@ sub ajaxStage
     {
         printOptions();
     }
+    elsif( $URL =~ /\/assignPrizeTickets\// )
+    {
+       $userService->assignPrizeTickets(); 
+    }
     elsif($URL =~ /\/send\//)
     {
     	my $subject = $CGI->param("subject");

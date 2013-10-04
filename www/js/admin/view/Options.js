@@ -112,6 +112,12 @@ Ext.define('Loto.view.Options', {
                 fieldLabel: 'Максимальное LOVA число',
                 name: 'maxLovaNumber'
             },
+            {
+                fieldLabel: 'Сумма для Призового билета',
+                name:'amountForPrizeTicket',
+                decimalPrecision: 2,
+                step: 0.01
+            },
           ]
       },
       {
